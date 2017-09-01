@@ -1,0 +1,25 @@
+﻿<ContentDialog
+    x:Class="Repeats.AskTimeDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Repeats"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title=""
+    PrimaryButtonText=""
+    SecondaryButtonText=""
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    Name="TimeContent">
+
+    <Grid>
+        <StackPanel>
+            <RadioButton x:Uid="R1" Content="" Tag="15" Checked="TimeRadioButton_Checked"/>
+            <RadioButton x:Uid="R2" Name="second" Content="" Tag="30" Checked="TimeRadioButton_Checked"/>
+            <RadioButton x:Uid="R3" Content="" Tag="45" Checked="TimeRadioButton_Checked"/>
+            <RadioButton x:Uid="R4" Content="" Tag="60" Checked="TimeRadioButton_Checked"/>
+        </StackPanel>
+
+    </Grid>
+</ContentDialog>

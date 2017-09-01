@@ -1,0 +1,51 @@
+﻿<Page
+    x:Class="Repeats.Pages.WelcomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Repeats.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <FlipView x:Name="flipView1" Background="DodgerBlue">
+            <StackPanel>
+                <RelativePanel  Margin="130,50" VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xED0D;" Height="100" FontSize="100" Foreground="White"/>
+                    <TextBlock Text="R" FontSize="55" Margin="32,0,-68,0" Height="65" Width="36" Foreground="White"/>
+                </RelativePanel>
+                <TextBlock x:Uid="W1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" FontSize="50" Margin="20,0,20,0" Foreground="White"/>
+                <TextBlock x:Uid="W2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Margin="20,30,20,0" FontSize="30" Foreground="White"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8F1;" Height="100" FontSize="100" Margin="130,50" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
+                <TextBlock x:Uid="W3" TextWrapping="Wrap" Text="" FontSize="25" Margin="20,0,20,0" Foreground="White" HorizontalAlignment="Center" />
+                <TextBlock x:Uid="W4" Text="" TextWrapping="Wrap" Margin="20,40,20,0" Foreground="#FFF9F9F9" FontSize="20"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEADF;" Height="100" FontSize="100" Margin="130,50" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
+                <TextBlock x:Uid="W5" TextWrapping="Wrap" Text="" FontSize="25" Margin="20,0,20,0" Foreground="White" HorizontalAlignment="Center" />
+                <TextBlock x:Uid="W6" Text="" TextWrapping="Wrap" Margin="20,40,20,0" Foreground="#FFF9F9F9" FontSize="20"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEDC6;" Height="100" FontSize="100" Margin="130,50" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
+                <TextBlock x:Uid="W7" TextWrapping="Wrap" Text = "" FontSize="25" Margin="20,0,20,0" Foreground="White" HorizontalAlignment="Center" />
+                <TextBlock x:Uid="W8" Text="" TextWrapping="Wrap" Margin="20,40,20,0" Foreground="#FFF9F9F9" FontSize="20"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE11A;" Height="100" FontSize="100" Margin="130,50" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
+                <TextBlock x:Uid="W9" TextWrapping="Wrap" Text="" FontSize="25" Margin="20,0,20,0" Foreground="White" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE115;" Height="100" FontSize="100" Margin="130,50" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
+                <TextBlock x:Uid="W10" TextWrapping="Wrap" Text="" FontSize="25" Margin="20,0,20,0" Foreground="White" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE001;" Height="100" FontSize="100" Margin="130,50" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White"/>
+                <TextBlock x:Uid="W11" TextWrapping="Wrap" Text="" FontSize="25" Margin="20,0,20,0" Foreground="White" HorizontalAlignment="Center" />
+                <Button x:Uid="WB1" Content="" Margin="20,40,20,0" Foreground="#FFF9F9F9" FontSize="20" Click="IntroClick" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </FlipView>
+        <Button x:Uid="WB2" Content="" VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="White" Click="Skip"/>
+    </Grid>
+</Page>

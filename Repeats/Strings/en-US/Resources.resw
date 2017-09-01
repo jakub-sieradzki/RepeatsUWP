@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About.Header" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AddButton.Label" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Answer</value>
+  </data>
+  <data name="ASK1" xml:space="preserve">
+    <value>Enter a name for the project</value>
+  </data>
+  <data name="ASK2" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ASK3" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="ASK4" xml:space="preserve">
+    <value>You are using an illegal character.</value>
+  </data>
+  <data name="ASK5" xml:space="preserve">
+    <value>Illegal characters: </value>
+  </data>
+  <data name="ASK6" xml:space="preserve">
+    <value>A project with that name already exists.</value>
+  </data>
+  <data name="Attention1" xml:space="preserve">
+    <value>Attention!</value>
+  </data>
+  <data name="Attention2" xml:space="preserve">
+    <value>You must add at least 2 questions.</value>
+  </data>
+  <data name="Attention3" xml:space="preserve">
+    <value>You can not leave a blank field.</value>
+  </data>
+  <data name="Bad" xml:space="preserve">
+    <value> Wrong!</value>
+  </data>
+  <data name="Correct" xml:space="preserve">
+    <value>Correct answer: </value>
+  </data>
+  <data name="DELETE1" xml:space="preserve">
+    <value>Are you sure you want to delete this?</value>
+  </data>
+  <data name="DELETE2" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="DELETE3" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="DeleteButton.Label" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EditButton.Label" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Error1" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Error2" xml:space="preserve">
+    <value>There was an error and we couldn't do it.</value>
+  </data>
+  <data name="Error3" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="Error4" xml:space="preserve">
+    <value>We couldn't load this project because it was not created in this application.</value>
+  </data>
+  <data name="Feedback.Text" xml:space="preserve">
+    <value>  Send feedback</value>
+  </data>
+  <data name="Go.Label" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value> Corretly!</value>
+  </data>
+  <data name="InkProject" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="ListText.Text" xml:space="preserve">
+    <value>Choose what you want to write a test:</value>
+  </data>
+  <data name="MAIN1" xml:space="preserve">
+    <value>Your Repeats</value>
+  </data>
+  <data name="MAIN2" xml:space="preserve">
+    <value>Check yourself!</value>
+  </data>
+  <data name="MAIN3" xml:space="preserve">
+    <value>Ink</value>
+  </data>
+  <data name="MAIN4" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MAIN5" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="NothingSearch" xml:space="preserve">
+    <value>Nothing found.</value>
+  </data>
+  <data name="notifi1" xml:space="preserve">
+    <value>Enter your answer here</value>
+  </data>
+  <data name="notifi2" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="notifi3" xml:space="preserve">
+    <value>Awesome! That's the correct answer!</value>
+  </data>
+  <data name="notifi4" xml:space="preserve">
+    <value>Oops, that was not the correct answer.</value>
+  </data>
+  <data name="notifi5" xml:space="preserve">
+    <value>The correct answer is: </value>
+  </data>
+  <data name="NotificationSettings.Header" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="off" xml:space="preserve">
+    <value>Turned off</value>
+  </data>
+  <data name="ON" xml:space="preserve">
+    <value>Turned on</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="R1.Content" xml:space="preserve">
+    <value>15 minutes</value>
+  </data>
+  <data name="R2.Content" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="R3.Content" xml:space="preserve">
+    <value>45 minutes</value>
+  </data>
+  <data name="R4.Content" xml:space="preserve">
+    <value>60 minutes</value>
+  </data>
+  <data name="Radio1.Content" xml:space="preserve">
+    <value>15 minutes</value>
+  </data>
+  <data name="Radio2.Content" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="Radio3.Content" xml:space="preserve">
+    <value>45 minutes</value>
+  </data>
+  <data name="Radio4.Content" xml:space="preserve">
+    <value>60 minutes</value>
+  </data>
+  <data name="Rate.Text" xml:space="preserve">
+    <value>  Rate in the Store</value>
+  </data>
+  <data name="SAVE.Label" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveButton.Label" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchButton.Label" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchText.Text" xml:space="preserve">
+    <value>Select the project you want to search for:</value>
+  </data>
+  <data name="TEST1" xml:space="preserve">
+    <value>All answers: </value>
+  </data>
+  <data name="TEST2" xml:space="preserve">
+    <value>Correct Answers: </value>
+  </data>
+  <data name="TEST3" xml:space="preserve">
+    <value>Incorrect answers: </value>
+  </data>
+  <data name="TestButton.Content" xml:space="preserve">
+    <value>CHECK</value>
+  </data>
+  <data name="TextBox.PlaceholderText" xml:space="preserve">
+    <value>Enter the answer</value>
+  </data>
+  <data name="TextNext.Text" xml:space="preserve">
+    <value>Next  </value>
+  </data>
+  <data name="TextSetting.Text" xml:space="preserve">
+    <value>Choose what time you want notifications to appear:</value>
+  </data>
+  <data name="TIME1" xml:space="preserve">
+    <value>Choose what time you want notifications to appear</value>
+  </data>
+  <data name="TIME2" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="TIME3" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="toff.Content" xml:space="preserve">
+    <value>Turn off notifications</value>
+  </data>
+  <data name="ToggleNotification.Header" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="ton.Content" xml:space="preserve">
+    <value>Turn on notifications</value>
+  </data>
+  <data name="W1.Text" xml:space="preserve">
+    <value>Welcome to Repeats!</value>
+  </data>
+  <data name="W10.Text" xml:space="preserve">
+    <value>In Settings you can control the most important functions of the application.</value>
+  </data>
+  <data name="W11.Text" xml:space="preserve">
+    <value>All ready, we can start!</value>
+  </data>
+  <data name="W2.Text" xml:space="preserve">
+    <value>The learning is pleasure now.</value>
+  </data>
+  <data name="W3.Text" xml:space="preserve">
+    <value>Your Repeats module will take you away from books!</value>
+  </data>
+  <data name="W4.Text" xml:space="preserve">
+    <value>Add some questions and answers and set your app to ask you out from time to time. Thanks to this, while doing your favorite activities, you will also learn at the same time!</value>
+  </data>
+  <data name="W5.Text" xml:space="preserve">
+    <value>Check yourself module will prepare you for the test!</value>
+  </data>
+  <data name="W6.Text" xml:space="preserve">
+    <value>Based on your questions and answers, the app creates a test that immediately displays the correct answer and counts the good and bad answers.</value>
+  </data>
+  <data name="W7.Text" xml:space="preserve">
+    <value>The Ink module will replace pen and paper!</value>
+  </data>
+  <data name="W8.Text" xml:space="preserve">
+    <value>You can create handwritten notes just like paper! You have a choice of colorful pens, colored pencils, ruler and more!</value>
+  </data>
+  <data name="W9.Text" xml:space="preserve">
+    <value>Search engine will help you quickly find the answer to your question!</value>
+  </data>
+  <data name="WB1.Content" xml:space="preserve">
+    <value>Go to the application</value>
+  </data>
+  <data name="WB2.Content" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+</root>

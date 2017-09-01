@@ -1,0 +1,38 @@
+﻿<Page
+    x:Class="Repeats.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Repeats"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:UI="using:Microsoft.Advertising.WinRT.UI"
+    mc:Ignorable="d">
+    <Grid>
+
+        <RelativePanel Margin="0,0" VerticalAlignment="Top"  Height="96" Background="#FF358FCD">
+            <TextBlock Name="MAINtext" Text="Repeats" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top" RelativePanel.AlignHorizontalCenterWithPanel="True" Margin="0,10" Foreground="White" TextAlignment="Center"/>
+            <Button RelativePanel.AlignRightWithPanel="True" Margin="10,10" Foreground="White" Background="{x:Null}" Height="35" Content="&#xE115;" FontFamily="Segoe MDL2 Assets" FontSize="20" Click="Settings"/>
+            <Button RelativePanel.AlignLeftWithPanel="True" Margin="10,10" Foreground="White" Background="{x:Null}" Height="35" Content="&#xE11A;" FontFamily="Segoe MDL2 Assets" FontSize="20" Click="Search"/>
+            <RelativePanel RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True"  HorizontalAlignment="Right" Width="360" Height="50" VerticalAlignment="Bottom"  >
+                <Button Name="myRectangle" Content="&#xE8F1;" FontSize="25" FontFamily="Segoe MDL2 Assets" Height="50" Width="50" Background="{x:Null}" Margin="98,0,-98,0" Foreground="White" Click="Repeat"/>
+                <Button Content="&#xEADF;" FontSize="25" FontFamily="Segoe MDL2 Assets" Height="50" Width="50" Background="{x:Null}" Margin="153,0,-153,0" Foreground="White" Click="Test"/>
+                <Button Content="&#xEDC6;" FontSize="25" FontFamily="Segoe MDL2 Assets" Height="50" Width="50" Background="{x:Null}" Margin="208,0,-208,0" Foreground="White" Click="WindowsInk"/>
+            </RelativePanel>
+        </RelativePanel>
+        <Frame Name="MyFrame" Margin="0,96,0,0">
+            <Frame.ContentTransitions>
+                <TransitionCollection>
+                    <NavigationThemeTransition/>
+                </TransitionCollection>
+            </Frame.ContentTransitions>
+        </Frame>
+
+        <UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
+        AdUnitId="355896"
+        HorizontalAlignment="Center"
+        Height="50"
+        VerticalAlignment="Bottom"
+        Width="300"
+        Margin="0,60"/>
+    </Grid>
+</Page>

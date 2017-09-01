@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="Repeats.Pages.AddRepeats"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Repeats.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.BottomAppBar>
+        <CommandBar Background="{x:Null}">
+            <CommandBar.Content>
+                <Grid/>
+            </CommandBar.Content>
+            <AppBarButton x:Uid="AddButton" Name="Add" Icon="Add" Label="" Click="NewItemClick"/>
+            <AppBarButton x:Uid="DeleteButton" Name="DELETE" Icon="Delete" Label="" Click="DeleteItemClick"/>
+            <AppBarButton x:Uid="SaveButton" Name="Save" Icon="Save" Click="AcceptClick" Label=""/>
+
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid Name="grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ListView Name="LIST" Margin="25,30,20,65" IsItemClickEnabled="True" ItemClick="Item_Click"/>
+        <ProgressRing Name="Ring" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="100"/>
+    </Grid>
+</Page>
