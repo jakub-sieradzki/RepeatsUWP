@@ -48,7 +48,7 @@ namespace Repeats
 
             MAINtext.Text = main1;
 
-            add.Visibility = Visibility.Visible;
+            // add.Visibility = Visibility.Visible;
         }
 
         private void Test(object sender, RoutedEventArgs e)
@@ -60,7 +60,7 @@ namespace Repeats
 
             MAINtext.Text = main2;
 
-            add.Visibility = Visibility.Visible;
+            // add.Visibility = Visibility.Visible;
         }
 
         private void WindowsInk(object sender, RoutedEventArgs e)
@@ -82,7 +82,7 @@ namespace Repeats
 
             MAINtext.Text = main4;
 
-            add.Visibility = Visibility.Visible;
+            // add.Visibility = Visibility.Visible;
         }
 
         private void Search(object sender, RoutedEventArgs e)
@@ -93,7 +93,7 @@ namespace Repeats
             MyFrame.Navigate(typeof(SearchListPage));
             MAINtext.Text = main5;
 
-            add.Visibility = Visibility.Visible;
+            // add.Visibility = Visibility.Visible;
         }
     }
 }
