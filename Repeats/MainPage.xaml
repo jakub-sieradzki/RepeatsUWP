@@ -27,12 +27,12 @@
             </Frame.ContentTransitions>
         </Frame>
 
-        <UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
+        <!-- <UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
         AdUnitId="355896"
         HorizontalAlignment="Center"
         Height="50"
         VerticalAlignment="Bottom"
         Width="300"
-        Margin="0,60"/>
+        Margin="0,60"/> -->
     </Grid>
 </Page>
