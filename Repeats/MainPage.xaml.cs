@@ -70,7 +70,7 @@ namespace Repeats
 
             MyFrame.Navigate(typeof(InkPage));
             MAINtext.Text = main3;
-            add.Visibility = Visibility.Collapsed;
+            // add.Visibility = Visibility.Collapsed;
         }
 
         private void Settings(object sender, RoutedEventArgs e)
