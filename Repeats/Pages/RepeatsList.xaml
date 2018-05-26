@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Page.BottomAppBar>
-        <CommandBar Name="Commandbar" Background="{x:Null}">
+    <!--<Page.BottomAppBar>
+        <CommandBar Name="Commandbar">
             <CommandBar.Content>
                 <Grid/>
             </CommandBar.Content>
@@ -15,21 +15,105 @@
             <AppBarButton x:Uid="DeleteButton" Name ="Delete" Icon="Delete" Label="" Click="Delete_Click"/>
             <AppBarButton x:Uid="AddButton" Name ="Add" Icon="Add" Label="" Click="AddClick" />
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView x:Name="ListViewI" IsItemClickEnabled="True" ItemClick="ItemClick_Click" Margin="0,0,0,65">
-            <ListView.ItemTemplate>
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <AcrylicBrush x:Key="MyAcrylicBrushRList"
+            BackgroundSource="HostBackdrop"
+            TintColor="#247EE6"
+            TintOpacity="0.1"
+            FallbackColor="White"/>
+                    <AcrylicBrush x:Key="MyAcrylicBrushTestList"
+            BackgroundSource="HostBackdrop"
+            TintColor="#247EE6"
+            TintOpacity="0.4"
+            FallbackColor="White"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource MyAcrylicBrushRList}">
+
+
+        <GridView x:Name="GridRepeats" Margin="4,0,0,0"  IsItemClickEnabled="True" ItemClick="ItemClick_Click">
+            <GridView.Header>
+                <Grid x:Name="MyHeaderGrid">
+                    <RelativePanel Height="200" Background="{ThemeResource MyAcrylicBrushRList}">
+                        <TextBlock Text="Witaj w Repeats!" FontSize="40" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,-3,70" Foreground="White"/>
+                        <!--<RelativePanel RelativePanel.AlignBottomWith="image">
+                            <TextBlock Text="Nazwa projektu"/>
+                            <TextBlock Text="Data modyfikacji" RelativePanel.AlignVerticalCenterWithPanel="True" VerticalAlignment="Center"/>
+                        </RelativePanel>-->
+                        <Button RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,20,70" Background="{x:Null}" Click="AddClick">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE109;" FontSize="25" FontFamily="Segoe MDL2 Assets" Foreground="White"/>
+                                <TextBlock Text="  Dodaj" FontSize="18" Foreground="White"/>
+                            </StackPanel>
+                        </Button>
+                    </RelativePanel>
+                </Grid>
+            </GridView.Header>
+            <GridView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel x:Name="STACK" Margin="10,5">
-                        <TextBlock
+                    <RelativePanel 
+                        Height="200" 
+                        Width="150"
+                        Background="{ThemeResource MyAcrylicBrushTestList}">
+                        <PersonPicture 
+                            x:Name="Person"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                            Margin="0,20,0,0"
+                            FontSize="10"
+                            Height="70"
+                            ProfilePicture="ms-appx:///Assets/new logo2.png"/>
+                        <TextBlock 
+                            Text="Nazwa zestawu"
+                            TextWrapping="Wrap"
+                            FontSize="18" 
+                            Name="SetName"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                            RelativePanel.Below="Person"
+                            Margin="0,20"/>
+                        <!--<Rectangle 
+                            Width="80" 
+                            Height="1" 
+                            RelativePanel.Below="SetName"/>-->
+                        <TextBlock 
+                            Name="ModifiDate" 
+                            Text="12.05.2018" 
+                            FontSize="14" 
+                            RelativePanel.AlignBottomWithPanel="True"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                            Margin="0,0,0,5"/>
+                    </RelativePanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+        <!--<StackPanel>
+            <RelativePanel Margin="0,0,0,0">
+                <TextBlock Text="Witamy" FontSize="50"/>
+                <Button Content="Dodaj" FontSize="50" RelativePanel.AlignRightWithPanel="True"/>
+
+            </RelativePanel>
+            <ListView x:Name="ListViewI" IsItemClickEnabled="True" ItemClick="ItemClick_Click">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel x:Name="STACK" Margin="10,5">
+                            <TextBlock
                             Name="TEXT"
                             Text = "{Binding DisplayName}"
                             Style="{ThemeResource BaseTextBlockStyle}">
-                        </TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>-->
+
+
     </Grid>
 </Page>

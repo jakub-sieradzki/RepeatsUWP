@@ -18,7 +18,13 @@
     </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView Name="LISTItems" Margin="25,30,20,65" IsItemClickEnabled="True" ItemClick="Item_Click"/>
+        <ListView Name="LISTItems" Margin="25,30,20,65" IsItemClickEnabled="True" ItemClick="Item_Click">
+            <ListView.Header>
+                <RelativePanel>
+                    <PersonPicture x:Name="PersonEdit"/>
+                </RelativePanel>
+            </ListView.Header>
+        </ListView>
         <ProgressRing Name="Ring" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="100"/>
     </Grid>
 </Page>

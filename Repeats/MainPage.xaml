@@ -7,9 +7,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:UI="using:Microsoft.Advertising.WinRT.UI"
     mc:Ignorable="d">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <AcrylicBrush x:Key="MyAcrylicBrush"
+            BackgroundSource="HostBackdrop"
+            TintColor="#247EE6"
+            TintOpacity="0.1"
+            FallbackColor="White"/>
+                </ResourceDictionary>
+                </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid>
 
-        <RelativePanel Margin="0,0" VerticalAlignment="Top"  Height="96" Background="#FF358FCD">
+        <!--<RelativePanel Margin="0,0" VerticalAlignment="Top"  Height="96" Background="#FF358FCD">
             <TextBlock Name="MAINtext" Text="Repeats" Width="120" HorizontalAlignment="Center" VerticalAlignment="Top" RelativePanel.AlignHorizontalCenterWithPanel="True" Margin="0,10" Foreground="White" TextAlignment="Center"/>
             <Button RelativePanel.AlignRightWithPanel="True" Margin="10,10" Foreground="White" Background="{x:Null}" Height="35" Content="&#xE115;" FontFamily="Segoe MDL2 Assets" FontSize="20" Click="Settings"/>
             <Button RelativePanel.AlignLeftWithPanel="True" Margin="10,10" Foreground="White" Background="{x:Null}" Height="35" Content="&#xE11A;" FontFamily="Segoe MDL2 Assets" FontSize="20" Click="Search"/>
@@ -17,15 +30,48 @@
                 <Button Name="myRectangle" Content="&#xE8F1;" FontSize="25" FontFamily="Segoe MDL2 Assets" Height="50" Width="50" Background="{x:Null}" Margin="98,0,-98,0" Foreground="White" Click="Repeat"/>
                 <Button Content="&#xEADF;" FontSize="25" FontFamily="Segoe MDL2 Assets" Height="50" Width="50" Background="{x:Null}" Margin="153,0,-153,0" Foreground="White" Click="Test"/>
                 <Button Content="&#xEDC6;" FontSize="25" FontFamily="Segoe MDL2 Assets" Height="50" Width="50" Background="{x:Null}" Margin="208,0,-208,0" Foreground="White" Click="WindowsInk"/>
-            </RelativePanel>
-        </RelativePanel>
-        <Frame Name="MyFrame" Margin="0,96,0,0">
-            <Frame.ContentTransitions>
-                <TransitionCollection>
-                    <NavigationThemeTransition/>
-                </TransitionCollection>
-            </Frame.ContentTransitions>
-        </Frame>
+            </RelativePanel>-->
+
+        <NavigationView x:Name="NavView"
+                    ItemInvoked="NavView_ItemInvoked"
+                    Loaded="NavView_Loaded"
+                    BackRequested="NavView_BackRequested"
+                        AlwaysShowHeader="False">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Uid="HomeNavItem" Content="Twoje powtórki" Tag="repeats">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8F1;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Uid="AppsNavItem" Content="Sprawdzian" Tag="test">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEADF;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Uid="GamesNavItem" Content="Rysunki" Tag="ink">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEDC6;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <NavigationView.AutoSuggestBox>
+                <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
+            </NavigationView.AutoSuggestBox>
+
+            <Frame x:Name="ContentFrame">
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition/>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+
+        </NavigationView>
+
+        <!--</RelativePanel>-->
+
 
         <!-- <UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
         AdUnitId="355896"

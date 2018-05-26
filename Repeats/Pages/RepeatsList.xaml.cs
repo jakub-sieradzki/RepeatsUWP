@@ -26,8 +26,8 @@ namespace Repeats.Pages
 
             Load();
 
-            Edit.Visibility = Visibility.Collapsed;
-            Delete.Visibility = Visibility.Collapsed;
+            //Edit.Visibility = Visibility.Collapsed;
+            //Delete.Visibility = Visibility.Collapsed;
         }
 
         private async void Load()
@@ -36,24 +36,28 @@ namespace Repeats.Pages
             c = await storageFolder.GetFolderAsync("FOLDERS");
             abcd = await c.GetFoldersAsync();
 
-            ListViewI.ItemsSource = abcd;
-            items = ListViewI.Items.Count;
+            //ListViewI.ItemsSource = abcd;
+            //items = ListViewI.Items.Count;
         }
 
         public void ItemClick_Click(object sender, ItemClickEventArgs e)
         {
-            Edit.Visibility = Visibility.Visible;
-            Delete.Visibility = Visibility.Visible;
-            Add.Visibility = Visibility.Collapsed;
+            //Edit.Visibility = Visibility.Visible;
+            //Delete.Visibility = Visibility.Visible;
+            //Add.Visibility = Visibility.Collapsed;
+            GridView grid = (GridView)sender;
+            grid.Items.Contains(PersonPicture);
+
+            //PersonPicture person = (PersonPicture)sender;
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                int cc = ListViewI.SelectedIndex;
+                //int cc = ListViewI.SelectedIndex;
 
-                name = abcd[cc].DisplayName;
+                //name = abcd[cc].DisplayName;
 
                 Frame.Navigate(typeof(EditItems));
             }
@@ -90,9 +94,9 @@ namespace Repeats.Pages
 
             try
             {
-                int cc = ListViewI.SelectedIndex;
+                //int cc = ListViewI.SelectedIndex;
 
-                name = abcd[cc].DisplayName;
+                //name = abcd[cc].DisplayName;
 
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
                 StorageFolder c = await storageFolder.GetFolderAsync("FOLDERS");
@@ -107,26 +111,26 @@ namespace Repeats.Pages
                 {
                     await d.DeleteAsync();
                     abcd = await c.GetFoldersAsync();
-                    ListViewI.ItemsSource = abcd;
-                    items = ListViewI.Items.Count;
+                    //ListViewI.ItemsSource = abcd;
+                    //items = ListViewI.Items.Count;
                 }
 
-                int count = ListViewI.Items.Count;
+                //int count = ListViewI.Items.Count;
 
-                if (count == 0)
-                {
-                    Settings.CancelTask();
+                //if (count == 0)
+                //{
+                //    Settings.CancelTask();
 
-                    Edit.Visibility = Visibility.Collapsed;
-                    Delete.Visibility = Visibility.Collapsed;
-                    Add.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    Edit.Visibility = Visibility.Collapsed;
-                    Delete.Visibility = Visibility.Collapsed;
-                    Add.Visibility = Visibility.Visible;
-                }
+                //    //Edit.Visibility = Visibility.Collapsed;
+                //    //Delete.Visibility = Visibility.Collapsed;
+                //    //Add.Visibility = Visibility.Visible;
+                //}
+                //else
+                //{
+                //    Edit.Visibility = Visibility.Collapsed;
+                //    Delete.Visibility = Visibility.Collapsed;
+                //    Add.Visibility = Visibility.Visible;
+                //}
             }
             catch (Exception)
             {
@@ -137,8 +141,10 @@ namespace Repeats.Pages
 
         private async void AddClick(object sender, RoutedEventArgs e)
         {
-            AskNameDialog dialog = new AskNameDialog();
-            await dialog.ShowAsync();
+            GridRepeats.Items.Add(GridRepeats.ItemTemplate);
+
+            //AskNameDialog dialog = new AskNameDialog();
+            //await dialog.ShowAsync();
         }
     }
 }
