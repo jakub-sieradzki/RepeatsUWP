@@ -39,7 +39,7 @@
     <Grid Background="{ThemeResource MyAcrylicBrushRList}">
 
 
-        <GridView x:Name="GridRepeats" Margin="4,0,0,0"  IsItemClickEnabled="True" ItemClick="ItemClick_Click">
+        <GridView x:Name="GridRepeats" Margin="4,0,0,0"  IsItemClickEnabled="True" ItemClick="ItemClick_Click" ItemsSource="{x:Bind ViewModel.Datas}">
             <GridView.Header>
                 <Grid x:Name="MyHeaderGrid">
                     <RelativePanel Height="200" Background="{ThemeResource MyAcrylicBrushRList}">
@@ -58,7 +58,7 @@
                 </Grid>
             </GridView.Header>
             <GridView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="local:RepeatsListData">
                     <RelativePanel 
                         Height="200" 
                         Width="150"
@@ -71,7 +71,7 @@
                             Height="70"
                             ProfilePicture="ms-appx:///Assets/new logo2.png"/>
                         <TextBlock 
-                            Text="Nazwa zestawu"
+                            Text="{Binding ProjectName}"
                             TextWrapping="Wrap"
                             FontSize="18" 
                             Name="SetName"
@@ -84,7 +84,7 @@
                             RelativePanel.Below="SetName"/>-->
                         <TextBlock 
                             Name="ModifiDate" 
-                            Text="12.05.2018" 
+                            Text="{Binding ProjectDate}" 
                             FontSize="14" 
                             RelativePanel.AlignBottomWithPanel="True"
                             RelativePanel.AlignHorizontalCenterWithPanel="True"

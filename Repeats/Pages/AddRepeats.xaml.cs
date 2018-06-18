@@ -3,6 +3,11 @@ using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite.Internal;
+using System.Collections.ObjectModel;
+using Microsoft.Toolkit.Uwp.UI.Extensions;
+using System.Linq;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -11,95 +16,173 @@ namespace Repeats.Pages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+
+    public class bind1
+    {
+        public int ClickCount { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+                return false;
+
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            var bi = (bind1)obj;
+            return this.ClickCount == bi.ClickCount;
+        }
+        public override int GetHashCode()
+        {
+            return ClickCount ^ 7;
+        }
+    }
+
+    public class BindViewModel
+    {
+        private ObservableCollection<bind1> defaultRecording1 = new ObservableCollection<bind1>();
+        public ObservableCollection<bind1> DefaultRecording { get { return this.defaultRecording1; } }
+        public BindViewModel()
+        {
+
+        }
+    }
+
     public sealed partial class AddRepeats : Page
     {
-        public static int c;
-        public static int time;
-        public string question;
-        public string name;
-        public string txt;
-        public TextBox Question;
-        public TextBox Answer;
         public StorageFolder MainStorage;
-        RelativePanel panel;
+        public int count;
 
         public AddRepeats()
         {
             this.InitializeComponent();
 
-            DELETE.Visibility = Visibility.Collapsed;
-
-            c = 0;
-
             Ring.IsActive = false;
 
-            ItemsTemplate();
-
             STORAGE();
+
+            count = 0;
+
+            this.ViewModel1 = new BindViewModel();
+
+            ViewModel1.DefaultRecording.Add(new bind1() { ClickCount = count });
         }
+
+        public BindViewModel ViewModel1 { get; set; }
 
         private void STORAGE()
         {
             MainStorage = ApplicationData.Current.LocalFolder;
         }
 
-        private void ItemsTemplate()
-        {
-            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-            var strque = loader.GetString("Question");
-            var strans = loader.GetString("Answer");
-
-            c++;
-
-            panel = new RelativePanel();
-            panel.Name = "P" + c.ToString();
-
-            Question = new TextBox();
-
-            Question.Name = "Q" + c.ToString();
-            Question.PlaceholderText = strque;
-            Question.FontSize = 20;
-
-            Answer = new TextBox();
-
-            Answer.Name = "A" + c.ToString();
-            Answer.PlaceholderText = strans;
-            Answer.FontSize = 20;
-            Answer.Margin = new Thickness(0, 40, 0, 0);
-
-            var qualifiers = Windows.ApplicationModel.Resources.Core.ResourceContext.GetForCurrentView().QualifierValues;
-
-            if (qualifiers["DeviceFamily"] == "DeviceFamily-Mobile")
-            {
-                Question.MinWidth = 140;
-                Answer.MinWidth = 140;
-            }
-            else
-            {
-                Question.MinWidth = 300;
-                Answer.MinWidth = 300;
-            }
-
-            panel.Children.Add(Question);
-            panel.Children.Add(Answer);
-
-            LIST.Items.Add(panel);
-        }
-
         private void DeleteItemClick(object sender, RoutedEventArgs e)
         {
-            LIST.Items.Remove(LIST.SelectedItem);
-            DELETE.Visibility = Visibility.Collapsed;
+            var button = sender as Button;
+            string strtag = button.Tag.ToString();
+
+            int count = Int32.Parse(strtag);
+
+            Grid find = button.Parent as Grid;
+
+            var find2 = find.FindName("REL") as RelativePanel;
+
+            var q = find2.FindName("quest") as TextBox;
+            var a = find2.FindName("answer") as TextBox;
+            q.Text = "";
+            a.Text = "";
+
+            ViewModel1.DefaultRecording.Remove(new bind1() { ClickCount = count });
         }
 
         public void NewItemClick(object sender, RoutedEventArgs e)
         {
-            ItemsTemplate();
+            count++;
+            ViewModel1.DefaultRecording.Add(new bind1() { ClickCount = count });
         }
 
-        public void Item_Click(object sender, ItemClickEventArgs e)
+        private void SaveClick(object sender, RoutedEventArgs e)
         {
-            DELETE.Visibility = Visibility.Visible;
+            Ring.Visibility = Visibility.Visible;
+            Ring.IsActive = true;
+
+            var items = GRID.Items;
+            var findrelative = GRID.FindDescendants<RelativePanel>();
+            var listrel = findrelative.ToList();
+            int relcount = listrel.Count;
+
+            relcount--;
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                String tableCommand = "CREATE TABLE IF NOT EXISTS " + AskNameDialog.name + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL)";
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                try
+                {
+                    createTable.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    
+                }
+                db.Close();
+            }
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+
+                for (int i = 0; i < relcount; i++)
+                {
+                    RelativePanel panel = listrel[i];
+                    TextBox questbox = panel.FindChildByName("quest") as TextBox;
+                    TextBox answerbox = panel.FindChildByName("answer") as TextBox;
+
+                    string question = questbox.Text;
+                    string answer = answerbox.Text;
+
+                    SqliteCommand insertCommand = new SqliteCommand();
+                    insertCommand.Connection = db;
+
+                    insertCommand.CommandText = "INSERT INTO " + AskNameDialog.name + " VALUES (NULL, @question, @answer);";
+                    insertCommand.Parameters.AddWithValue("@question", question);
+                    insertCommand.Parameters.AddWithValue("@answer", answer);
+
+                    try
+                    {
+                        insertCommand.ExecuteReader();
+                    }
+                    catch (SqliteException)
+                    {
+                        //Handle error
+                        return;
+                    }
+                }
+
+                db.Close();
+            }
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand insertCommand = new SqliteCommand();
+                insertCommand.Connection = db;
+
+                insertCommand.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title);";
+                insertCommand.Parameters.AddWithValue("@title", AskNameDialog.name);
+                try
+                {
+                    insertCommand.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    //Handle error
+                    return;
+                }
+                db.Close();
+            }
+
+            Frame.Navigate(typeof(RepeatsList));
         }
 
         private static async void ExceptionUps()
@@ -164,7 +247,6 @@ namespace Repeats.Pages
 
                     Ring.IsActive = false;
                     Add.IsEnabled = true;
-                    DELETE.IsEnabled = true;
                     Save.IsEnabled = true;
                 }
                 else
@@ -191,106 +273,6 @@ namespace Repeats.Pages
                 ExceptionUps();
             }
 
-        }
-
-        private async void AcceptClick(object sender, RoutedEventArgs e)
-        {
-            Ring.IsActive = true;
-            Add.IsEnabled = false;
-            DELETE.IsEnabled = false;
-            Save.IsEnabled = false;
-            try
-            {
-                int NEWint = 0;
-
-                int d = LIST.Items.Count;
-
-                if (d == 0 || d == 1)
-                {
-                    Ring.IsActive = false;
-                    Add.IsEnabled = true;
-                    DELETE.IsEnabled = true;
-                    Save.IsEnabled = true;
-
-                    CountDialog();
-                }
-                else
-                {
-                    string n = AskNameDialog.name;
-
-                    StorageFolder c = await MainStorage.GetFolderAsync("FOLDERS");
-                    StorageFolder sampleFolder = await c.CreateFolderAsync(n, CreationCollisionOption.ReplaceExisting);
-                    StorageFolder FOLDER = await c.GetFolderAsync(n);
-
-                    StorageFile sampleFile = await FOLDER.CreateFileAsync("ItemsCount.txt", CreationCollisionOption.ReplaceExisting);
-                    StorageFile sampleFile2 = await FOLDER.GetFileAsync("ItemsCount.txt");
-                    await FileIO.WriteTextAsync(sampleFile2, d.ToString());
-
-                    int COUNTS2 = LIST.Items.Count;
-
-                    for (int i = 1; i <= COUNTS2; i++)
-                    {
-                        object FindRel = LIST.FindName("P" + i.ToString());
-
-                        if (FindRel == null)
-                        {
-                            COUNTS2 += 1;
-                        }
-                        else
-                        {
-                            NEWint++;
-
-                            RelativePanel Rel = (RelativePanel)FindRel;
-
-                            object box1 = Rel.FindName("Q" + i.ToString());
-                            object box2 = Rel.FindName("A" + i.ToString());
-
-                            TextBox txtb = (TextBox)box1;
-                            string Q = txtb.Text;
-
-                            TextBox txtb2 = (TextBox)box2;
-                            string A = txtb2.Text;
-
-                            if (Q == "" || A == "")
-                            {
-                                Ring.IsActive = false;
-                                Add.IsEnabled = true;
-                                DELETE.IsEnabled = true;
-                                Save.IsEnabled = true;
-
-                                WriteDialog();
-                                break;
-                            }
-                            else
-                            {
-                                txt = "header" + NEWint.ToString() + ".txt";
-
-                                StorageFile sampleFile10 = await FOLDER.CreateFileAsync(txt, CreationCollisionOption.ReplaceExisting);
-
-                                string[] lines = { n, Q, A };
-
-                                StorageFile sampleFile20 = await FOLDER.GetFileAsync(txt);
-                                await FileIO.WriteLinesAsync(sampleFile20, lines);
-
-                                if (i == COUNTS2)
-                                {
-                                    ASKTIME();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                ExceptionUps();
-
-                Ring.IsActive = false;
-
-                Add.IsEnabled = true;
-                DELETE.IsEnabled = true;
-                Save.IsEnabled = true;
-            }
         }
     }
 }

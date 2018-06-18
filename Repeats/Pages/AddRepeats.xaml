@@ -6,20 +6,61 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <AcrylicBrush x:Key="MyAcrylicBrushRList"
+            BackgroundSource="HostBackdrop"
+            TintColor="#247EE6"
+            TintOpacity="0.1"
+            FallbackColor="White"/>
+                    <AcrylicBrush x:Key="MyAcrylicBrushTestList"
+            BackgroundSource="HostBackdrop"
+            TintColor="#247EE6"
+            TintOpacity="0.4"
+            FallbackColor="White"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    
     <Page.BottomAppBar>
         <CommandBar Background="{x:Null}">
             <CommandBar.Content>
                 <Grid/>
             </CommandBar.Content>
             <AppBarButton x:Uid="AddButton" Name="Add" Icon="Add" Label="" Click="NewItemClick"/>
-            <AppBarButton x:Uid="DeleteButton" Name="DELETE" Icon="Delete" Label="" Click="DeleteItemClick"/>
-            <AppBarButton x:Uid="SaveButton" Name="Save" Icon="Save" Click="AcceptClick" Label=""/>
+            <AppBarButton x:Uid="SaveButton" Name="Save" Icon="Save" Click="SaveClick" Label="Zapisz"/>
 
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Name="grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView Name="LIST" Margin="25,30,20,65" IsItemClickEnabled="True" ItemClick="Item_Click"/>
+    <Grid Name="grid" Background="{ThemeResource MyAcrylicBrushRList}">
+        <GridView Name="GRID" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModel1.DefaultRecording}">
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Name="GridRel">
+                        <RelativePanel x:Name="REL" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="SaveButton" Grid.Column="1" Margin="0,0,40,0">
+                            <Rectangle Name="Rectangle" RelativePanel.AlignHorizontalCenterWithPanel="True" Width="5"/>
+                            <TextBox Name="quest" PlaceholderText="Pytanie" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="Rectangle" Margin="10,0,0,0"/>
+                            <TextBox Name="answer" PlaceholderText="Odpowiedź"  RelativePanel.AlignRightWithPanel="True" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0"/>
+                        </RelativePanel>
+                        <Button Name="SaveButton" Tag="{Binding ClickCount}" Content="&#xE107;" FontSize="16" FontFamily="Segoe MDL2 Assets" Foreground="White" HorizontalAlignment="Right" Click="DeleteItemClick"/>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
         <ProgressRing Name="Ring" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="100"/>
     </Grid>
 </Page>

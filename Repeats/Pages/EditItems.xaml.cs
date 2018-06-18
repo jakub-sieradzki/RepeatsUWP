@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -91,11 +93,38 @@ namespace Repeats.Pages
             ContentDialogResult result = await ExcUPS.ShowAsync();
         }
 
+        //private List<string> GrabQuestions()
+        //{
+        //    List<string> questions = new List<string>();
+        //    using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+        //    {
+        //        db.Open();
+        //        SqliteCommand selectCommand = new SqliteCommand("SELECT question from " + NAME, db);
+        //        SqliteDataReader query;
+        //        try
+        //        {
+        //            query = selectCommand.ExecuteReader();
+        //        }
+        //        catch (SqliteException error)
+        //        {
+        //            //Handle error
+        //            return questions;
+        //        }
+        //        while (query.Read())
+        //        {
+        //            questions.Add(query.GetString(0));
+        //        }
+        //        db.Close();
+        //    }
+        //    return questions;
+        //}
+
         private async void Load()
         {
             try
             {
                 string NAME = RepeatsList.name;
+
 
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
                 StorageFolder p = await storageFolder.GetFolderAsync("FOLDERS");

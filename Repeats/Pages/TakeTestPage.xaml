@@ -9,7 +9,17 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <RelativePanel Background="#19000000">
+        <ListView ItemsSource="{x:Bind ViewTestModel.Test}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:TakeTestPageData">
+                    <RelativePanel>
+                        <TextBlock Text="{Binding Question}" Name="QuestionPlace" RelativePanel.AlignTopWithPanel="True"/>
+                        <TextBox Name="AnswerPlace" RelativePanel.Below="QuestionPlace"/>
+                    </RelativePanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--<RelativePanel Background="#19000000">
             <Button Name="Button2" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" Background="#FF029EF7" Foreground="White" Margin="0,20" Click="Next_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock x:Uid="TextNext" Text="" FontSize="21"/>
@@ -24,6 +34,6 @@
             </StackPanel>
             <Button x:Uid="TestButton" Name="ButtonFlip1" RelativePanel.AlignHorizontalCenterWith="StackFlip1" RelativePanel.Below="StackFlip1" MinWidth="200" Height="50" Background="#FFFF8000" Content="" Foreground="White" Margin="0,50" Click="Check_Click"/>
             <TextBlock Name="TEXT3" RelativePanel.Above="BoxFlip1" RelativePanel.AlignHorizontalCenterWith="BoxFlip1"/>
-        </RelativePanel>
+        </RelativePanel>-->
     </Grid>
 </Page>

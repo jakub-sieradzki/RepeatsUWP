@@ -4,6 +4,8 @@ using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite.Internal;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,6 +30,37 @@ namespace Repeats.Pages
 
             //Edit.Visibility = Visibility.Collapsed;
             //Delete.Visibility = Visibility.Collapsed;
+
+            this.ViewModel = new MainPageDataModel();
+        }
+
+        public MainPageDataModel ViewModel { get; set; }
+
+        private List<String> Grab_Titles()
+        {
+            List<String> title = new List<string>();
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                
+                SqliteCommand selectCommand = new SqliteCommand("SELECT title from TitleTable", db);
+                SqliteDataReader query;
+                try
+                {
+                    query = selectCommand.ExecuteReader();
+                }
+                catch (SqliteException error)
+                {
+                    //Handle error
+                    return title;
+                }
+                while (query.Read())
+                {
+                    title.Add(query.GetString(0));
+                }
+                db.Close();
+            }
+            return title;
         }
 
         private async void Load()
@@ -42,13 +75,9 @@ namespace Repeats.Pages
 
         public void ItemClick_Click(object sender, ItemClickEventArgs e)
         {
-            //Edit.Visibility = Visibility.Visible;
-            //Delete.Visibility = Visibility.Visible;
-            //Add.Visibility = Visibility.Collapsed;
-            GridView grid = (GridView)sender;
-            grid.Items.Contains(PersonPicture);
-
-            //PersonPicture person = (PersonPicture)sender;
+            var data = (RepeatsListData)e.ClickedItem;
+            name = data.ProjectName;
+            Frame.Navigate(typeof(EditItems));
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
@@ -141,10 +170,10 @@ namespace Repeats.Pages
 
         private async void AddClick(object sender, RoutedEventArgs e)
         {
-            GridRepeats.Items.Add(GridRepeats.ItemTemplate);
+            //GridRepeats.Items.Add(GridRepeats.ItemTemplate);
 
-            //AskNameDialog dialog = new AskNameDialog();
-            //await dialog.ShowAsync();
+            AskNameDialog dialog = new AskNameDialog();
+            await dialog.ShowAsync();
         }
     }
 }

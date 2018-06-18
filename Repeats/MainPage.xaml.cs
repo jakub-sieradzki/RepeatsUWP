@@ -144,7 +144,9 @@ namespace Repeats
                     {typeof(RepeatsList), "repeats"},
                     {typeof(TestPage), "test"},
                     {typeof(InkPage), "ink"},
-                    {typeof(AddRepeats), "addrepeats" }
+                    {typeof(AddRepeats), "addrepeats" },
+                    {typeof(EditItems), "edit"},
+                    {typeof(TakeTestPage), "taketest" }
                 };
 
                 String stringTag = lookup[ContentFrame.SourcePageType];

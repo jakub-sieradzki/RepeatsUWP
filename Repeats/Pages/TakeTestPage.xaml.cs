@@ -34,7 +34,11 @@ namespace Repeats.Pages
 
             GetItemsFromFolder();
             LoadLocalItems();
+
+            this.ViewTestModel = new TakeTestPageDataModel();
         }
+
+        public TakeTestPageDataModel ViewTestModel { get; set; }
 
         private static async void ExceptionUps()
         {
@@ -89,7 +93,7 @@ namespace Repeats.Pages
                         ANSWER = Reader.ReadLine();
                     }
 
-                    TextFlip1.Text = QUESTION;
+                    //TextFlip1.Text = QUESTION;
                 }
                 else
                 {
@@ -100,12 +104,12 @@ namespace Repeats.Pages
 
 
 
-                    BoxFlip1.Visibility = Visibility.Collapsed;
-                    ButtonFlip1.Visibility = Visibility.Collapsed;
+                    //BoxFlip1.Visibility = Visibility.Collapsed;
+                    //ButtonFlip1.Visibility = Visibility.Collapsed;
 
-                    string all = strtest1 + COUNTS.ToString() + Environment.NewLine + Environment.NewLine + strtest2 + GOOD.ToString() + Environment.NewLine + strtest3 + BAD.ToString();
+                    //string all = strtest1 + COUNTS.ToString() + Environment.NewLine + Environment.NewLine + strtest2 + GOOD.ToString() + Environment.NewLine + strtest3 + BAD.ToString();
 
-                    TextFlip1.Text = all;
+                    //TextFlip1.Text = all;
                 }
                 item += 1;
             }
@@ -118,15 +122,15 @@ namespace Repeats.Pages
 
         private void LoadLocalItems()
         {
-            Button2.Visibility = Visibility.Collapsed;
-            StackFlip1.Visibility = Visibility.Collapsed;
-            TEXT3.Visibility = Visibility.Collapsed;
+            //Button2.Visibility = Visibility.Collapsed;
+            //StackFlip1.Visibility = Visibility.Collapsed;
+            //TEXT3.Visibility = Visibility.Collapsed;
 
-            BoxFlip1.IsEnabled = true;
-            ButtonFlip1.IsEnabled = true;
+            //BoxFlip1.IsEnabled = true;
+            //ButtonFlip1.IsEnabled = true;
 
-            BoxFlip1.BorderBrush = new SolidColorBrush(Colors.Gray);
-            BoxFlip1.Text = "";
+            //BoxFlip1.BorderBrush = new SolidColorBrush(Colors.Gray);
+            //BoxFlip1.Text = "";
         }
 
         private void CheckAnswer()
@@ -139,31 +143,31 @@ namespace Repeats.Pages
                 var strfin = loader.GetString("Correct");
 
 
-                if (BoxFlip1.Text == ANSWER)
-                {
-                    Stack1.FontFamily = new FontFamily("Segoe MDL2 Assets");
-                    Stack1.Text = "\uE001";
-                    Stack1.Foreground = new SolidColorBrush(Colors.Green);
-                    Stack2.Text = strgoo;
+                //if (BoxFlip1.Text == ANSWER)
+                //{
+                //    Stack1.FontFamily = new FontFamily("Segoe MDL2 Assets");
+                //    Stack1.Text = "\uE001";
+                //    Stack1.Foreground = new SolidColorBrush(Colors.Green);
+                //    Stack2.Text = strgoo;
 
-                    StackFlip1.Visibility = Visibility.Visible;
-                    Button2.Visibility = Visibility.Visible;
+                //    StackFlip1.Visibility = Visibility.Visible;
+                //    Button2.Visibility = Visibility.Visible;
 
-                    GOOD += 1;
-                }
-                else
-                {
-                    Stack1.FontFamily = new FontFamily("Segoe MDL2 Assets");
-                    Stack1.Text = "\uE10A";
-                    Stack1.Foreground = new SolidColorBrush(Colors.Red);
-                    Stack2.Text = strbad;
-                    StackFlip1.Visibility = Visibility.Visible;
-                    Button2.Visibility = Visibility.Visible;
-                    TEXT3.Text = strfin + ANSWER;
-                    TEXT3.Visibility = Visibility.Visible;
+                //    GOOD += 1;
+                //}
+                //else
+                //{
+                //    Stack1.FontFamily = new FontFamily("Segoe MDL2 Assets");
+                //    Stack1.Text = "\uE10A";
+                //    Stack1.Foreground = new SolidColorBrush(Colors.Red);
+                //    Stack2.Text = strbad;
+                //    StackFlip1.Visibility = Visibility.Visible;
+                //    Button2.Visibility = Visibility.Visible;
+                //    TEXT3.Text = strfin + ANSWER;
+                //    TEXT3.Visibility = Visibility.Visible;
 
-                    BAD += 1;
-                }
+                //    BAD += 1;
+                //}
             }
             catch (Exception)
             {
@@ -182,8 +186,8 @@ namespace Repeats.Pages
         {
             CheckAnswer();
 
-            BoxFlip1.IsEnabled = false;
-            ButtonFlip1.IsEnabled = false;
+            //BoxFlip1.IsEnabled = false;
+            //ButtonFlip1.IsEnabled = false;
         }
     }
 }

@@ -13,6 +13,8 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite.Internal;
 
 namespace Repeats
 {
@@ -29,6 +31,22 @@ namespace Repeats
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            SqliteEngine.UseWinSqlite3(); //Configuring library to use SDK version of SQLite
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db")) //Name of .db file doesn't matter, but should be consistent across all SqliteConnection objects
+            {
+                db.Open(); //Open connection to database
+                String tableCommand = "CREATE TABLE IF NOT EXISTS TitleTable (id INTEGER PRIMARY KEY AUTOINCREMENT, title NVARCHAR(2048) NULL)";
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                try
+                {
+                    createTable.ExecuteReader(); //Execute command, throws SqliteException error if command doesn't execute properly
+                }
+                catch (SqliteException e)
+                {
+                    //Do nothing
+                }
+            }
         }
 
         /// <summary>
