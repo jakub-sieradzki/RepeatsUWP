@@ -26,7 +26,7 @@ namespace Repeats.Pages
                 {
                     db.Open();
 
-                    SqliteCommand selectCommand = new SqliteCommand("SELECT question from " + TestPage.name, db);
+                    SqliteCommand selectCommand = new SqliteCommand("SELECT question from " + RepeatsList.name, db);
                     SqliteDataReader query;
                     try
                     {

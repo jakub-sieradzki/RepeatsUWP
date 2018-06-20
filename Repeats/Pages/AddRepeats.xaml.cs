@@ -4,7 +4,6 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Data.Sqlite;
-using Microsoft.Data.Sqlite.Internal;
 using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System.Linq;
@@ -40,8 +39,8 @@ namespace Repeats.Pages
 
     public class BindViewModel
     {
-        private ObservableCollection<bind1> defaultRecording1 = new ObservableCollection<bind1>();
-        public ObservableCollection<bind1> DefaultRecording { get { return this.defaultRecording1; } }
+        private ObservableCollection<bind1> addRepeat = new ObservableCollection<bind1>();
+        public ObservableCollection<bind1> AddRepeat { get { return this.addRepeat; } }
         public BindViewModel()
         {
 
@@ -65,7 +64,7 @@ namespace Repeats.Pages
 
             this.ViewModel1 = new BindViewModel();
 
-            ViewModel1.DefaultRecording.Add(new bind1() { ClickCount = count });
+            ViewModel1.AddRepeat.Add(new bind1() { ClickCount = count });
         }
 
         public BindViewModel ViewModel1 { get; set; }
@@ -91,13 +90,17 @@ namespace Repeats.Pages
             q.Text = "";
             a.Text = "";
 
-            ViewModel1.DefaultRecording.Remove(new bind1() { ClickCount = count });
+            ViewModel1.AddRepeat.Remove(new bind1() { ClickCount = count });
         }
 
         public void NewItemClick(object sender, RoutedEventArgs e)
         {
             count++;
-            ViewModel1.DefaultRecording.Add(new bind1() { ClickCount = count });
+            ViewModel1.AddRepeat.Add(new bind1() { ClickCount = count });
+
+            string date = DateTime.Now.ToLongDateString();
+
+            int i = 0;
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
@@ -112,19 +115,26 @@ namespace Repeats.Pages
 
             relcount--;
 
+            var date = DateTime.Now.ToString("yyyyMMddHHmmss");
+            date = "R" + date;
+
+            string realDate = DateTime.Now.ToShortDateString();
+
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
                 db.Open();
-                String tableCommand = "CREATE TABLE IF NOT EXISTS " + AskNameDialog.name + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL)";
+                String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL)";
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+
                 try
                 {
                     createTable.ExecuteReader();
                 }
-                catch (SqliteException)
+                catch(SqliteException)
                 {
-                    
+
                 }
+
                 db.Close();
             }
 
@@ -132,7 +142,7 @@ namespace Repeats.Pages
             {
                 db.Open();
 
-                for (int i = 0; i < relcount; i++)
+                for (int i = 0; i <= relcount; i++)
                 {
                     RelativePanel panel = listrel[i];
                     TextBox questbox = panel.FindChildByName("quest") as TextBox;
@@ -144,7 +154,7 @@ namespace Repeats.Pages
                     SqliteCommand insertCommand = new SqliteCommand();
                     insertCommand.Connection = db;
 
-                    insertCommand.CommandText = "INSERT INTO " + AskNameDialog.name + " VALUES (NULL, @question, @answer);";
+                    insertCommand.CommandText = "INSERT INTO " + date + " VALUES (NULL, @question, @answer);";
                     insertCommand.Parameters.AddWithValue("@question", question);
                     insertCommand.Parameters.AddWithValue("@answer", answer);
 
@@ -154,7 +164,6 @@ namespace Repeats.Pages
                     }
                     catch (SqliteException)
                     {
-                        //Handle error
                         return;
                     }
                 }
@@ -168,17 +177,19 @@ namespace Repeats.Pages
                 SqliteCommand insertCommand = new SqliteCommand();
                 insertCommand.Connection = db;
 
-                insertCommand.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title);";
+                insertCommand.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate);";
                 insertCommand.Parameters.AddWithValue("@title", AskNameDialog.name);
-                try
-                {
+                insertCommand.Parameters.AddWithValue("@TableName", date);
+                insertCommand.Parameters.AddWithValue("@CreateDate", realDate);
+                //try
+                //{
                     insertCommand.ExecuteReader();
-                }
-                catch (SqliteException)
-                {
-                    //Handle error
-                    return;
-                }
+                //}
+                //catch (SqliteException)
+                //{
+                //    //Handle error
+                //    return;
+                //}
                 db.Close();
             }
 

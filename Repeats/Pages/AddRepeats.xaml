@@ -15,11 +15,6 @@
             TintColor="#247EE6"
             TintOpacity="0.1"
             FallbackColor="White"/>
-                    <AcrylicBrush x:Key="MyAcrylicBrushTestList"
-            BackgroundSource="HostBackdrop"
-            TintColor="#247EE6"
-            TintOpacity="0.4"
-            FallbackColor="White"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
@@ -37,7 +32,7 @@
     </Page.BottomAppBar>
 
     <Grid Name="grid" Background="{ThemeResource MyAcrylicBrushRList}">
-        <GridView Name="GRID" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModel1.DefaultRecording}">
+        <GridView Name="GRID" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModel1.AddRepeat}">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsStackPanel Orientation="Vertical"/>

@@ -72,16 +72,47 @@
                             ProfilePicture="ms-appx:///Assets/new logo2.png"/>
                         <TextBlock 
                             Text="{Binding ProjectName}"
-                            TextWrapping="Wrap"
+                            TextWrapping="NoWrap"
                             FontSize="18" 
                             Name="SetName"
                             RelativePanel.AlignHorizontalCenterWithPanel="True"
                             RelativePanel.Below="Person"
-                            Margin="0,20"/>
-                        <!--<Rectangle 
-                            Width="80" 
-                            Height="1" 
-                            RelativePanel.Below="SetName"/>-->
+                            Margin="20,10,20,10"/>
+                        <Button 
+                            Name="TEST"
+                            Content="&#xEE92;"
+                            FontFamily="Segoe MDL2 Assets"
+                            HorizontalAlignment="Center"
+                            Height="35" 
+                            Margin="0,0,0,0" 
+                            VerticalAlignment="Center" 
+                            Width="35"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                            RelativePanel.Below="SetName"
+                            Tag="{Binding TableName}"
+                            Click="TakeTestButton"/>
+                        <Button 
+                            Content="&#xE107;"
+                            FontFamily="Segoe MDL2 Assets"
+                            HorizontalAlignment="Center"
+                            Height="35" 
+                            Margin="0,0,4,0" 
+                            VerticalAlignment="Center" 
+                            Width="35"
+                            RelativePanel.Below="SetName"
+                            RelativePanel.LeftOf="TEST"
+                            Tag="{Binding TableName}"
+                            Click="Delete_Click"/>
+                        <Button 
+                            Content="&#xEDAC;"
+                            FontFamily="Segoe MDL2 Assets"
+                            HorizontalAlignment="Center"
+                            Height="35" 
+                            Margin="4,0,0,0" 
+                            VerticalAlignment="Center" 
+                            Width="35"
+                            RelativePanel.Below="SetName"
+                            RelativePanel.RightOf="TEST"/>
                         <TextBlock 
                             Name="ModifiDate" 
                             Text="{Binding ProjectDate}" 
@@ -91,6 +122,7 @@
                             Margin="0,0,0,5"/>
                     </RelativePanel>
                 </DataTemplate>
+
             </GridView.ItemTemplate>
         </GridView>
         <!--<StackPanel>

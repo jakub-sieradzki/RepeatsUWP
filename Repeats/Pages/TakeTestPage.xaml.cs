@@ -32,8 +32,8 @@ namespace Repeats.Pages
             GOOD = 0;
             BAD = 0;
 
-            GetItemsFromFolder();
-            LoadLocalItems();
+            //GetItemsFromFolder();
+            //LoadLocalItems();
 
             this.ViewTestModel = new TakeTestPageDataModel();
         }

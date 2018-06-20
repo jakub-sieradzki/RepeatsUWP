@@ -1,7 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
+using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -13,13 +16,47 @@ namespace Repeats.Pages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+
+    public class bind2
+    {
+        public int ClickCount { get; set; }
+        public string GetQuestion { get; set; }
+        public string GetAnswer { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, null))
+                return false;
+
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            var bi = (bind2)obj;
+            return this.ClickCount == bi.ClickCount;
+        }
+        public override int GetHashCode()
+        {
+            return ClickCount ^ 7;
+        }
+    }
+
+    public class Bind2ViewModel
+    {
+        private ObservableCollection<bind2> editRepeat = new ObservableCollection<bind2>();
+        public ObservableCollection<bind2> EditRepeat { get { return this.editRepeat; } }
+        public Bind2ViewModel()
+        {
+
+        }
+    }
+
     public sealed partial class EditItems : Page
     {
         public static string FolderName;
         public TextBox Question;
         public TextBox Answer;
         RelativePanel panel;
-        int c;
+        public int all;
 
         public EditItems()
         {
@@ -29,52 +66,14 @@ namespace Repeats.Pages
 
             Ring.IsActive = false;
 
-            c = 0;
+            all = 0;
+
+            this.ViewModel2 = new Bind2ViewModel();
 
             Load();
         }
-        private void ItemsTemplate()
-        {
-            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-            var strque = loader.GetString("Question");
-            var strans = loader.GetString("Answer");
 
-            c++;
-
-            panel = new RelativePanel();
-            panel.Name = "P" + c.ToString();
-
-            Question = new TextBox();
-
-            Question.Name = "Q" + c.ToString();
-            Question.Text = strque;
-            Question.FontSize = 20;
-
-            Answer = new TextBox();
-
-            Answer.Name = "A" + c.ToString();
-            Answer.Text = strans;
-            Answer.FontSize = 20;
-            Answer.Margin = new Thickness(0, 40, 0, 0);
-
-            var qualifiers = Windows.ApplicationModel.Resources.Core.ResourceContext.GetForCurrentView().QualifierValues;
-
-            if (qualifiers["DeviceFamily"] == "DeviceFamily-Mobile")
-            {
-                Question.MinWidth = 140;
-                Answer.MinWidth = 140;
-            }
-            else
-            {
-                Question.MinWidth = 300;
-                Answer.MinWidth = 300;
-            }
-
-            panel.Children.Add(Question);
-            panel.Children.Add(Answer);
-
-            LISTItems.Items.Add(panel);
-        }
+        public Bind2ViewModel ViewModel2 { get; set; }
 
         private static async void ExceptionUps()
         {
@@ -93,82 +92,67 @@ namespace Repeats.Pages
             ContentDialogResult result = await ExcUPS.ShowAsync();
         }
 
-        //private List<string> GrabQuestions()
-        //{
-        //    List<string> questions = new List<string>();
-        //    using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-        //    {
-        //        db.Open();
-        //        SqliteCommand selectCommand = new SqliteCommand("SELECT question from " + NAME, db);
-        //        SqliteDataReader query;
-        //        try
-        //        {
-        //            query = selectCommand.ExecuteReader();
-        //        }
-        //        catch (SqliteException error)
-        //        {
-        //            //Handle error
-        //            return questions;
-        //        }
-        //        while (query.Read())
-        //        {
-        //            questions.Add(query.GetString(0));
-        //        }
-        //        db.Close();
-        //    }
-        //    return questions;
-        //}
+        private List<string> GrabQuestions()
+        {
+            List<string> questions = new List<string>();
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand selectCommand = new SqliteCommand("SELECT question from " + RepeatsList.name, db);
+                SqliteDataReader query;
+                try
+                {
+                    query = selectCommand.ExecuteReader();
+                }
+                catch (SqliteException error)
+                {
+                    //Handle error
+                    return questions;
+                }
+                while (query.Read())
+                {
+                    questions.Add(query.GetString(0));
+                }
+                db.Close();
+            }
+            return questions;
+        }
+
+        private List<string> GrabAnswers()
+        {
+            List<string> answers = new List<string>();
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand selectCommand = new SqliteCommand("SELECT answer from " + RepeatsList.name, db);
+                SqliteDataReader query;
+                try
+                {
+                    query = selectCommand.ExecuteReader();
+                }
+                catch (SqliteException error)
+                {
+                    //Handle error
+                    return answers;
+                }
+                while (query.Read())
+                {
+                    answers.Add(query.GetString(0));
+                }
+                db.Close();
+            }
+            return answers;
+        }
 
         private async void Load()
         {
-            try
+            int count = GrabQuestions().Count;
+            count--;
+
+            for(int i = 0; i <= count; i++)
             {
-                string NAME = RepeatsList.name;
-
-
-                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-                StorageFolder p = await storageFolder.GetFolderAsync("FOLDERS");
-                StorageFolder d = await p.GetFolderAsync(NAME);
-
-                StorageFile sampleFile2 = await d.GetFileAsync("ItemsCount.txt");
-
-                string w = await FileIO.ReadTextAsync(sampleFile2);
-
-                string count1;
-
-                using (StringReader reader = new StringReader(w))
-                {
-                    count1 = reader.ReadLine();
-                }
-
-                int x = Int32.Parse(count1);
-
-                for (int i = 1; i <= x; i++)
-                {
-                    ItemsTemplate();
-
-                    var S = await d.GetFileAsync("header" + i.ToString() + ".txt");
-
-                    string Strings = await FileIO.ReadTextAsync(S);
-
-                    string Quest;
-                    string Answ;
-
-                    using (StringReader reader2 = new StringReader(Strings))
-                    {
-                        FolderName = reader2.ReadLine();
-                        Quest = reader2.ReadLine();
-                        Answ = reader2.ReadLine();
-                    }
-
-                    Question.Text = Quest;
-                    Answer.Text = Answ;
-
-                }
-            }
-            catch (Exception)
-            {
-                ExceptionUps();
+                ViewModel2.EditRepeat.Add(new bind2() { ClickCount = i, GetQuestion = GrabQuestions()[i], GetAnswer = GrabAnswers()[i] });
+                all++;
             }
         }
 
@@ -204,138 +188,147 @@ namespace Repeats.Pages
             ContentDialogResult result = await WriDia.ShowAsync();
         }
 
+        private void DeleteItemClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            string strtag = button.Tag.ToString();
+
+            int count = Int32.Parse(strtag);
+
+            Grid find = button.Parent as Grid;
+
+            var find2 = find.FindName("REL") as RelativePanel;
+
+            var q = find2.FindName("quest") as TextBox;
+            var a = find2.FindName("answer") as TextBox;
+            q.Text = "";
+            a.Text = "";
+
+            ViewModel2.EditRepeat.Remove(new bind2() { ClickCount = count });
+        }
+
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
-            Ring.IsActive = true;
-            ADD.IsEnabled = false;
-            DELETE.IsEnabled = false;
-            SAVE.IsEnabled = false;
+            var items = GRID.Items;
+            var findrelative = GRID.FindDescendants<RelativePanel>();
+            var listrel = findrelative.ToList();
+            int relcount = listrel.Count;
+            relcount--;
 
-            try
+            var date = DateTime.Now.ToString("yyyyMMddHHmmss");
+            date = "R" + date;
+
+            string realDate = DateTime.Now.ToShortDateString();
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
-                int COUNTS1 = LISTItems.Items.Count;
+                db.Open();
+                String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL)";
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
-                if (COUNTS1 == 0 || COUNTS1 == 1)
+                try
                 {
-                    Ring.IsActive = false;
-                    ADD.IsEnabled = true;
-                    DELETE.IsEnabled = true;
-                    SAVE.IsEnabled = true;
-
-                    CountDialog();
+                    createTable.ExecuteReader();
                 }
-                else
+                catch (SqliteException)
                 {
-                    int NEWint = 0;
 
-                    string NAME = RepeatsList.name;
+                }
 
-                    StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-                    StorageFolder p = await storageFolder.GetFolderAsync("FOLDERS");
-                    StorageFolder d = await p.GetFolderAsync(NAME);
+                db.Close();
+            }
 
-                    StorageFile sampleFile2 = await d.GetFileAsync("ItemsCount.txt");
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
 
-                    string w = await FileIO.ReadTextAsync(sampleFile2);
+                for (int i = 0; i <= relcount; i++)
+                {
+                    RelativePanel panel = listrel[i];
+                    TextBox questbox = panel.FindChildByName("quest") as TextBox;
+                    TextBox answerbox = panel.FindChildByName("answer") as TextBox;
 
-                    string count1;
+                    string question = questbox.Text;
+                    string answer = answerbox.Text;
 
-                    using (StringReader reader = new StringReader(w))
+                    SqliteCommand insertCommand = new SqliteCommand();
+                    insertCommand.Connection = db;
+
+                    insertCommand.CommandText = "INSERT INTO " + date + " VALUES (NULL, @question, @answer);";
+                    insertCommand.Parameters.AddWithValue("@question", question);
+                    insertCommand.Parameters.AddWithValue("@answer", answer);
+
+                    try
                     {
-                        count1 = reader.ReadLine();
+                        insertCommand.ExecuteReader();
                     }
-
-                    int x = Int32.Parse(count1);
-                    for (int g = 1; g <= x; g++)
+                    catch (SqliteException)
                     {
-                        string txt = "header" + g.ToString() + ".txt";
-
-                        if (await d.TryGetItemAsync(txt) == null)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            StorageFile sampleFile20 = await d.GetFileAsync(txt);
-
-                            await sampleFile20.DeleteAsync();
-                        }
+                        return;
                     }
+                }
 
-                    StorageFile tyty = await d.CreateFileAsync("ItemsCount.txt", CreationCollisionOption.ReplaceExisting);
-                    StorageFile co = await d.GetFileAsync("ItemsCount.txt");
+                db.Close();
+            }
 
-                    await FileIO.WriteTextAsync(co, COUNTS1.ToString());
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand insertCommand = new SqliteCommand();
+                insertCommand.Connection = db;
 
-                    string n = RepeatsList.name;
+                insertCommand.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate);";
+                insertCommand.Parameters.AddWithValue("@title", RepeatsList.OfficialName);
+                insertCommand.Parameters.AddWithValue("@TableName", date);
+                insertCommand.Parameters.AddWithValue("@CreateDate", realDate);
+                try
+                {
+                    insertCommand.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    //Handle error
+                    return;
+                }
+                db.Close();
+            }
 
-                    int COUNTS2 = LISTItems.Items.Count;
-
-                    for (int i = 1; i <= COUNTS2; i++)
-                    {
-                        object FindRel = LISTItems.FindName("P" + i.ToString());
-
-                        if (FindRel == null)
-                        {
-                            COUNTS2 += 1;
-                        }
-                        else
-                        {
-                            NEWint++;
-
-                            RelativePanel Rel = (RelativePanel)FindRel;
-
-                            object box1 = Rel.FindName("Q" + i.ToString());
-                            object box2 = Rel.FindName("A" + i.ToString());
-
-                            TextBox txtb = (TextBox)box1;
-                            string Q = txtb.Text;
-
-                            TextBox txtb2 = (TextBox)box2;
-                            string A = txtb2.Text;
-
-
-                            if (Q == "" || A == "")
-                            {
-                                Ring.IsActive = false;
-                                ADD.IsEnabled = true;
-                                DELETE.IsEnabled = true;
-                                SAVE.IsEnabled = true;
-
-                                WriteDialog();
-                                break;
-                            }
-                            else
-                            {
-                                string txt2 = "header" + NEWint.ToString() + ".txt";
-
-                                StorageFile sampleFile10 = await d.CreateFileAsync(txt2, CreationCollisionOption.ReplaceExisting);
-
-                                string[] lines = { n, Q, A };
-
-                                StorageFile sampleFile20 = await d.GetFileAsync(txt2);
-                                await FileIO.WriteLinesAsync(sampleFile20, lines);
-
-                                if (i == COUNTS2)
-                                {
-                                    Frame.Navigate(typeof(RepeatsList));
-                                }
-                            }
-                        }
-                    }
-                    Ring.IsActive = false;
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                String tableCommand = "DROP TABLE " + RepeatsList.name;
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                try
+                {
+                    createTable.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    //Do nothing
                 }
             }
-            catch (Exception)
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
-                ExceptionUps();
+                db.Open();
+                SqliteCommand insertCommand = new SqliteCommand();
+                insertCommand.Connection = db;
 
-                Ring.IsActive = false;
+                insertCommand.CommandText = "DELETE FROM TitleTable WHERE TableName=" +"\"" + RepeatsList.name + "\"";
+                try
+                {
+                    insertCommand.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    //Handle error
+                    return;
+                }
 
-                ADD.IsEnabled = true;
-                DELETE.IsEnabled = true;
-                SAVE.IsEnabled = true;
+                db.Close();
             }
+
+            Frame.Navigate(typeof(RepeatsList));
         }
 
         private void Item_Click(object sender, ItemClickEventArgs e)
@@ -345,13 +338,13 @@ namespace Repeats.Pages
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            LISTItems.Items.Remove(LISTItems.SelectedItem);
             DELETE.Visibility = Visibility.Collapsed;
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            ItemsTemplate();
+            all++;
+            ViewModel2.EditRepeat.Add(new bind2() { ClickCount = all });
         }
     }
 }
