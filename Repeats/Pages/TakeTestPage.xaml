@@ -7,18 +7,48 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <AcrylicBrush x:Key="MyAcrylicBrushRList"
+            BackgroundSource="HostBackdrop"
+            TintColor="#247EE6"
+            TintOpacity="0.1"
+            FallbackColor="White"/>
+                    <AcrylicBrush x:Key="MyAcrylicBrushTestList"
+            BackgroundSource="HostBackdrop"
+            TintColor="#247EE6"
+            TintOpacity="0.4"
+            FallbackColor="White"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
 
-        <ListView ItemsSource="{x:Bind ViewTestModel.Test}">
-            <ListView.ItemTemplate>
+    <Grid Background="{ThemeResource MyAcrylicBrushRList}">
+
+        <GridView Name="GridTakeTest" ItemsSource="{x:Bind ViewTestModel.Test}" SelectionMode="None" IsItemClickEnabled="False">
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
                 <DataTemplate x:DataType="local:TakeTestPageData">
                     <RelativePanel>
-                        <TextBlock Text="{Binding Question}" Name="QuestionPlace" RelativePanel.AlignTopWithPanel="True"/>
-                        <TextBox Name="AnswerPlace" RelativePanel.Below="QuestionPlace"/>
+                        <TextBlock Text="{Binding Question}" Foreground="White" Name="QuestionPlace" RelativePanel.AlignTopWithPanel="True" Margin="10"/>
+                        <TextBox PlaceholderText="Twoja odpowiedź" Name="AnswerPlace" RelativePanel.Below="QuestionPlace" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="10,0,10,0"/>
                     </RelativePanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </GridView.ItemTemplate>
+        </GridView>
+        <Button Click="Check_Click" Content="Button" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <!--<RelativePanel Background="#19000000">
             <Button Name="Button2" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" Background="#FF029EF7" Foreground="White" Margin="0,20" Click="Next_Click">
                 <StackPanel Orientation="Horizontal">

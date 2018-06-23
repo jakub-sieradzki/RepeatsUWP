@@ -108,7 +108,6 @@ namespace Repeats.Pages
             Ring.Visibility = Visibility.Visible;
             Ring.IsActive = true;
 
-            var items = GRID.Items;
             var findrelative = GRID.FindDescendants<RelativePanel>();
             var listrel = findrelative.ToList();
             int relcount = listrel.Count;

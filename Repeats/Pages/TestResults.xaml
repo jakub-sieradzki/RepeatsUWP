@@ -1,0 +1,57 @@
+﻿<Page
+    x:Class="Repeats.Pages.TestResults"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Repeats.Pages"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <RelativePanel>
+            <controls:RadialProgressBar
+                Name="Radial"
+                Thickness="10"
+                Minimum="0"
+                Maximum="100"
+                Width="150"
+                Height="150"
+                RelativePanel.AlignLeftWithPanel="True"
+                Margin="50,20,0,0"/>
+            <TextBlock Name="percentScore" Text="50%" FontSize="45" RelativePanel.AlignLeftWithPanel="True" Margin="82,62,0,0"/>
+            <TextBlock Name="Score" Text="47/60 poprawnych odpowiedzi" FontSize="50" RelativePanel.AlignRightWith="percentScore" RelativePanel.AlignRightWithPanel="True" TextWrapping="Wrap" Margin="0,50,70,0"/>
+
+            <GridView x:Name="GRIDresults" RelativePanel.Below="Radial" Margin="0,20,0,0" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewResultsModel.Test}">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </GridView.ItemContainerStyle>
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <RelativePanel>
+                            <controls:Expander RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" x:Name="TestExpander" ExpandDirection="Down" IsExpanded="False" HorizontalContentAlignment="Left">
+                                <controls:Expander.Header>
+                                    <TextBlock Text="{Binding AllQuestions}"/>
+                                </controls:Expander.Header>
+                                <StackPanel Margin="50,0,0,0">
+                                    <TextBlock x:Name="CorrectAnswer" Text="{Binding CorrectAnswers}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                                    <TextBlock x:Name="YourAnswer" Text="{Binding YourAnswers}" Margin="0,10,0,10" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </controls:Expander>
+                            <TextBlock x:Name="GoodOrBad" Text="{Binding emoji}" RelativePanel.AlignRightWithPanel="True" FontSize="20" Margin="0,6,10,0"/>
+                        </RelativePanel>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+            <TextBlock Text="Wyniki" RelativePanel.Above="GRIDresults"  RelativePanel.AlignHorizontalCenterWithPanel="True"/>
+        </RelativePanel>
+    </Grid>
+</Page>

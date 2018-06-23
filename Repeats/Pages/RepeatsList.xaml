@@ -112,7 +112,8 @@
                             VerticalAlignment="Center" 
                             Width="35"
                             RelativePanel.Below="SetName"
-                            RelativePanel.RightOf="TEST"/>
+                            RelativePanel.RightOf="TEST"
+                            Click="BellClick"/>
                         <TextBlock 
                             Name="ModifiDate" 
                             Text="{Binding ProjectDate}" 

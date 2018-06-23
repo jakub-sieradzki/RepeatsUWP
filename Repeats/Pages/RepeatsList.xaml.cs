@@ -163,5 +163,10 @@ namespace Repeats.Pages
             AskNameDialog dialog = new AskNameDialog();
             await dialog.ShowAsync();
         }
+
+        private void BellClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TestResults));
+        }
     }
 }
