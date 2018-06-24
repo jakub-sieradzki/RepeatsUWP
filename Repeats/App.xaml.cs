@@ -33,18 +33,18 @@ namespace Repeats
             this.Suspending += OnSuspending;
 
             SqliteEngine.UseWinSqlite3(); //Configuring library to use SDK version of SQLite
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db")) //Name of .db file doesn't matter, but should be consistent across all SqliteConnection objects
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
-                db.Open(); //Open connection to database
+                db.Open();
                 String tableCommand = "CREATE TABLE IF NOT EXISTS TitleTable (id INTEGER PRIMARY KEY AUTOINCREMENT, title NVARCHAR(2048) NULL, TableName NVARCHAR(2048) NULL, CreateDate NVARCHAR(2048) NULL)";
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
                 try
                 {
-                    createTable.ExecuteReader(); //Execute command, throws SqliteException error if command doesn't execute properly
+                    createTable.ExecuteReader();
                 }
-                catch (SqliteException e)
+                catch (SqliteException)
                 {
-                    //Do nothing
+
                 }
             }
         }

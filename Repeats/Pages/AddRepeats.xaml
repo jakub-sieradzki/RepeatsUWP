@@ -6,20 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Default">
-                    <AcrylicBrush x:Key="MyAcrylicBrushRList"
-            BackgroundSource="HostBackdrop"
-            TintColor="#247EE6"
-            TintOpacity="0.1"
-            FallbackColor="White"/>
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
-    
     <Page.BottomAppBar>
         <CommandBar Background="{x:Null}">
             <CommandBar.Content>
@@ -31,7 +17,7 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Name="grid" Background="{ThemeResource MyAcrylicBrushRList}">
+    <Grid Name="grid" Background="{ThemeResource MyAcrylicBrush}">
         <GridView Name="GRID" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModel1.AddRepeat}">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>

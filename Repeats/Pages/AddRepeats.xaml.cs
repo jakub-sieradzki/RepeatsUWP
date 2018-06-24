@@ -99,8 +99,6 @@ namespace Repeats.Pages
             ViewModel1.AddRepeat.Add(new bind1() { ClickCount = count });
 
             string date = DateTime.Now.ToLongDateString();
-
-            int i = 0;
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
@@ -118,10 +116,13 @@ namespace Repeats.Pages
             date = "R" + date;
 
             string realDate = DateTime.Now.ToShortDateString();
+            string getname = AskNameDialog.name;
 
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
                 db.Open();
+
+                #region Create table
                 String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL)";
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
@@ -133,14 +134,9 @@ namespace Repeats.Pages
                 {
 
                 }
+                #endregion
 
-                db.Close();
-            }
-
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-
+                #region Get & save sets
                 for (int i = 0; i <= relcount; i++)
                 {
                     RelativePanel panel = listrel[i];
@@ -166,29 +162,26 @@ namespace Repeats.Pages
                         return;
                     }
                 }
+                #endregion
 
-                db.Close();
-            }
+                #region save to RepeatsList
+                SqliteCommand insertCommand2 = new SqliteCommand();
+                insertCommand2.Connection = db;
 
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                SqliteCommand insertCommand = new SqliteCommand();
-                insertCommand.Connection = db;
+                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate);";
+                insertCommand2.Parameters.AddWithValue("@title", getname);
+                insertCommand2.Parameters.AddWithValue("@TableName", date);
+                insertCommand2.Parameters.AddWithValue("@CreateDate", realDate);
+                try
+                {
+                    insertCommand2.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    return;
+                }
+                #endregion
 
-                insertCommand.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate);";
-                insertCommand.Parameters.AddWithValue("@title", AskNameDialog.name);
-                insertCommand.Parameters.AddWithValue("@TableName", date);
-                insertCommand.Parameters.AddWithValue("@CreateDate", realDate);
-                //try
-                //{
-                    insertCommand.ExecuteReader();
-                //}
-                //catch (SqliteException)
-                //{
-                //    //Handle error
-                //    return;
-                //}
                 db.Close();
             }
 

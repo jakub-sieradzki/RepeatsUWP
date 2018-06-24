@@ -10,6 +10,8 @@
         BackgroundSource="Backdrop" TintColor="#247EE6" TintOpacity=".4"/>
             <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground"
         BackgroundSource="HostBackdrop" TintColor="#247EE6" TintOpacity=".4"/>
+            <AcrylicBrush x:Key="MyAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="#247EE6" 
+        TintOpacity="0.1" FallbackColor="White"/>
         </ResourceDictionary>
     </Application.Resources>
 

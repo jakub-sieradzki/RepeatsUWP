@@ -121,12 +121,12 @@ namespace Repeats.Pages
                     }
                 }
 
-                int it = RepeatsList.items;
+                //int it = RepeatsList.items;
 
-                if (it == 0)
-                {
-                    turnon.IsEnabled = false;
-                }
+                //if (it == 0)
+                //{
+                //    turnon.IsEnabled = false;
+                //}
             }
             catch
             {

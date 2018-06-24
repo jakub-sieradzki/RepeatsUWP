@@ -32,14 +32,12 @@ namespace Repeats
 
                 uint u = Convert.ToUInt32(b);
 
-                var taskRegistered = false;
                 var exampleTaskName = "RepeatsNotificationTask";
 
                 foreach (var task1 in BackgroundTaskRegistration.AllTasks)
                 {
                     if (task1.Value.Name == exampleTaskName)
                     {
-                        taskRegistered = true;
                         break;
                     }
                 }

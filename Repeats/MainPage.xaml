@@ -7,20 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:UI="using:Microsoft.Advertising.WinRT.UI"
     mc:Ignorable="d">
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Default">
-                    <AcrylicBrush x:Key="MyAcrylicBrushRList"
-            BackgroundSource="HostBackdrop"
-            TintColor="#247EE6"
-            TintOpacity="0.1"
-            FallbackColor="White"/>
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
-    <Grid Background="{ThemeResource MyAcrylicBrushRList}">
+    
+    <Grid Background="{ThemeResource MyAcrylicBrush}">
 
         <NavigationView x:Name="NavView"
                     ItemInvoked="NavView_ItemInvoked"
@@ -32,11 +20,6 @@
                 <NavigationViewItem x:Uid="HomeNavItem" Content="Twoje powtórki" Tag="repeats">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8F1;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem x:Uid="AppsNavItem" Content="Sprawdzian" Tag="test">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEADF;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Uid="GamesNavItem" Content="Rysunki" Tag="ink">

@@ -6,37 +6,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Default">
-                    <AcrylicBrush x:Key="MyAcrylicBrushRList"
-            BackgroundSource="HostBackdrop"
-            TintColor="#247EE6"
-            TintOpacity="0.1"
-            FallbackColor="White"/>
-                    <AcrylicBrush x:Key="MyAcrylicBrushTestList"
-            BackgroundSource="HostBackdrop"
-            TintColor="#247EE6"
-            TintOpacity="0.4"
-            FallbackColor="White"/>
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
-    
     <Page.BottomAppBar>
         <CommandBar Background="{x:Null}">
             <CommandBar.Content>
                 <Grid/>
             </CommandBar.Content>
             <AppBarButton x:Uid="AddButton" Name="ADD" Icon="Add" Label="" Click="Add_Click"/>
-            <AppBarButton x:Uid="DeleteButton" Name="DELETE" Icon="Delete" Label="" Click="Delete_Click"/>
             <AppBarButton x:Uid="SaveButton" Name="SAVE" Icon="Save" Label="" Click="Save_Click"/>
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{ThemeResource MyAcrylicBrushRList}">
+    <Grid Background="{ThemeResource MyAcrylicBrush}">
         <GridView Name="GRID" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModel2.EditRepeat}">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>

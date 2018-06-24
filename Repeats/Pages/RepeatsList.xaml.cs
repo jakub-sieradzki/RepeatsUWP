@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using Windows.Storage;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Data.Sqlite;
-using Microsoft.Data.Sqlite.Internal;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -16,60 +12,17 @@ namespace Repeats.Pages
     /// </summary>
     public sealed partial class RepeatsList : Page
     {
-        public static string clicked;
-        public static int items;
         public static string name;
         public static string OfficialName;
-        public StorageFolder c;
-        public IReadOnlyList<StorageFolder> abcd;
 
         public RepeatsList()
         {
             this.InitializeComponent();
 
-            Load();
-
-            //Edit.Visibility = Visibility.Collapsed;
-            //Delete.Visibility = Visibility.Collapsed;
-
             this.ViewModel = new MainPageDataModel();
         }
 
         public MainPageDataModel ViewModel { get; set; }
-
-        private List<String> Grab_Titles()
-        {
-            List<String> title = new List<string>();
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                
-                SqliteCommand selectCommand = new SqliteCommand("SELECT title from TitleTable", db);
-                SqliteDataReader query;
-                try
-                {
-                    query = selectCommand.ExecuteReader();
-                }
-                catch (SqliteException error)
-                {
-                    //Handle error
-                    return title;
-                }
-                while (query.Read())
-                {
-                    title.Add(query.GetString(0));
-                }
-                db.Close();
-            }
-            return title;
-        }
-
-        private async void Load()
-        {
-            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            c = await storageFolder.GetFolderAsync("FOLDERS");
-            abcd = await c.GetFoldersAsync();
-        }
 
         private void TakeTestButton(object sender, RoutedEventArgs e)
         {
@@ -115,7 +68,7 @@ namespace Repeats.Pages
             ContentDialogResult result = await ExcUPS.ShowAsync();
         }
 
-        private async void Delete_Click(object sender, RoutedEventArgs e)
+        private void Delete_Click(object sender, RoutedEventArgs e)
         {
             Button del = sender as Button;
             string gettag = del.Tag.ToString();
@@ -131,7 +84,7 @@ namespace Repeats.Pages
                 }
                 catch (SqliteException)
                 {
-                    //Do nothing
+
                 }
             }
 

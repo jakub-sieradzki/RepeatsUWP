@@ -3,9 +3,7 @@ using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -52,17 +50,11 @@ namespace Repeats.Pages
 
     public sealed partial class EditItems : Page
     {
-        public static string FolderName;
-        public TextBox Question;
-        public TextBox Answer;
-        RelativePanel panel;
         public int all;
 
         public EditItems()
         {
             this.InitializeComponent();
-
-            DELETE.Visibility = Visibility.Collapsed;
 
             Ring.IsActive = false;
 
@@ -92,66 +84,19 @@ namespace Repeats.Pages
             ContentDialogResult result = await ExcUPS.ShowAsync();
         }
 
-        private List<string> GrabQuestions()
+        private void Load()
         {
-            List<string> questions = new List<string>();
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                SqliteCommand selectCommand = new SqliteCommand("SELECT question from " + RepeatsList.name, db);
-                SqliteDataReader query;
-                try
-                {
-                    query = selectCommand.ExecuteReader();
-                }
-                catch (SqliteException error)
-                {
-                    //Handle error
-                    return questions;
-                }
-                while (query.Read())
-                {
-                    questions.Add(query.GetString(0));
-                }
-                db.Close();
-            }
-            return questions;
-        }
+            string NAME = RepeatsList.name;
 
-        private List<string> GrabAnswers()
-        {
-            List<string> answers = new List<string>();
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                SqliteCommand selectCommand = new SqliteCommand("SELECT answer from " + RepeatsList.name, db);
-                SqliteDataReader query;
-                try
-                {
-                    query = selectCommand.ExecuteReader();
-                }
-                catch (SqliteException error)
-                {
-                    //Handle error
-                    return answers;
-                }
-                while (query.Read())
-                {
-                    answers.Add(query.GetString(0));
-                }
-                db.Close();
-            }
-            return answers;
-        }
+            List<string> GetQuestions = GetFromDB.GrabData(NAME, "question");
+            List<string> GetAnswers = GetFromDB.GrabData(NAME, "answer");
 
-        private async void Load()
-        {
-            int count = GrabQuestions().Count;
+            int count = GetQuestions.Count;
             count--;
 
             for(int i = 0; i <= count; i++)
             {
-                ViewModel2.EditRepeat.Add(new bind2() { ClickCount = i, GetQuestion = GrabQuestions()[i], GetAnswer = GrabAnswers()[i] });
+                ViewModel2.EditRepeat.Add(new bind2() { ClickCount = i, GetQuestion = GetQuestions[i], GetAnswer = GetAnswers[i] });
                 all++;
             }
         }
@@ -207,7 +152,7 @@ namespace Repeats.Pages
             ViewModel2.EditRepeat.Remove(new bind2() { ClickCount = count });
         }
 
-        private async void Save_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
             var items = GRID.Items;
             var findrelative = GRID.FindDescendants<RelativePanel>();
@@ -220,12 +165,16 @@ namespace Repeats.Pages
 
             string realDate = DateTime.Now.ToShortDateString();
 
+            string NAME = RepeatsList.name;
+            string official = RepeatsList.OfficialName;
+
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
                 db.Open();
+
+                #region Create table
                 String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL)";
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-
                 try
                 {
                     createTable.ExecuteReader();
@@ -234,14 +183,9 @@ namespace Repeats.Pages
                 {
 
                 }
+                #endregion
 
-                db.Close();
-            }
-
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-
+                #region Get & save sets
                 for (int i = 0; i <= relcount; i++)
                 {
                     RelativePanel panel = listrel[i];
@@ -267,78 +211,58 @@ namespace Repeats.Pages
                         return;
                     }
                 }
+                #endregion
 
-                db.Close();
-            }
+                #region Insert values into TitleTable
+                SqliteCommand insertCommand2 = new SqliteCommand();
+                insertCommand2.Connection = db;
 
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                SqliteCommand insertCommand = new SqliteCommand();
-                insertCommand.Connection = db;
-
-                insertCommand.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate);";
-                insertCommand.Parameters.AddWithValue("@title", RepeatsList.OfficialName);
-                insertCommand.Parameters.AddWithValue("@TableName", date);
-                insertCommand.Parameters.AddWithValue("@CreateDate", realDate);
+                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate);";
+                insertCommand2.Parameters.AddWithValue("@title", official);
+                insertCommand2.Parameters.AddWithValue("@TableName", date);
+                insertCommand2.Parameters.AddWithValue("@CreateDate", realDate);
                 try
                 {
-                    insertCommand.ExecuteReader();
+                    insertCommand2.ExecuteReader();
                 }
                 catch (SqliteException)
                 {
-                    //Handle error
                     return;
                 }
-                db.Close();
-            }
+                #endregion
 
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                String tableCommand = "DROP TABLE " + RepeatsList.name;
-                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                #region Drop table
+                String tableCommand2 = "DROP TABLE " + NAME;
+                SqliteCommand createTable2 = new SqliteCommand(tableCommand2, db);
                 try
                 {
-                    createTable.ExecuteReader();
+                    createTable2.ExecuteReader();
                 }
                 catch (SqliteException)
                 {
-                    //Do nothing
+
                 }
-            }
+                #endregion
 
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                SqliteCommand insertCommand = new SqliteCommand();
-                insertCommand.Connection = db;
+                #region Delete from RepeatsList
+                SqliteCommand insertCommand3 = new SqliteCommand();
+                insertCommand3.Connection = db;
 
-                insertCommand.CommandText = "DELETE FROM TitleTable WHERE TableName=" +"\"" + RepeatsList.name + "\"";
+                insertCommand3.CommandText = "DELETE FROM TitleTable WHERE TableName=" + "\"" + NAME + "\"";
                 try
                 {
-                    insertCommand.ExecuteReader();
+                    insertCommand3.ExecuteReader();
                 }
                 catch (SqliteException)
                 {
-                    //Handle error
                     return;
                 }
+                #endregion
 
                 db.Close();
             }
 
             Frame.Navigate(typeof(RepeatsList));
-        }
-
-        private void Item_Click(object sender, ItemClickEventArgs e)
-        {
-            DELETE.Visibility = Visibility.Visible;
-        }
-
-        private void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            DELETE.Visibility = Visibility.Collapsed;
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)

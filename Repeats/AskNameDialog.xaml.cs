@@ -30,14 +30,14 @@ namespace Repeats
             var ask2 = loader.GetString("ASK2");
             var ask3 = loader.GetString("ASK3");
 
-            Content.Title = ask1;
-            Content.PrimaryButtonText = ask2;
-            Content.SecondaryButtonText = ask3;
+            content.Title = ask1;
+            content.PrimaryButtonText = ask2;
+            content.SecondaryButtonText = ask3;
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            Content.Hide();
+            content.Hide();
         }
 
         private static async void ExceptionUps()
@@ -136,7 +136,7 @@ namespace Repeats
             }
             catch (Exception)
             {
-                Content.Hide();
+                content.Hide();
             }
 
         }

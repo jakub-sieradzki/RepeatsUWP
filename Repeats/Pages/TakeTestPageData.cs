@@ -1,10 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repeats.Pages
 {
@@ -20,65 +16,16 @@ namespace Repeats.Pages
         public ObservableCollection<TakeTestPageData> Test { get { return this.test; } }
         public TakeTestPageDataModel()
         {
-            List<String> Grab_Test()
-            {
-                List<String> questions = new List<String>();
-                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                {
-                    db.Open();
+            string NAME = RepeatsList.name;
 
-                    SqliteCommand selectCommand = new SqliteCommand("SELECT question from " + RepeatsList.name, db);
-                    SqliteDataReader query;
-                    try
-                    {
-                        query = selectCommand.ExecuteReader();
-                    }
-                    catch (SqliteException error)
-                    {
-                        //Handle error
-                        return questions;
-                    }
-                    while (query.Read())
-                    {
-                        questions.Add(query.GetString(0));
-                    }
-                    db.Close();
-                }
-                return questions;
-            }
+            List<string> Grab_Test = GetFromDB.GrabData(NAME, "question");
+            List<string> Grab_Correct = GetFromDB.GrabData(NAME, "answer");
 
-            List<String> Grab_correct()
-            {
-                List<String> answers = new List<String>();
-                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                {
-                    db.Open();
-
-                    SqliteCommand selectCommand = new SqliteCommand("SELECT answer from " + RepeatsList.name, db);
-                    SqliteDataReader query;
-                    try
-                    {
-                        query = selectCommand.ExecuteReader();
-                    }
-                    catch (SqliteException error)
-                    {
-                        //Handle error
-                        return answers;
-                    }
-                    while (query.Read())
-                    {
-                        answers.Add(query.GetString(0));
-                    }
-                    db.Close();
-                }
-                return answers;
-            }
-
-            int count = Grab_Test().Count;
+            int count = Grab_Test.Count;
 
             for(int i = 0; i < count; i++)
             {
-                this.test.Add(new TakeTestPageData() { Question = Grab_Test().ElementAt(i), Answer = Grab_correct().ElementAt(i) });
+                this.test.Add(new TakeTestPageData() { Question = Grab_Test.ElementAt(i), Answer = Grab_Correct.ElementAt(i) });
             }
         }
     }

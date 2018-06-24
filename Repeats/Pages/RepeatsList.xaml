@@ -6,26 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <!--<Page.BottomAppBar>
-        <CommandBar Name="Commandbar">
-            <CommandBar.Content>
-                <Grid/>
-            </CommandBar.Content>
-            <AppBarButton x:Uid="EditButton" Name="Edit" Icon="Edit" Label="" Click="Edit_Click"/>
-            <AppBarButton x:Uid="DeleteButton" Name ="Delete" Icon="Delete" Label="" Click="Delete_Click"/>
-            <AppBarButton x:Uid="AddButton" Name ="Add" Icon="Add" Label="" Click="AddClick" />
-        </CommandBar>
-    </Page.BottomAppBar>-->
-
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Default">
-                    <AcrylicBrush x:Key="MyAcrylicBrushRList"
-            BackgroundSource="HostBackdrop"
-            TintColor="#247EE6"
-            TintOpacity="0.1"
-            FallbackColor="White"/>
                     <AcrylicBrush x:Key="MyAcrylicBrushTestList"
             BackgroundSource="HostBackdrop"
             TintColor="#247EE6"
@@ -36,19 +20,15 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource MyAcrylicBrushRList}">
+    <Grid Background="{ThemeResource MyAcrylicBrush}">
 
 
         <GridView x:Name="GridRepeats" Margin="4,0,0,0"  IsItemClickEnabled="True" ItemClick="ItemClick_Click" ItemsSource="{x:Bind ViewModel.Datas}">
             <GridView.Header>
                 <Grid x:Name="MyHeaderGrid">
-                    <RelativePanel Height="200" Background="{ThemeResource MyAcrylicBrushRList}">
+                    <RelativePanel Height="200">
                         <TextBlock Text="Witaj w Repeats!" FontSize="40" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,-3,70" Foreground="White"/>
-                        <!--<RelativePanel RelativePanel.AlignBottomWith="image">
-                            <TextBlock Text="Nazwa projektu"/>
-                            <TextBlock Text="Data modyfikacji" RelativePanel.AlignVerticalCenterWithPanel="True" VerticalAlignment="Center"/>
-                        </RelativePanel>-->
-                        <Button RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,20,70" Background="{x:Null}" Click="AddClick">
+                        <Button RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,20,70" Background="{x:Null}" Click="AddClick" Style="{StaticResource ButtonRevealStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#xE109;" FontSize="25" FontFamily="Segoe MDL2 Assets" Foreground="White"/>
                                 <TextBlock Text="  Dodaj" FontSize="18" Foreground="White"/>

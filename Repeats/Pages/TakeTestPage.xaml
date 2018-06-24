@@ -7,26 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Default">
-                    <AcrylicBrush x:Key="MyAcrylicBrushRList"
-            BackgroundSource="HostBackdrop"
-            TintColor="#247EE6"
-            TintOpacity="0.1"
-            FallbackColor="White"/>
-                    <AcrylicBrush x:Key="MyAcrylicBrushTestList"
-            BackgroundSource="HostBackdrop"
-            TintColor="#247EE6"
-            TintOpacity="0.4"
-            FallbackColor="White"/>
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
-
-    <Grid Background="{ThemeResource MyAcrylicBrushRList}">
+    <Grid Background="{ThemeResource MyAcrylicBrush}">
 
         <GridView Name="GridTakeTest" ItemsSource="{x:Bind ViewTestModel.Test}" SelectionMode="None" IsItemClickEnabled="False">
             <GridView.ItemsPanel>

@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -39,92 +38,15 @@ namespace Repeats.Pages
         {
             int count;
 
-            List<String> Grab_Titles()
-            {
-                List<String> title = new List<string>();
-                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                {
-                    db.Open();
+            List<string> Grab_Titles = GetFromDB.GrabData("TitleTable", "title");
+            List<string> Grab_Dates = GetFromDB.GrabData("TitleTable", "CreateDate");
+            List<string> Grab_Names = GetFromDB.GrabData("TitleTable", "TableName");
 
-                    SqliteCommand selectCommand = new SqliteCommand("SELECT title from TitleTable", db);
-                    SqliteDataReader query;
-                    try
-                    {
-                        query = selectCommand.ExecuteReader();
-                    }
-                    catch (SqliteException error)
-                    {
-                        //Handle error
-                        return title;
-                    }
-                    while (query.Read())
-                    {
-                        title.Add(query.GetString(0));
-                    }
-                    db.Close();
-                }
-                return title;
-            }
-
-            count = Grab_Titles().Count;
-
-            List<String> Grab_Dates()
-            {
-                List<String> title = new List<string>();
-                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                {
-                    db.Open();
-
-                    SqliteCommand selectCommand = new SqliteCommand("SELECT CreateDate from TitleTable", db);
-                    SqliteDataReader query;
-                    try
-                    {
-                        query = selectCommand.ExecuteReader();
-                    }
-                    catch (SqliteException error)
-                    {
-                        //Handle error
-                        return title;
-                    }
-                    while (query.Read())
-                    {
-                        title.Add(query.GetString(0));
-                    }
-                    db.Close();
-                }
-                return title;
-            }
-
-            List<String> Grab_Names()
-            {
-                List<String> name = new List<string>();
-                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                {
-                    db.Open();
-
-                    SqliteCommand selectCommand = new SqliteCommand("SELECT TableName from TitleTable", db);
-                    SqliteDataReader query;
-                    try
-                    {
-                        query = selectCommand.ExecuteReader();
-                    }
-                    catch (SqliteException error)
-                    {
-                        //Handle error
-                        return name;
-                    }
-                    while (query.Read())
-                    {
-                        name.Add(query.GetString(0));
-                    }
-                    db.Close();
-                }
-                return name;
-            }
+            count = Grab_Titles.Count;
 
             for (int i = 0; i < count; i++)
             {
-                this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles().ElementAt(i), ProjectDate = Grab_Dates().ElementAt(i), TableName = Grab_Names().ElementAt(i) });
+                this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles.ElementAt(i), ProjectDate = Grab_Dates.ElementAt(i), TableName = Grab_Names.ElementAt(i) });
             }
 
         }
