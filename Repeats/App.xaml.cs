@@ -1,20 +1,15 @@
-﻿using NotificationsBackground;
-using Repeats.Pages;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Background;
-using Windows.Foundation.Collections;
-using Windows.Foundation.Metadata;
-using Windows.Storage;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Data.Sqlite;
 using Microsoft.Data.Sqlite.Internal;
+using Windows.UI.Notifications;
+using Microsoft.QueryStringDotNET;
+using Microsoft.Toolkit.Uwp.Notifications;
+using System.Collections.Generic;
 
 namespace Repeats
 {
@@ -32,7 +27,7 @@ namespace Repeats
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            SqliteEngine.UseWinSqlite3(); //Configuring library to use SDK version of SQLite
+            SqliteEngine.UseWinSqlite3();
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
                 db.Open();
@@ -55,66 +50,8 @@ namespace Repeats
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
 
-        protected async override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            await OnLaunchedOrActivated(e);
-
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                var statusBar = StatusBar.GetForCurrentView();
-                if (statusBar != null)
-                {
-                    await statusBar.HideAsync();
-                }
-            }
-
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            if (rootFrame == null)
-            {
-                rootFrame = new Frame();
-
-                rootFrame.NavigationFailed += OnNavigationFailed;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: Load state from previously suspended application
-                }
-
-                Window.Current.Content = rootFrame;
-            }
-
-            if (e.PrelaunchActivated == false)
-            {
-                if (rootFrame.Content == null)
-                {
-                    StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-
-                    var test = await storageFolder.TryGetItemAsync("OOBE");
-                    if (test == null)
-                    {
-                        rootFrame.Navigate(typeof(WelcomePage));
-                        StorageFile storageFile = await storageFolder.CreateFileAsync("OOBE");
-                    }
-                    else
-                    {
-                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                    }
-                }
-
-                Window.Current.Activate();
-            }
-        }
-
-        protected override async void OnActivated(IActivatedEventArgs e)
-        {
-            await OnLaunchedOrActivated(e);
-        }
-
-        private async Task OnLaunchedOrActivated(IActivatedEventArgs e)
-        {
-            await InitializeApp();
-
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -128,82 +65,338 @@ namespace Repeats
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
-                    // TODO: Load state from previously suspended application
+                    //TODO: Load state from previously suspended application
                 }
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
 
+            if (e.PrelaunchActivated == false)
+            {
+                if (rootFrame.Content == null)
+                {
+                    // When the navigation stack isn't restored navigate to the first page,
+                    // configuring the new page by passing required information as a navigation
+                    // parameter
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                }
+                // Ensure the current window is active
+                Window.Current.Activate();
+            }
+        }
+
+        protected override void OnActivated(IActivatedEventArgs e)
+        {
+            // Get the root frame
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            // TODO: Initialize root frame just like in OnLaunched
+
             // Handle toast activation
             if (e is ToastNotificationActivatedEventArgs)
             {
                 var toastActivationArgs = e as ToastNotificationActivatedEventArgs;
 
-                // If empty args, no specific action (just launch the app)
-                if (toastActivationArgs.Argument.Length == 0)
-                {
-                    if (rootFrame.Content == null)
-                        rootFrame.Navigate(typeof(MainPage));
-                }
+                // Parse the query string (using QueryString.NET)
+                QueryString args = QueryString.Parse(toastActivationArgs.Argument);
+
+                rootFrame.Navigate(typeof(MainPage));
+
+                // If we're loading the app for the first time, place the main page on
+                // the back stack so that user can go back after they've been
+                // navigated to the specific page
+                if (rootFrame.BackStack.Count == 0)
+                    rootFrame.BackStack.Add(new PageStackEntry(typeof(MainPage), null, null));
             }
 
-            // Handle launch activation
-            else if (e is LaunchActivatedEventArgs)
-            {
-                var launchActivationArgs = e as LaunchActivatedEventArgs;
-
-                // If launched with arguments (not a normal primary tile/applist launch)
-                if (launchActivationArgs.Arguments.Length > 0)
-                {
-                    // TODO: Handle arguments for cases like launching from secondary Tile, so we navigate to the correct page
-                    throw new NotImplementedException();
-                }
-
-                // Otherwise if launched normally
-                else
-                {
-                    // If we're currently not on a page, navigate to the main page
-                    if (rootFrame.Content == null)
-                    {
-                        StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-
-                        var test = await storageFolder.TryGetItemAsync("OOBE");
-                        if (test == null)
-                        {
-                            rootFrame.Navigate(typeof(WelcomePage));
-                            StorageFile storageFile = await storageFolder.CreateFileAsync("OOBE");
-                        }
-                        else
-                        {
-                            rootFrame.Navigate(typeof(MainPage));
-                        }
-                    }
-                }
-            }
-
-            else
-            {
-                // TODO: Handle other types of activation
-                throw new NotImplementedException();
-            }
-
+            // TODO: Handle other types of activation
 
             // Ensure the current window is active
             Window.Current.Activate();
-
-
         }
 
-        private bool _isInitialized = false;
-        private async Task InitializeApp()
+        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
-            if (_isInitialized)
-                return;
+            var deferral = args.TaskInstance.GetDeferral();
 
-            RegisterBackgroundTask();
+            switch (args.TaskInstance.Task.Name)
+            {
+                case "ToastBackgroundTask":
+                    var details = args.TaskInstance.TriggerDetails as ToastNotificationActionTriggerDetail;
+                    if (details != null)
+                    {
+                        string arguments = details.Argument;
+                        var userInput = details.UserInput;
+                        var input = userInput.Values;
 
-            _isInitialized = true;
+                        if (arguments == "next")
+                        {
+                            notifi();
+                        }
+                        else if(arguments == "cancel")
+                        {
+
+                        }
+                        else
+                        {
+                            if (input.Contains(arguments))
+                            {
+                                int conversationId = 00111;
+                                ToastVisual visual = new ToastVisual()
+                                {
+                                    BindingGeneric = new ToastBindingGeneric()
+                                    {
+                                        Children =
+                                    {
+                                        new AdaptiveText()
+                                        {
+                                            Text = "Brawo! To poprawna odpowiedź"
+                                        },
+
+                                        new AdaptiveText()
+                                        {
+                                            Text = "Szybko się uczysz 😉"
+                                        },
+                                    },
+
+                                        Attribution = new ToastGenericAttributionText()
+                                        {
+                                            Text = "Repeats (Beta)"
+                                        }
+                                    }
+                                };
+
+                                ToastActionsCustom actions = new ToastActionsCustom()
+                                {
+
+                                    Buttons =
+                                    {
+                                        new ToastButton("Odrzuć", "cancel")
+                                        {
+                                            ActivationType = ToastActivationType.Background,
+                                        },
+
+                                        new ToastButton("Kolejne pytanie", "next")
+                                        {
+                                            ActivationType = ToastActivationType.Background,
+
+                                            ActivationOptions = new ToastActivationOptions()
+                                            {
+                                                AfterActivationBehavior = ToastAfterActivationBehavior.PendingUpdate
+                                            }
+                                        }
+                                    }
+                                };
+
+                                ToastContent toastContent = new ToastContent()
+                                {
+                                    Visual = visual,
+                                    Actions = actions,
+
+                                    Launch = new QueryString()
+                                {
+                                    {"action", "viewQuestion" },
+                                    {"conversationId", conversationId.ToString() }
+                                }.ToString()
+                                };
+
+                                var toast = new ToastNotification(toastContent.GetXml())
+                                {
+                                    Tag = "NextQuestion"
+                                };
+
+                                ToastNotificationManager.CreateToastNotifier().Show(toast);
+                            }
+                            else
+                            {
+                                int conversationId = 00111;
+                                ToastVisual visual = new ToastVisual()
+                                {
+                                    BindingGeneric = new ToastBindingGeneric()
+                                    {
+                                        Children =
+                                    {
+                                        new AdaptiveText()
+                                        {
+                                            Text = "Niestety, to nie była poprawna odpowiedź"
+                                        },
+
+                                        new AdaptiveText()
+                                        {
+                                            Text = "Prawidłowa odpowiedź to: " + arguments
+                                        },
+                                    },
+
+                                        Attribution = new ToastGenericAttributionText()
+                                        {
+                                            Text = "Repeats (Beta)"
+                                        }
+                                    }
+                                };
+
+                                ToastActionsCustom actions = new ToastActionsCustom()
+                                {
+
+                                    Buttons =
+                                    {
+                                        new ToastButton("Odrzuć", "cancel")
+                                        {
+                                            ActivationType = ToastActivationType.Background,
+                                        },
+
+                                        new ToastButton("Kolejne pytanie", "next")
+                                        {
+                                            ActivationType = ToastActivationType.Background,
+                                            ActivationOptions = new ToastActivationOptions()
+                                            {
+                                                AfterActivationBehavior = ToastAfterActivationBehavior.PendingUpdate
+                                            }
+                                        }
+                                    }
+                                };
+
+                                ToastContent toastContent = new ToastContent()
+                                {
+                                    Visual = visual,
+                                    Actions = actions,
+
+                                    Launch = new QueryString()
+                                {
+                                    {"action", "viewQuestion" },
+                                    {"conversationId", conversationId.ToString() }
+                                }.ToString()
+                                };
+
+                                var toast = new ToastNotification(toastContent.GetXml())
+                                {
+                                    Tag = "NextQuestion"
+                                };
+
+                                ToastNotificationManager.CreateToastNotifier().Show(toast);
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            deferral.Complete();
+        }
+
+        void notifi()
+        {
+            IList<string> GetNames = GrabData("TitleTable", "TableName");
+            IList<string> GetOfficial = GrabData("TitleTable", "title");
+
+            int NameCount = GetNames.Count;
+
+            Random rnd = new Random();
+            int r = rnd.Next(NameCount);
+
+            string name = GetNames[r];
+            string ofname = GetOfficial[r];
+
+            IList<string> qu = GrabData(name, "question");
+            IList<string> an = GrabData(name, "answer");
+
+            int ItemsCount = qu.Count;
+
+            Random rnd2 = new Random();
+            int r2 = rnd2.Next(ItemsCount);
+
+            string question = qu[r2];
+            string answer = an[r2];
+
+            int conversationId = 384928;
+
+            ToastVisual visual = new ToastVisual()
+            {
+                BindingGeneric = new ToastBindingGeneric()
+                {
+                    Children =
+                    {
+                        new AdaptiveText()
+                        {
+                            Text = ofname
+                        },
+
+                        new AdaptiveText()
+                        {
+                            Text = question
+                        },
+                    },
+
+                    Attribution = new ToastGenericAttributionText()
+                    {
+                        Text = "Repeats (Beta)"
+                    }
+                }
+            };
+
+            ToastActionsCustom actions = new ToastActionsCustom()
+            {
+                Inputs =
+                {
+                    new ToastTextBox("tbReply")
+                    {
+                        PlaceholderContent = "Tutaj wpisz odpowiedź"
+                    }
+                },
+
+                Buttons =
+                {
+                    new ToastButton("Reply", answer)
+                    {
+                        ActivationType = ToastActivationType.Background,
+                        TextBoxId = "tbReply"
+                    }
+                }
+            };
+
+            ToastContent toastContent = new ToastContent()
+            {
+                Visual = visual,
+                Actions = actions,
+
+                Launch = new QueryString()
+                {
+                    {"action", "viewQuestion" },
+                    {"conversationId", conversationId.ToString() }
+                }.ToString()
+            };
+
+            var toast = new ToastNotification(toastContent.GetXml())
+            {
+                Tag="NextQuestion"
+            };
+            
+
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
+        }
+
+        public static IList<string> GrabData(string FROM, string WHAT)
+        {
+            IList<string> data = new List<string>();
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM, db);
+                SqliteDataReader query;
+                try
+                {
+                    query = selectCommand.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    return data;
+                }
+                while (query.Read())
+                {
+                    data.Add(query.GetString(0));
+                }
+                db.Close();
+            }
+            return data;
         }
 
         /// <summary>
@@ -216,28 +409,6 @@ namespace Repeats
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
-        private void RegisterBackgroundTask()
-        {
-            const string taskName = "ToastBackgroundTask";
-
-            // If background task is already registered, do nothing
-            if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
-                return;
-
-            // Otherwise create the background task
-            var builder = new BackgroundTaskBuilder()
-            {
-                Name = taskName,
-                TaskEntryPoint = typeof(TextBackground).FullName
-            };
-
-            // And set the toast action trigger
-            builder.SetTrigger(new ToastNotificationActionTrigger());
-
-            // And register the task
-
-            builder.Register();
-        }
 
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved

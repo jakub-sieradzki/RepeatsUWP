@@ -11,15 +11,12 @@
     SecondaryButtonText=""
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    DefaultButton="Secondary"
     Name="TimeContent">
 
     <Grid>
         <StackPanel>
-            <RadioButton x:Uid="R1" Content="" Tag="15" Checked="TimeRadioButton_Checked"/>
-            <RadioButton x:Uid="R2" Name="second" Content="" Tag="30" Checked="TimeRadioButton_Checked"/>
-            <RadioButton x:Uid="R3" Content="" Tag="45" Checked="TimeRadioButton_Checked"/>
-            <RadioButton x:Uid="R4" Content="" Tag="60" Checked="TimeRadioButton_Checked"/>
+            <TextBox Name="GetTimeTxt"/>
         </StackPanel>
-
     </Grid>
 </ContentDialog>

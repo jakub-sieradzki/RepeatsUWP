@@ -2,6 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Data.Sqlite;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -111,15 +112,15 @@ namespace Repeats.Pages
             ViewModel.Datas.Remove(new RepeatsListData() { TableName = gettag });
         }
 
-        private async void AddClick(object sender, RoutedEventArgs e)
+
+        private void AddClick(object sender, RoutedEventArgs e)
         {
-            AskNameDialog dialog = new AskNameDialog();
-            await dialog.ShowAsync();
+            Frame.Navigate(typeof(AddRepeats));
         }
 
         private void BellClick(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(TestResults));
+            //Frame.Navigate(typeof(TestResults));
         }
     }
 }

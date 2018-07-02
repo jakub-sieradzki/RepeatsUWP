@@ -1,5 +1,4 @@
 ﻿using System;
-using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -97,26 +96,22 @@ namespace Repeats.Pages
         {
             count++;
             ViewModel1.AddRepeat.Add(new bind1() { ClickCount = count });
-
-            string date = DateTime.Now.ToLongDateString();
         }
 
-        private void SaveClick(object sender, RoutedEventArgs e)
+        private async void SaveClick(object sender, RoutedEventArgs e)
         {
             Ring.Visibility = Visibility.Visible;
             Ring.IsActive = true;
 
             var findrelative = GRID.FindDescendants<RelativePanel>();
             var listrel = findrelative.ToList();
-            int relcount = listrel.Count;
-
-            relcount--;
+            int relcount = GRID.Items.Count;
 
             var date = DateTime.Now.ToString("yyyyMMddHHmmss");
             date = "R" + date;
 
             string realDate = DateTime.Now.ToShortDateString();
-            string getname = AskNameDialog.name;
+            string getname = AskName.Text;
 
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
@@ -137,7 +132,7 @@ namespace Repeats.Pages
                 #endregion
 
                 #region Get & save sets
-                for (int i = 0; i <= relcount; i++)
+                for (int i = 1; i <= relcount; i++)
                 {
                     RelativePanel panel = listrel[i];
                     TextBox questbox = panel.FindChildByName("quest") as TextBox;
@@ -184,6 +179,9 @@ namespace Repeats.Pages
 
                 db.Close();
             }
+
+            AskTimeDialog TIME = new AskTimeDialog();
+            await TIME.ShowAsync();
 
             Frame.Navigate(typeof(RepeatsList));
         }
@@ -235,47 +233,6 @@ namespace Repeats.Pages
             };
 
             ContentDialogResult result = await WriDia.ShowAsync();
-        }
-
-        private async void ASKTIME()
-        {
-            try
-            {
-                var a = await MainStorage.TryGetItemAsync("time.txt");
-
-                if (a == null)
-                {
-                    AskTimeDialog TIME = new AskTimeDialog();
-                    await TIME.ShowAsync();
-
-                    Ring.IsActive = false;
-                    Add.IsEnabled = true;
-                    Save.IsEnabled = true;
-                }
-                else
-                {
-                    var taskName = "RepeatsNotificationTask";
-
-                    foreach (var cur in BackgroundTaskRegistration.AllTasks)
-                    {
-                        if (cur.Value.Name == taskName)
-                        {
-
-                        }
-                        else
-                        {
-                            RegisterTask.RegisterBackgroundTask();
-                        }
-                    }
-
-                    Frame.Navigate(typeof(RepeatsList));
-                }
-            }
-            catch (Exception)
-            {
-                ExceptionUps();
-            }
-
         }
     }
 }

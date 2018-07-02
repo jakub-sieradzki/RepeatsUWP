@@ -168,7 +168,7 @@ namespace Repeats.Pages
 
                 CancelTask();
 
-                RegisterTask.RegisterBackgroundTask();
+                //RegisterTask.RegisterBackgroundTask();
             }
             catch (Exception)
             {
@@ -268,7 +268,7 @@ namespace Repeats.Pages
                         var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
                         var on1 = loader.GetString("ON");
 
-                        RegisterTask.RegisterBackgroundTask();
+                        //RegisterTask.RegisterBackgroundTask();
                         turnon.IsEnabled = false;
                         turnon.Content = on1;
                     }

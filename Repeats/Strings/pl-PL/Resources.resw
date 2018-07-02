@@ -310,7 +310,7 @@
     <value>Wybierz, co jaki czas mają wyświetlać się powiadomienia:</value>
   </data>
   <data name="TIME1" xml:space="preserve">
-    <value>Wybierz, co jaki czas mają wyświetlać się powiadomienia</value>
+    <value>Co jaki czas mają wyświetlać się powiadomienia (w minutach)?</value>
   </data>
   <data name="TIME2" xml:space="preserve">
     <value>Anuluj</value>

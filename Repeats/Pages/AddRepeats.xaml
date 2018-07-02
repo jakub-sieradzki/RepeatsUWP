@@ -19,6 +19,12 @@
 
     <Grid Name="grid" Background="{ThemeResource MyAcrylicBrush}">
         <GridView Name="GRID" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModel1.AddRepeat}">
+            <GridView.Header>
+                <RelativePanel>
+                    <PersonPicture Name="Pic" Margin="40"/>
+                    <TextBox Name="AskName" RelativePanel.RightOf="Pic" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="100,0,100,0" RelativePanel.AlignRightWithPanel="True" PlaceholderText="Nazwa zestawu"/>
+                </RelativePanel>
+            </GridView.Header>
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsStackPanel Orientation="Vertical"/>

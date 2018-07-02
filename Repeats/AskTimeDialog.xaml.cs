@@ -1,7 +1,8 @@
 ﻿using Repeats.Pages;
 using System;
+using System.Linq;
+using Windows.ApplicationModel.Background;
 using Windows.Storage;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -15,8 +16,6 @@ namespace Repeats
         public AskTimeDialog()
         {
             this.InitializeComponent();
-
-            second.IsChecked = true;
 
             Load();
         }
@@ -32,27 +31,6 @@ namespace Repeats
             TimeContent.PrimaryButtonText = time2;
             TimeContent.SecondaryButtonText = time3;
 
-        }
-
-        private void TimeRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioButton rb = sender as RadioButton;
-            string a = rb.Tag.ToString();
-            switch (a)
-            {
-                case "15":
-                    time = 15;
-                    break;
-                case "30":
-                    time = 30;
-                    break;
-                case "45":
-                    time = 45;
-                    break;
-                case "60":
-                    time = 60;
-                    break;
-            }
         }
 
         private static async void ExceptionUps()
@@ -79,22 +57,68 @@ namespace Repeats
 
         private async void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            try
-            {
-                Frame frame = MainPage.FRAME;
+            //try
+            //{
 
-                StorageFolder Storage = ApplicationData.Current.LocalFolder;
-                StorageFile Storage1 = await Storage.CreateFileAsync("time.txt", CreationCollisionOption.ReplaceExisting);
-                StorageFile Storage2 = await Storage.GetFileAsync("time.txt");
-                await FileIO.WriteTextAsync(Storage2, time.ToString());
+                string txt = GetTimeTxt.Text;
+                int GetIntTime = Int32.Parse(txt);
+                GetIntTime = GetIntTime * 60000;
 
-                RegisterTask.RegisterBackgroundTask();
-                frame.Navigate(typeof(RepeatsList));
-            }
-            catch (Exception)
-            {
-                ExceptionUps();
-            }
+                ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
+                localSettings.Values["Frequency"] = GetIntTime;
+
+                var taskRegistered = false;
+                var exampleTaskName = "RepeatsNotificationTask";
+
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == exampleTaskName)
+                    {
+                        taskRegistered = true;
+                        break;
+                    }
+                }
+
+                if (taskRegistered == false)
+                {
+                    var builder = new BackgroundTaskBuilder();
+
+                    ApplicationTrigger trigger = new ApplicationTrigger();
+
+                    builder.Name = exampleTaskName;
+                    builder.TaskEntryPoint = "BackgroundTask.Task";
+                    builder.SetTrigger(trigger);
+                    BackgroundTaskRegistration task = builder.Register();
+
+                    var result = await trigger.RequestAsync();
+                }
+
+                const string taskName = "ToastBackgroundTask";
+
+                // If background task is already registered, do nothing
+                if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
+                    return;
+
+                // Otherwise request access
+                BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
+
+                // Create the background task
+                BackgroundTaskBuilder build = new BackgroundTaskBuilder()
+                {
+                    Name = taskName
+                };
+
+                // Assign the toast action trigger
+                build.SetTrigger(new ToastNotificationActionTrigger());
+
+                // And register the task
+                BackgroundTaskRegistration registration = build.Register();
+            //}
+            //catch (Exception)
+            //{
+            //    ExceptionUps();
+            //}
 
         }
     }

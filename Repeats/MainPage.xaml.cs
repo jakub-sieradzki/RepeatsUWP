@@ -21,10 +21,13 @@ namespace Repeats
         public static MainPage Current;
 
         public static Frame FRAME;
+        public static int ConversationId;
 
         public MainPage()
         {
             this.InitializeComponent();
+
+            ConversationId = 1111;
 
             var frame = new Frame();
             frame.ContentTransitions = new TransitionCollection();

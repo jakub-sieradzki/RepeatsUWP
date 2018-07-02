@@ -99,9 +99,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AskNameDialog.xaml.cs">
-      <DependentUpon>AskNameDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="AskTimeDialog.xaml.cs">
       <DependentUpon>AskTimeDialog.xaml</DependentUpon>
     </Compile>
@@ -205,10 +202,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="AskNameDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="AskTimeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -296,9 +289,9 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NotificationsBackground\NotificationsBackground.csproj">
-      <Project>{2ed87bd1-8b1e-4379-a223-a1d55b7e4dd5}</Project>
-      <Name>NotificationsBackground</Name>
+    <ProjectReference Include="..\BackgroundTask\BackgroundTask.csproj">
+      <Project>{1e164d57-c6d0-4016-b154-f8076851f1c9}</Project>
+      <Name>BackgroundTask</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

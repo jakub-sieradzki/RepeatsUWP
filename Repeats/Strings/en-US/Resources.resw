@@ -310,7 +310,7 @@
     <value>Choose what time you want notifications to appear:</value>
   </data>
   <data name="TIME1" xml:space="preserve">
-    <value>Choose what time you want notifications to appear</value>
+    <value>Set the frequency of sending notifications (in minutes):</value>
   </data>
   <data name="TIME2" xml:space="preserve">
     <value>Cancel</value>
