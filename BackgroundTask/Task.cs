@@ -2,8 +2,8 @@
 using Microsoft.QueryStringDotNET;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Windows.ApplicationModel.Background;
 using Windows.Storage;
@@ -18,6 +18,7 @@ namespace BackgroundTask
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
             object value = localSettings.Values["Frequency"];
+            localSettings.Values["ProcessId"] = Process.GetCurrentProcess().Id;
             int freq = Convert.ToInt32(value);
 
             int c = 1;
@@ -27,7 +28,6 @@ namespace BackgroundTask
                 c++;
                 Thread.Sleep(freq);
             }
-
         }
 
         void notifi()

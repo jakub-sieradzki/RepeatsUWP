@@ -6,6 +6,11 @@ using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System.Linq;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Windows.UI.Notifications;
+using Microsoft.QueryStringDotNET;
+using System.Threading;
+using Windows.System.Threading;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -48,7 +53,6 @@ namespace Repeats.Pages
 
     public sealed partial class AddRepeats : Page
     {
-        public StorageFolder MainStorage;
         public int count;
 
         public AddRepeats()
@@ -56,8 +60,6 @@ namespace Repeats.Pages
             this.InitializeComponent();
 
             Ring.IsActive = false;
-
-            STORAGE();
 
             count = 0;
 
@@ -67,11 +69,6 @@ namespace Repeats.Pages
         }
 
         public BindViewModel ViewModel1 { get; set; }
-
-        private void STORAGE()
-        {
-            MainStorage = ApplicationData.Current.LocalFolder;
-        }
 
         private void DeleteItemClick(object sender, RoutedEventArgs e)
         {

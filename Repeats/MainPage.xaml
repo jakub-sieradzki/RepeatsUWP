@@ -30,7 +30,11 @@
             </NavigationView.MenuItems>
 
             <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
+                <AutoSuggestBox x:Name="ASB" QueryIcon="Find"                 
+                TextChanged="AutoSuggestBox_TextChanged"
+                QuerySubmitted="AutoSuggestBox_QuerySubmitted"
+                SuggestionChosen="AutoSuggestBox_SuggestionChosen"
+                PlaceholderText="Szukaj"/>
             </NavigationView.AutoSuggestBox>
 
             <Frame x:Name="ContentFrame">

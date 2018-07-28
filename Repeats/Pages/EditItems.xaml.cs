@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -62,7 +64,16 @@ namespace Repeats.Pages
 
             this.ViewModel2 = new Bind2ViewModel();
 
+            AskNameEdit.Text = RepeatsList.OfficialName;
+
             Load();
+
+            ConnectedAnimation imageAnimation =
+                ConnectedAnimationService.GetForCurrentView().GetAnimation("image");
+            if (imageAnimation != null)
+            {
+                imageAnimation.TryStart(PicEdit);
+            }
         }
 
         public Bind2ViewModel ViewModel2 { get; set; }

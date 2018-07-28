@@ -3,6 +3,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Data.Sqlite;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Animation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -35,9 +36,11 @@ namespace Repeats.Pages
         public void ItemClick_Click(object sender, ItemClickEventArgs e)
         {
             var data = (RepeatsListData)e.ClickedItem;
+            var item = e.ClickedItem;
+            var g = GridRepeats.PrepareConnectedAnimation("image", item, "Person");
             OfficialName = data.ProjectName;
             name = data.TableName;
-            Frame.Navigate(typeof(EditItems));
+            Frame.Navigate(typeof(EditItems), null, new SuppressNavigationTransitionInfo());
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)

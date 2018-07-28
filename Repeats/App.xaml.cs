@@ -10,6 +10,12 @@ using Windows.UI.Notifications;
 using Microsoft.QueryStringDotNET;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System.Collections.Generic;
+using Windows.Storage;
+using System.Threading;
+using System.Timers;
+using Windows.ApplicationModel.Background;
+using System.Linq;
+using System.Diagnostics;
 
 namespace Repeats
 {
@@ -86,34 +92,31 @@ namespace Repeats
             }
         }
 
+        public bool IsStartup;
+
         protected override void OnActivated(IActivatedEventArgs e)
         {
-            // Get the root frame
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            // TODO: Initialize root frame just like in OnLaunched
-
-            // Handle toast activation
             if (e is ToastNotificationActivatedEventArgs)
             {
+                IsStartup = false;
+
+                Frame rootFrame = Window.Current.Content as Frame;
+
                 var toastActivationArgs = e as ToastNotificationActivatedEventArgs;
 
-                // Parse the query string (using QueryString.NET)
                 QueryString args = QueryString.Parse(toastActivationArgs.Argument);
 
                 rootFrame.Navigate(typeof(MainPage));
 
-                // If we're loading the app for the first time, place the main page on
-                // the back stack so that user can go back after they've been
-                // navigated to the specific page
                 if (rootFrame.BackStack.Count == 0)
                     rootFrame.BackStack.Add(new PageStackEntry(typeof(MainPage), null, null));
+
+                Window.Current.Activate();
             }
-
-            // TODO: Handle other types of activation
-
-            // Ensure the current window is active
-            Window.Current.Activate();
+            else if (e.Kind == ActivationKind.StartupTask)
+            {
+                IsStartup = true;
+            }
         }
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
@@ -278,9 +281,63 @@ namespace Repeats
                         }
                     }
                     break;
+
+                //case "RepeatsNotificationTask":
+                //    ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
+                //    object value = localSettings.Values["Frequency"];
+                //    int freq = Convert.ToInt32(value);
+
+                //    int c = 1;
+                //    //for (int i = 0; i < c; i++)
+                //    //{
+                //    //    notifi();
+                //    //    c++;
+                //    //    Thread.Sleep(freq);
+                //    //}
+
+                //    System.Timers.Timer timer = new System.Timers.Timer(10000);
+                //    timer.Elapsed += nNotifi;
+                //    timer.AutoReset = true;
+                //    timer.Enabled = true;
+                //    break;
             }
 
             deferral.Complete();
+        }
+
+        void nNotifi(Object source, ElapsedEventArgs e)
+        {
+            //notifi();
+
+            int i = 0;
+
+            var toastContent = new ToastContent()
+            {
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+            {
+                new AdaptiveText()
+                {
+                    Text = "Hello World"
+                },
+                new AdaptiveText()
+                {
+                    Text = "This is a simple toast message"
+                }
+            }
+                    }
+                }
+            };
+
+            // Create the toast notification
+            var toastNotif = new ToastNotification(toastContent.GetXml());
+
+            // And send the notification
+            ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
         }
 
         void notifi()
@@ -372,6 +429,8 @@ namespace Repeats
             
 
             ToastNotificationManager.CreateToastNotifier().Show(toast);
+
+            int i = 0;
         }
 
         public static IList<string> GrabData(string FROM, string WHAT)
@@ -418,10 +477,57 @@ namespace Repeats
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
 
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
+           if(IsStartup)
+           {
+                var reResult = await BackgroundExecutionManager.RequestAccessAsync();
+
+                var exampleTaskName = "RepeatsNotificationTask";
+
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == exampleTaskName)
+                    {
+                        task.Value.Unregister(true);
+                        break;
+                    }
+                }
+
+                var builder = new BackgroundTaskBuilder();
+
+                ApplicationTrigger trigger = new ApplicationTrigger();
+
+                builder.Name = exampleTaskName;
+                builder.SetTrigger(trigger);
+                builder.TaskEntryPoint = "BackgroundTask.Task";
+                BackgroundTaskRegistration builders = builder.Register();
+
+                var result = await trigger.RequestAsync();
+
+                const string taskName = "ToastBackgroundTask";
+
+                foreach (var tasks in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (tasks.Value.Name == taskName)
+                    {
+                        tasks.Value.Unregister(true);
+                        break;
+                    }
+                }
+
+                BackgroundTaskBuilder build = new BackgroundTaskBuilder()
+                {
+                    Name = taskName
+                };
+
+                build.SetTrigger(new ToastNotificationActionTrigger());
+
+                BackgroundTaskRegistration registration = build.Register();
+
+                Process.GetCurrentProcess().Kill();
+            }
             deferral.Complete();
         }
     }

@@ -7,40 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource MyAcrylicBrush}">
         <Pivot>
-            <PivotItem x:Uid="NotificationSettings" Header="">
-                <StackPanel>
-                    <Button x:Uid="toff" Name="turnoff" Click="CancelTask_Click" Content="" Margin="0,10"/>
-                    <Button x:Uid="ton" Name="turnon" Click="RegisterTask_Click" Content=""/>
-                    <TextBlock x:Uid="TextSetting" Name="TEXT" Text="" TextWrapping="Wrap" Margin="0,10"/>
-                    <StackPanel Name="stack" RelativePanel.Below="TEXT">
-                        <RadioButton x:Uid="Radio1" Name="first" Content="" Tag="15"/>
-                        <RadioButton x:Uid="Radio2" Name="second" Content="" Tag="30"/>
-                        <RadioButton x:Uid="Radio3" Name="third" Content="" Tag="45"/>
-                        <RadioButton x:Uid="Radio4" Name="fourth" Content="" Tag="60"/>
-                    </StackPanel>
-                </StackPanel>
-            </PivotItem>
-            <PivotItem x:Uid="About" Header="">
+            <PivotItem Header="Powiadomienia">
                 <RelativePanel>
-                    <StackPanel Height="70" Width="70" Background="Gray" Name="IMAGE">
-                        <Image Height="70" Width="70" Source="ms-appx:///Assets/new logo2.png" Stretch="Fill"/>
-                    </StackPanel>
-                    <TextBlock RelativePanel.RightOf= "IMAGE" Text="Repeats v.1.0.1.0&#13;Developer: Rootek Studio" Margin="12,0"/>
-                    <Button RelativePanel.Below="IMAGE" Margin="0,37,0,-37" Background="#FF00A2FF" Name="Button1" Click="RATE">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE00A;" FontSize="30" Foreground="White"/>
-                            <TextBlock x:Uid="Rate" Text="" FontSize="22" Foreground="White"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Name="FEEDBACK" RelativePanel.Below="Button1" Margin="0,60" Background="#FF00A2FF" Click="Feedback_Click">
-                        <StackPanel  Orientation="Horizontal">
-                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE939;" FontSize="30" Foreground="White"/>
-                            <TextBlock x:Uid="Feedback" Text="" FontSize="22" Foreground="White"/>
-                        </StackPanel>
-                    </Button>
+                    <ToggleSwitch x:Name="Switch" Header="Powiadomienia" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top"/>
+                    <!--<Button Content="Button" HorizontalAlignment="Center" Height="32" Margin="0,0,0,0" VerticalAlignment="Center" Width="65" Click="Button_Click"/>-->
+
                 </RelativePanel>
+
+
             </PivotItem>
         </Pivot>
     </Grid>
