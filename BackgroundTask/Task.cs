@@ -32,8 +32,8 @@ namespace BackgroundTask
 
         void notifi()
         {
-            IList<string> GetNames = GrabData("TitleTable", "TableName");
-            IList<string> GetOfficial = GrabData("TitleTable", "title");
+            IList<string> GetNames = GrabTitles("TitleTable", "TableName");
+            IList<string> GetOfficial = GrabTitles("TitleTable", "title");
 
             int NameCount = GetNames.Count;
 
@@ -126,14 +126,14 @@ namespace BackgroundTask
                 db.Open();
                 SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM, db);
                 SqliteDataReader query;
-                try
-                {
+                //try
+                //{
                     query = selectCommand.ExecuteReader();
-                }
-                catch (SqliteException)
-                {
-                    return data;
-                }
+                //}
+                //catch (SqliteException)
+                //{
+                    //return data;
+                //}
                 while (query.Read())
                 {
                     data.Add(query.GetString(0));
@@ -141,6 +141,32 @@ namespace BackgroundTask
                 db.Close();
             }
             return data;
+        }
+
+        public static IList<string> GrabTitles(string FROM, string WHAT)
+        {
+            IList<string> titles = new List<string>();
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM + " WHERE " + "IsEnabled='&#xEDAC;'", db);
+                SqliteDataReader query;
+                //try
+                //{
+                query = selectCommand.ExecuteReader();
+                //}
+                //catch (SqliteException)
+                //{
+                //return data;
+                //}
+                while (query.Read())
+                {
+                    titles.Add(query.GetString(0));
+                }
+                db.Close();
+            }
+            return titles;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Repeats.Pages
         public string ProjectName { get; set; }
         public string ProjectDate { get; set; }
         public string TableName { get; set; }
+        public object IsENABLED { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -41,12 +42,12 @@ namespace Repeats.Pages
             List<string> Grab_Titles = GetFromDB.GrabData("TitleTable", "title");
             List<string> Grab_Dates = GetFromDB.GrabData("TitleTable", "CreateDate");
             List<string> Grab_Names = GetFromDB.GrabData("TitleTable", "TableName");
-
+            List<string> Grab_Enabled = GetFromDB.GrabData("TitleTable", "IsEnabled");
             count = Grab_Titles.Count;
 
             for (int i = 0; i < count; i++)
             {
-                this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles.ElementAt(i), ProjectDate = Grab_Dates.ElementAt(i), TableName = Grab_Names.ElementAt(i) });
+                this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles.ElementAt(i), ProjectDate = Grab_Dates.ElementAt(i), TableName = Grab_Names.ElementAt(i), IsENABLED = Grab_Enabled.ElementAt(i) });
             }
 
         }

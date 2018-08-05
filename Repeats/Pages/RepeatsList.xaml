@@ -76,23 +76,24 @@
                             FontFamily="Segoe MDL2 Assets"
                             HorizontalAlignment="Center"
                             Height="35" 
-                            Margin="0,0,4,0" 
+                            Margin="0,0,4,0"
                             VerticalAlignment="Center" 
                             Width="35"
                             RelativePanel.Below="SetName"
                             RelativePanel.LeftOf="TEST"
                             Tag="{Binding TableName}"
                             Click="Delete_Click"/>
-                        <Button 
-                            Content="&#xEDAC;"
-                            FontFamily="Segoe MDL2 Assets"
+                        <Button
                             HorizontalAlignment="Center"
+                            FontFamily="Segoe MDL2 Assets"
                             Height="35" 
                             Margin="4,0,0,0" 
                             VerticalAlignment="Center" 
                             Width="35"
                             RelativePanel.Below="SetName"
                             RelativePanel.RightOf="TEST"
+                            Tag="{Binding TableName}"
+                            Content="{Binding IsENABLED}"
                             Click="BellClick"/>
                         <TextBlock 
                             Name="ModifiDate" 

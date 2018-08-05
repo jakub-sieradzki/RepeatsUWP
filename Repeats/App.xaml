@@ -7,11 +7,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
-        BackgroundSource="Backdrop" TintColor="#247EE6" TintOpacity=".4"/>
+        BackgroundSource="Backdrop" TintColor="#247EE6" TintOpacity=".4" FallbackColor="#FF616161" />
             <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground"
-        BackgroundSource="HostBackdrop" TintColor="#247EE6" TintOpacity=".4"/>
+        BackgroundSource="HostBackdrop" TintColor="#247EE6" TintOpacity=".4" FallbackColor="#FF616161"/>
             <AcrylicBrush x:Key="MyAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="#247EE6" 
-        TintOpacity="0.1" FallbackColor="White"/>
+        TintOpacity="0.1" FallbackColor="#FF424242"/>
         </ResourceDictionary>
     </Application.Resources>
 

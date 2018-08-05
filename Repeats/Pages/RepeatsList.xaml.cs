@@ -43,18 +43,6 @@ namespace Repeats.Pages
             Frame.Navigate(typeof(EditItems), null, new SuppressNavigationTransitionInfo());
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Frame.Navigate(typeof(EditItems));
-            }
-            catch (Exception)
-            {
-                ExceptionUps();
-            }
-        }
-
         private static async void ExceptionUps()
         {
             var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
@@ -123,7 +111,51 @@ namespace Repeats.Pages
 
         private void BellClick(object sender, RoutedEventArgs e)
         {
-            //Frame.Navigate(typeof(TestResults));
+            Button bell = sender as Button;
+            bell.Content = "&#xE7ED;";
+            string gettag = bell.Tag.ToString();
+            gettag = "'" + gettag + "'";
+
+            if(bell.Content.ToString() == "&#xEDAC;")
+            {
+                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+                {
+                    db.Open();
+                    String tableCommand = "UPDATE TitleTable SET IsEnabled='&#xE7ED;' WHERE TableName=" + gettag;
+                    SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                    try
+                    {
+                        createTable.ExecuteReader();
+                    }
+                    catch (SqliteException)
+                    {
+
+                    }
+                    db.Close();
+                }
+
+                bell.Content = "&#xE7ED;";
+            }
+            else
+            {
+                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+                {
+                    db.Open();
+                    String tableCommand = "UPDATE TitleTable SET IsEnabled='&#xEDAC;' WHERE TableName=" + gettag;
+                    SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                    //try
+                    //{
+                    createTable.ExecuteReader();
+                    //}
+                    //catch (SqliteException)
+                    //{
+
+                    //}
+                    db.Close();
+                }
+
+                bell.Content = "&#xEDAC;";
+            }
         }
     }
 }

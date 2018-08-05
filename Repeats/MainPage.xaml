@@ -14,8 +14,9 @@
                     ItemInvoked="NavView_ItemInvoked"
                     Loaded="NavView_Loaded"
                     BackRequested="NavView_BackRequested"
-                        AlwaysShowHeader="False">
-
+                    AlwaysShowHeader="False" 
+                      Foreground="White">
+            
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Uid="HomeNavItem" Content="Twoje powtórki" Tag="repeats">
                     <NavigationViewItem.Icon>

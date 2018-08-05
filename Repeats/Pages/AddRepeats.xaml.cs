@@ -160,10 +160,11 @@ namespace Repeats.Pages
                 SqliteCommand insertCommand2 = new SqliteCommand();
                 insertCommand2.Connection = db;
 
-                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate);";
+                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate, @IsEnabled);";
                 insertCommand2.Parameters.AddWithValue("@title", getname);
                 insertCommand2.Parameters.AddWithValue("@TableName", date);
                 insertCommand2.Parameters.AddWithValue("@CreateDate", realDate);
+                insertCommand2.Parameters.AddWithValue("@IsEnabled", "&#xEDAC;");
                 try
                 {
                     insertCommand2.ExecuteReader();
