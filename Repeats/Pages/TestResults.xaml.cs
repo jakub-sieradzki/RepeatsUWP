@@ -1,20 +1,7 @@
-﻿using Microsoft.Toolkit.Uwp.UI.Extensions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -51,6 +38,8 @@ namespace Repeats.Pages
 
     public sealed partial class TestResults : Page
     {
+
+
         public TestResults()
         {
             this.InitializeComponent();
@@ -63,9 +52,16 @@ namespace Repeats.Pages
 
         private void Load()
         {
-            Score.Text = TakeTestPage.TestCount.ToString() + "/" + ViewResultsModel.Test.Count + " poprawnych odpowiedzi";
+            int good = TakeTestPage.TestCount;
+            int all = ViewResultsModel.Test.Count;
+            int wrong = all - good;
 
-            var value = ((double)TakeTestPage.TestCount / ViewResultsModel.Test.Count) * 100;
+            Score1.Text = "Poprawnych odpowiedzi: " + good.ToString();
+            Score2.Text = "Niepoprawnych odpowiedzi: " + wrong.ToString();
+            Score3.Text = "Wszystkich odpowiedzi: " + all.ToString();
+            Score4.Text = "Twój czas: " + TakeTestPage.StopwatchResults;
+            
+            var value = ((double)good / all) * 100;
             var percentage = Convert.ToInt32(Math.Round(value, 0));
 
             percentScore.Text = percentage.ToString() + "%";

@@ -20,8 +20,12 @@
     <PackageCertificateKeyFile>Repeats_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>30A31BE3CBB47D5E10109E7E7FE87E3FC76EF975</PackageCertificateThumbprint>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>DEB327085C1FB59D14AB47A5F63B132584508452</PackageCertificateThumbprint>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
+    <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -255,7 +259,7 @@
       <Version>1.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.5</Version>
+      <Version>6.1.7</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Services.Store.SDK">
       <Version>10.1705.16001</Version>

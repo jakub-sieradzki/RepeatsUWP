@@ -1,16 +1,10 @@
 ﻿using System;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System.Linq;
-using Microsoft.Toolkit.Uwp.Notifications;
-using Windows.UI.Notifications;
-using Microsoft.QueryStringDotNET;
-using System.Threading;
-using Windows.System.Threading;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -164,7 +158,7 @@ namespace Repeats.Pages
                 insertCommand2.Parameters.AddWithValue("@title", getname);
                 insertCommand2.Parameters.AddWithValue("@TableName", date);
                 insertCommand2.Parameters.AddWithValue("@CreateDate", realDate);
-                insertCommand2.Parameters.AddWithValue("@IsEnabled", "&#xEDAC;");
+                insertCommand2.Parameters.AddWithValue("@IsEnabled", "true");
                 try
                 {
                     insertCommand2.ExecuteReader();

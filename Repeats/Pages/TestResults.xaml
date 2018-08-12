@@ -9,21 +9,27 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <RelativePanel>
-            <controls:RadialProgressBar
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+        <RelativePanel Name="ResultsRelative">
+            <RelativePanel Name="radialRelative" Margin="60,20">
+                <controls:RadialProgressBar
                 Name="Radial"
                 Thickness="10"
                 Minimum="0"
                 Maximum="100"
                 Width="150"
                 Height="150"
-                RelativePanel.AlignLeftWithPanel="True"
-                Margin="50,20,0,0"/>
-            <TextBlock Name="percentScore" Text="50%" FontSize="45" RelativePanel.AlignLeftWithPanel="True" Margin="82,62,0,0"/>
-            <TextBlock Name="Score" Text="47/60 poprawnych odpowiedzi" FontSize="50" RelativePanel.AlignRightWith="percentScore" RelativePanel.AlignRightWithPanel="True" TextWrapping="Wrap" Margin="0,50,70,0"/>
-
-            <GridView x:Name="GRIDresults" RelativePanel.Below="Radial" Margin="0,20,0,0" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewResultsModel.Test}">
+                RelativePanel.AlignLeftWithPanel="True"/>
+                <TextBlock Name="percentScore" Text="100%" FontSize="40" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Height="60"/>
+            </RelativePanel>
+            <StackPanel Name="Results" RelativePanel.RightOf="radialRelative" RelativePanel.AlignVerticalCenterWith="radialRelative" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock Name="Score1" Text="Poprawnych odpowiedzi: 15" FontSize="20"  TextWrapping="Wrap" Margin="0,0,0,5"/>
+                <TextBlock Name="Score2" Text="Niepoprawnych odpowiedzi: 15" FontSize="20"  TextWrapping="Wrap" Margin="0,0,0,5"/>
+                <TextBlock Name="Score3" Text="Wszystkich odpowiedzi: 30" FontSize="20"  TextWrapping="Wrap"  Margin="0,0,0,5"/>
+                <TextBlock Name="Score4" Text="Twój czas: 00h 10m 25s" FontSize="20"  TextWrapping="Wrap"/>
+            </StackPanel>
+            <TextBlock Name="resultsText" Text="Wyniki" RelativePanel.Below="radialRelative"  RelativePanel.AlignHorizontalCenterWithPanel="True" Margin="0,35,0,0"/>
+            <GridView x:Name="GRIDresults" RelativePanel.Below="resultsText" Margin="0,10,0,0" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewResultsModel.Test}">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsStackPanel Orientation="Vertical"/>
@@ -51,7 +57,7 @@
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
-            <TextBlock Text="Wyniki" RelativePanel.Above="GRIDresults"  RelativePanel.AlignHorizontalCenterWithPanel="True"/>
+
         </RelativePanel>
     </Grid>
 </Page>

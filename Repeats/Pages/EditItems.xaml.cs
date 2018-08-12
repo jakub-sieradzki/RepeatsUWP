@@ -149,6 +149,9 @@ namespace Repeats.Pages
             var button = sender as Button;
             string strtag = button.Tag.ToString();
 
+            var finddd = button.FindAscendantByName("REL");
+            //finddd.
+
             int count = Int32.Parse(strtag);
 
             Grid find = button.Parent as Grid;
@@ -197,7 +200,7 @@ namespace Repeats.Pages
                 #endregion
 
                 #region Get & save sets
-                for (int i = 0; i <= relcount; i++)
+                for (int i = 1; i <= relcount; i++)
                 {
                     RelativePanel panel = listrel[i];
                     TextBox questbox = panel.FindChildByName("quest") as TextBox;
@@ -228,10 +231,11 @@ namespace Repeats.Pages
                 SqliteCommand insertCommand2 = new SqliteCommand();
                 insertCommand2.Connection = db;
 
-                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate);";
+                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate, @IsEnabled);";
                 insertCommand2.Parameters.AddWithValue("@title", official);
                 insertCommand2.Parameters.AddWithValue("@TableName", date);
                 insertCommand2.Parameters.AddWithValue("@CreateDate", realDate);
+                insertCommand2.Parameters.AddWithValue("@IsEnabled", "true");
                 try
                 {
                     insertCommand2.ExecuteReader();

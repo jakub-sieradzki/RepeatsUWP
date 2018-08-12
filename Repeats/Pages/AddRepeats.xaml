@@ -13,12 +13,11 @@
             </CommandBar.Content>
             <AppBarButton x:Uid="AddButton" Name="Add" Icon="Add" Label="" Click="NewItemClick"/>
             <AppBarButton x:Uid="SaveButton" Name="Save" Icon="Save" Click="SaveClick" Label="Zapisz"/>
-
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Name="grid" Background="{ThemeResource MyAcrylicBrush}">
-        <GridView Name="GRID" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModel1.AddRepeat}">
+    <Grid Name="grid" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+        <GridView Name="GRID" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel1.AddRepeat}">
             <GridView.Header>
                 <RelativePanel>
                     <PersonPicture Name="Pic" Margin="40"/>
@@ -37,8 +36,8 @@
             </GridView.ItemContainerStyle>
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Name="GridRel">
-                        <RelativePanel x:Name="REL" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="SaveButton" Grid.Column="1" Margin="0,0,40,0">
+                    <Grid Name="GridRel" >
+                        <RelativePanel  x:Name="REL" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="SaveButton" Grid.Column="1" Margin="0,0,40,0">
                             <Rectangle Name="Rectangle" RelativePanel.AlignHorizontalCenterWithPanel="True" Width="5"/>
                             <TextBox Name="quest" PlaceholderText="Pytanie" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="Rectangle" Margin="10,0,0,0"/>
                             <TextBox Name="answer" PlaceholderText="Odpowiedź"  RelativePanel.AlignRightWithPanel="True" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0"/>

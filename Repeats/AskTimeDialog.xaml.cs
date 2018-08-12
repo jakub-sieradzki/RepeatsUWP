@@ -15,6 +15,7 @@ namespace Repeats
     public sealed partial class AskTimeDialog : ContentDialog
     {
         public static int time;
+        public static bool IsCancel;
 
         public AskTimeDialog()
         {
@@ -55,6 +56,7 @@ namespace Repeats
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            IsCancel = true;
             TimeContent.Hide();
         }
 
@@ -62,7 +64,7 @@ namespace Repeats
         {
             //try
             //{
-
+            IsCancel = false;
                 string txt = GetTimeTxt.Text;
                 int GetIntTime = Int32.Parse(txt);
                 GetIntTime = GetIntTime * 60000;
@@ -70,6 +72,8 @@ namespace Repeats
                 ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
                 localSettings.Values["Frequency"] = GetIntTime;
                 localSettings.Values["IsBackgroundEnabled"] = true;
+
+
 
             var reResult = await BackgroundExecutionManager.RequestAccessAsync();
 
@@ -125,31 +129,32 @@ namespace Repeats
             //    ExceptionUps();
             //}
 
-            StartupTask startupTask = await StartupTask.GetAsync("RepeatsNotifi");
-            switch (startupTask.State)
-            {
-                case StartupTaskState.Disabled:
-                    // Task is disabled but can be enabled.
-                    StartupTaskState newState = await startupTask.RequestEnableAsync();
-                    Debug.WriteLine("Request to enable startup, result = {0}", newState);
-                    break;
-                case StartupTaskState.DisabledByUser:
-                    // Task is disabled and user must enable it manually.
-                    MessageDialog dialog = new MessageDialog(
-                        "I know you don't want this app to run " +
-                        "as soon as you sign in, but if you change your mind, " +
-                        "you can enable this in the Startup tab in Task Manager.",
-                        "TestStartup");
-                    await dialog.ShowAsync();
-                    break;
-                case StartupTaskState.DisabledByPolicy:
-                    Debug.WriteLine(
-                        "Startup disabled by group policy, or not supported on this device");
-                    break;
-                case StartupTaskState.Enabled:
-                    Debug.WriteLine("Startup is enabled.");
-                    break;
-            }
+            //StartupTask startupTask = await StartupTask.GetAsync("RepeatsNotifi");
+            //startupTask.Disable();
+            //switch (startupTask.State)
+            //{
+            //    case StartupTaskState.Disabled:
+            //        // Task is disabled but can be enabled.
+            //        StartupTaskState newState = await startupTask.RequestEnableAsync();
+            //        Debug.WriteLine("Request to enable startup, result = {0}", newState);
+            //        break;
+            //    case StartupTaskState.DisabledByUser:
+            //        // Task is disabled and user must enable it manually.
+            //        MessageDialog dialog = new MessageDialog(
+            //            "I know you don't want this app to run " +
+            //            "as soon as you sign in, but if you change your mind, " +
+            //            "you can enable this in the Startup tab in Task Manager.",
+            //            "TestStartup");
+            //        await dialog.ShowAsync();
+            //        break;
+            //    case StartupTaskState.DisabledByPolicy:
+            //        Debug.WriteLine(
+            //            "Startup disabled by group policy, or not supported on this device");
+            //        break;
+            //    case StartupTaskState.Enabled:
+            //        Debug.WriteLine("Startup is enabled.");
+            //        break;
+            //}
 
         }
     }

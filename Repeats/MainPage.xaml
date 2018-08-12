@@ -7,15 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:UI="using:Microsoft.Advertising.WinRT.UI"
     mc:Ignorable="d">
-    
-    <Grid Background="{ThemeResource MyAcrylicBrush}">
+
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
 
         <NavigationView x:Name="NavView"
                     ItemInvoked="NavView_ItemInvoked"
                     Loaded="NavView_Loaded"
                     BackRequested="NavView_BackRequested"
-                    AlwaysShowHeader="False" 
-                      Foreground="White">
+                    AlwaysShowHeader="False" >
             
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Uid="HomeNavItem" Content="Twoje powtórki" Tag="repeats">

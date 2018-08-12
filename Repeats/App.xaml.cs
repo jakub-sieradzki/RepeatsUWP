@@ -31,7 +31,7 @@ namespace Repeats
         public App()
         {
             this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            //this.Suspending += OnSuspending;
 
             SqliteEngine.UseWinSqlite3();
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
@@ -307,40 +307,6 @@ namespace Repeats
             deferral.Complete();
         }
 
-        void nNotifi(Object source, ElapsedEventArgs e)
-        {
-            //notifi();
-
-            int i = 0;
-
-            var toastContent = new ToastContent()
-            {
-                Visual = new ToastVisual()
-                {
-                    BindingGeneric = new ToastBindingGeneric()
-                    {
-                        Children =
-            {
-                new AdaptiveText()
-                {
-                    Text = "Hello World"
-                },
-                new AdaptiveText()
-                {
-                    Text = "This is a simple toast message"
-                }
-            }
-                    }
-                }
-            };
-
-            // Create the toast notification
-            var toastNotif = new ToastNotification(toastContent.GetXml());
-
-            // And send the notification
-            ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
-        }
-
         void notifi()
         {
             IList<string> GetNames = GrabData("TitleTable", "TableName");
@@ -478,59 +444,59 @@ namespace Repeats
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
 
-        private async void OnSuspending(object sender, SuspendingEventArgs e)
-        {
-            var deferral = e.SuspendingOperation.GetDeferral();
-           if(IsStartup)
-           {
-                var reResult = await BackgroundExecutionManager.RequestAccessAsync();
+        //private async void OnSuspending(object sender, SuspendingEventArgs e)
+        //{
+        //    var deferral = e.SuspendingOperation.GetDeferral();
+        //   if(IsStartup)
+        //   {
+        //        var reResult = await BackgroundExecutionManager.RequestAccessAsync();
 
-                var exampleTaskName = "RepeatsNotificationTask";
+        //        var exampleTaskName = "RepeatsNotificationTask";
 
-                foreach (var task in BackgroundTaskRegistration.AllTasks)
-                {
-                    if (task.Value.Name == exampleTaskName)
-                    {
-                        task.Value.Unregister(true);
-                        break;
-                    }
-                }
+        //        foreach (var task in BackgroundTaskRegistration.AllTasks)
+        //        {
+        //            if (task.Value.Name == exampleTaskName)
+        //            {
+        //                task.Value.Unregister(true);
+        //                break;
+        //            }
+        //        }
 
-                var builder = new BackgroundTaskBuilder();
+        //        var builder = new BackgroundTaskBuilder();
 
-                ApplicationTrigger trigger = new ApplicationTrigger();
+        //        ApplicationTrigger trigger = new ApplicationTrigger();
 
-                builder.Name = exampleTaskName;
-                builder.SetTrigger(trigger);
-                builder.TaskEntryPoint = "BackgroundTask.Task";
-                BackgroundTaskRegistration builders = builder.Register();
+        //        builder.Name = exampleTaskName;
+        //        builder.SetTrigger(trigger);
+        //        builder.TaskEntryPoint = "BackgroundTask.Task";
+        //        BackgroundTaskRegistration builders = builder.Register();
 
-                var result = await trigger.RequestAsync();
+        //        var result = await trigger.RequestAsync();
 
-                const string taskName = "ToastBackgroundTask";
+        //        const string taskName = "ToastBackgroundTask";
 
-                foreach (var tasks in BackgroundTaskRegistration.AllTasks)
-                {
-                    if (tasks.Value.Name == taskName)
-                    {
-                        tasks.Value.Unregister(true);
-                        break;
-                    }
-                }
+        //        foreach (var tasks in BackgroundTaskRegistration.AllTasks)
+        //        {
+        //            if (tasks.Value.Name == taskName)
+        //            {
+        //                tasks.Value.Unregister(true);
+        //                break;
+        //            }
+        //        }
 
-                BackgroundTaskBuilder build = new BackgroundTaskBuilder()
-                {
-                    Name = taskName
-                };
+        //        BackgroundTaskBuilder build = new BackgroundTaskBuilder()
+        //        {
+        //            Name = taskName
+        //        };
 
-                build.SetTrigger(new ToastNotificationActionTrigger());
+        //        build.SetTrigger(new ToastNotificationActionTrigger());
 
-                BackgroundTaskRegistration registration = build.Register();
+        //        BackgroundTaskRegistration registration = build.Register();
 
-                Process.GetCurrentProcess().Kill();
-            }
-            deferral.Complete();
-        }
+        //        Process.GetCurrentProcess().Kill();
+        //    }
+        //    deferral.Complete();
+        //}
     }
 }
 

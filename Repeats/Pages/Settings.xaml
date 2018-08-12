@@ -7,16 +7,41 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource MyAcrylicBrush}">
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
         <Pivot>
             <PivotItem Header="Powiadomienia">
-                <RelativePanel>
-                    <ToggleSwitch x:Name="Switch" Header="Powiadomienia" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top"/>
+                <StackPanel Orientation="Vertical">
+                    <ToggleSwitch x:Name="Switch" Header="Powiadomienia" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" />
+                    <StackPanel Orientation="Horizontal" Margin="10,0,0,10" Name="ResetStack">
+                        <Button Name="RESETbutton" Content="Resetuj powiadomienia" Click="Reset_Click" Margin="0,0,10,0"/>
+                    </StackPanel>
+
                     <!--<Button Content="Button" HorizontalAlignment="Center" Height="32" Margin="0,0,0,0" VerticalAlignment="Center" Width="65" Click="Button_Click"/>-->
-
-                </RelativePanel>
-
-
+                    <TextBlock Text="Powiadomienia z konkretnych zestawów" Margin="10,10,0,0"/>
+                    <ListView Name="LISTofSets" ItemsSource="{x:Bind VIEWMODEL.SetRepeat}" SelectionMode="None" IsItemClickEnabled="False" Margin="0,10,0,0">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <RelativePanel>
+                                    <TextBlock RelativePanel.AlignLeftWithPanel="True" x:Name="setNAME" Text="{Binding SetName}" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="5,0"/>
+                                    <ToggleSwitch RelativePanel.AlignRightWithPanel="True" Tag="{Binding TName}" IsOn="{Binding ISON}" x:Name="setToggle" Toggled="Set_Toggled"/>
+                                </RelativePanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="Personalizacja">
+                
             </PivotItem>
         </Pivot>
     </Grid>

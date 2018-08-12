@@ -16,12 +16,12 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <Grid Background="{ThemeResource MyAcrylicBrush}">
-        <GridView Name="GRID" IsItemClickEnabled="False" ItemsSource="{x:Bind ViewModel2.EditRepeat}">
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+        <GridView Name="GRID" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel2.EditRepeat}">
             <GridView.Header>
                 <RelativePanel>
                     <PersonPicture Name="PicEdit" Margin="40" ProfilePicture="ms-appx:///Assets/new logo2.png"/>
-                    <TextBox Name="AskNameEdit" RelativePanel.RightOf="PicEdit" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="100,0,100,0" RelativePanel.AlignRightWithPanel="True" PlaceholderText="Nazwa zestawu"/>
+                    <TextBox Name="AskNameEdit" RelativePanel.RightOf="PicEdit" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="100,0,100,0" RelativePanel.AlignRightWithPanel="True" PlaceholderText="Nazwa zestawu" BorderBrush="{x:Null}"/>
                 </RelativePanel>
             </GridView.Header>
             <GridView.ItemsPanel>

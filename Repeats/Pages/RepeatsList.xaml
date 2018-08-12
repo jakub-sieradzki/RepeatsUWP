@@ -20,18 +20,18 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource MyAcrylicBrush}">
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
 
 
         <GridView x:Name="GridRepeats" Margin="4,0,0,0"  IsItemClickEnabled="True" ItemClick="ItemClick_Click" ItemsSource="{x:Bind ViewModel.Datas}">
             <GridView.Header>
                 <Grid x:Name="MyHeaderGrid">
                     <RelativePanel Height="200">
-                        <TextBlock Text="Witaj w Repeats!" FontSize="40" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,-3,70" Foreground="White"/>
+                        <TextBlock Text="Witaj w Repeats!" FontSize="40" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,-3,70"/>
                         <Button RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,20,70" Background="{x:Null}" Click="AddClick" Style="{StaticResource ButtonRevealStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE109;" FontSize="25" FontFamily="Segoe MDL2 Assets" Foreground="White"/>
-                                <TextBlock Text="  Dodaj" FontSize="18" Foreground="White"/>
+                                <TextBlock Text="&#xE109;" FontSize="25" FontFamily="Segoe MDL2 Assets"/>
+                                <TextBlock Text="  Dodaj" FontSize="18"/>
                             </StackPanel>
                         </Button>
                     </RelativePanel>
@@ -42,7 +42,7 @@
                     <RelativePanel 
                         Height="200" 
                         Width="150"
-                        Background="{ThemeResource MyAcrylicBrushTestList}">
+                        >
                         <PersonPicture 
                             x:Name="Person"
                             RelativePanel.AlignHorizontalCenterWithPanel="True"
@@ -62,12 +62,10 @@
                             Name="TEST"
                             Content="&#xEE92;"
                             FontFamily="Segoe MDL2 Assets"
-                            HorizontalAlignment="Center"
                             Height="35" 
-                            Margin="0,0,0,0" 
-                            VerticalAlignment="Center" 
+                            Margin="0,0,40,0" 
                             Width="35"
-                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
                             RelativePanel.Below="SetName"
                             Tag="{Binding TableName}"
                             Click="TakeTestButton"/>
@@ -83,18 +81,6 @@
                             RelativePanel.LeftOf="TEST"
                             Tag="{Binding TableName}"
                             Click="Delete_Click"/>
-                        <Button
-                            HorizontalAlignment="Center"
-                            FontFamily="Segoe MDL2 Assets"
-                            Height="35" 
-                            Margin="4,0,0,0" 
-                            VerticalAlignment="Center" 
-                            Width="35"
-                            RelativePanel.Below="SetName"
-                            RelativePanel.RightOf="TEST"
-                            Tag="{Binding TableName}"
-                            Content="{Binding IsENABLED}"
-                            Click="BellClick"/>
                         <TextBlock 
                             Name="ModifiDate" 
                             Text="{Binding ProjectDate}" 
@@ -104,7 +90,6 @@
                             Margin="0,0,0,5"/>
                     </RelativePanel>
                 </DataTemplate>
-
             </GridView.ItemTemplate>
         </GridView>
         <!--<StackPanel>

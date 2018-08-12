@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -14,9 +15,15 @@ namespace Repeats.Pages
     /// </summary>
     public sealed partial class TakeTestPage : Page
     {
+        Stopwatch stopwatch;
+        public static string StopwatchResults;
+
         public TakeTestPage()
         {
             this.InitializeComponent();
+
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             this.ViewTestModel = new TakeTestPageDataModel();
         }
@@ -48,6 +55,10 @@ namespace Repeats.Pages
 
         private void Check_Click(object sender, RoutedEventArgs e)
         {
+            stopwatch.Stop();
+
+            StopwatchResults = stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:ff");
+
             var findalltext = GridTakeTest.FindDescendants<TextBox>();
             var gridviewtxt = findalltext.ToList();
             int count = gridviewtxt.Count;
