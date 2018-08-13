@@ -5,6 +5,16 @@ using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System.Linq;
+using System.Collections.Generic;
+using Windows.UI.Notifications;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Windows.ApplicationModel.Background;
+using Microsoft.QueryStringDotNET;
+using System.Diagnostics;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Media;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -64,7 +74,7 @@ namespace Repeats.Pages
 
         public BindViewModel ViewModel1 { get; set; }
 
-        private void DeleteItemClick(object sender, RoutedEventArgs e)
+        private async void DeleteItemClick(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             string strtag = button.Tag.ToString();
@@ -77,8 +87,24 @@ namespace Repeats.Pages
 
             var q = find2.FindName("quest") as TextBox;
             var a = find2.FindName("answer") as TextBox;
+            Button btn1 = find2.FindName("AddPhoto") as Button;
+            Button btn2 = find2.FindName("DeleteImage") as Button;
+            Image img = find2.FindName("ImagePreview") as Image;
+
+            if(img.Visibility == Visibility.Visible)
+            {
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+                var file = await folder.GetFileAsync(btn2.Tag.ToString());
+                await file.DeleteAsync();
+            }
             q.Text = "";
             a.Text = "";
+            btn1.Tag = "";
+            btn2.Tag = "";
+            btn1.IsEnabled = true;
+            btn2.Visibility = Visibility.Collapsed;
+            img.Source = null;
+            img.Visibility = Visibility.Collapsed;
 
             ViewModel1.AddRepeat.Remove(new bind1() { ClickCount = count });
         }
@@ -87,6 +113,68 @@ namespace Repeats.Pages
         {
             count++;
             ViewModel1.AddRepeat.Add(new bind1() { ClickCount = count });
+        }
+
+        private async void AddPhoto_Click(object sender, RoutedEventArgs e)
+        {
+            Button but = sender as Button;
+
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".jpeg");
+            openPicker.FileTypeFilter.Add(".png");
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null)
+            {
+                string type = file.FileType;
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+                StorageFile File = await file.CopyAsync(folder);
+
+                var date = DateTime.Now.ToString("yyyyMMddHHmmss");
+                date = "I" + date;
+
+                await File.RenameAsync(date + type, NameCollisionOption.GenerateUniqueName);
+
+                but.Tag = date + type;
+
+                RelativePanel find = but.FindAscendantByName("REL") as RelativePanel;
+                Image img = find.FindChildByName("ImagePreview") as Image;
+                Button x = find.FindChildByName("DeleteImage") as Button;
+
+                x.Tag = date + type;
+
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.UriSource = new Uri(img.BaseUri, File.Path);
+
+                img.Source = bitmapImage;
+
+                img.Visibility = Visibility.Visible;
+                x.Visibility = Visibility.Visible;
+
+                but.IsEnabled = false;
+            }
+        }
+
+        private async void DeleteImage_Click(object sender, RoutedEventArgs e)
+        {
+            Button but = sender as Button;
+
+            StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+            var file = await folder.GetFileAsync(but.Tag.ToString());
+            await file.DeleteAsync();
+
+            RelativePanel find = but.FindAscendantByName("REL") as RelativePanel;
+            Image img = find.FindChildByName("ImagePreview") as Image;
+            img.Visibility = Visibility.Collapsed;
+            Button btn = find.FindChildByName("AddPhoto") as Button;
+
+            btn.Tag = "";
+            btn.IsEnabled = true;
+            but.Visibility = Visibility.Collapsed;
+
+
         }
 
         private async void SaveClick(object sender, RoutedEventArgs e)
@@ -109,17 +197,16 @@ namespace Repeats.Pages
                 db.Open();
 
                 #region Create table
-                String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL)";
+                String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL, image NVARCHAR(2048) NULL)";
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-
-                try
-                {
+                //try
+                //{
                     createTable.ExecuteReader();
-                }
-                catch(SqliteException)
-                {
+                //}
+                //catch(SqliteException)
+                //{
 
-                }
+                //}
                 #endregion
 
                 #region Get & save sets
@@ -128,25 +215,27 @@ namespace Repeats.Pages
                     RelativePanel panel = listrel[i];
                     TextBox questbox = panel.FindChildByName("quest") as TextBox;
                     TextBox answerbox = panel.FindChildByName("answer") as TextBox;
+                    Button photoButton = panel.FindChildByName("AddPhoto") as Button;
 
                     string question = questbox.Text;
                     string answer = answerbox.Text;
+                    string tag = photoButton.Tag.ToString();
 
                     SqliteCommand insertCommand = new SqliteCommand();
                     insertCommand.Connection = db;
 
-                    insertCommand.CommandText = "INSERT INTO " + date + " VALUES (NULL, @question, @answer);";
+                    insertCommand.CommandText = "INSERT INTO " + date + " VALUES (NULL, @question, @answer, @image);";
                     insertCommand.Parameters.AddWithValue("@question", question);
                     insertCommand.Parameters.AddWithValue("@answer", answer);
-
-                    try
-                    {
+                    insertCommand.Parameters.AddWithValue("@image", tag);
+                    //try
+                    //{
                         insertCommand.ExecuteReader();
-                    }
-                    catch (SqliteException)
-                    {
-                        return;
-                    }
+                    //}
+                    //catch (SqliteException)
+                    //{
+                    //    return;
+                    //}
                 }
                 #endregion
 
@@ -172,10 +261,221 @@ namespace Repeats.Pages
                 db.Close();
             }
 
-            AskTimeDialog TIME = new AskTimeDialog();
-            await TIME.ShowAsync();
+            notifi();
+
+            //AskTimeDialog TIME = new AskTimeDialog();
+            //await TIME.ShowAsync();
 
             Frame.Navigate(typeof(RepeatsList));
+        }
+
+        async void notifi()
+        {
+            IList<string> GetNames = GrabTitles("TitleTable", "TableName");
+            IList<string> GetOfficial = GrabTitles("TitleTable", "title");
+
+            int NameCount = GetNames.Count;
+
+            //if (NameCount == 0)
+            //{
+            //    var exampleTaskName = "RepeatsNotificationTask";
+
+            //    foreach (var task in BackgroundTaskRegistration.AllTasks)
+            //    {
+            //        if (task.Value.Name == exampleTaskName)
+            //        {
+            //            task.Value.Unregister(true);
+            //            break;
+            //        }
+            //    }
+
+            //    var tskName = "ToastBackgroundTask";
+            //    foreach (var tsk in BackgroundTaskRegistration.AllTasks)
+            //    {
+            //        if (tsk.Value.Name == tskName)
+            //        {
+            //            tsk.Value.Unregister(true);
+            //            break;
+            //        }
+            //    }
+
+            //    Process.GetCurrentProcess().Kill();
+            //}
+
+            Random rnd = new Random();
+            int r = rnd.Next(NameCount);
+
+            string name = GetNames[r];
+            string ofname = GetOfficial[r];
+
+            IList<string> qu = GrabData(name, "question");
+            IList<string> an = GrabData(name, "answer");
+            IList<string> im = GrabData(name, "image");
+
+            int ItemsCount = qu.Count;
+
+            Random rnd2 = new Random();
+            int r2 = rnd2.Next(ItemsCount);
+
+            string question = qu[r2];
+            string answer = an[r2];
+            string image = im[r2];
+
+            int conversationId = 384928;
+
+            ToastVisual visual;
+
+            if(image != "")
+            {
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+                StorageFile img = await folder.GetFileAsync(image);
+
+                string path = img.Path;
+
+                visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = ofname
+                            },
+
+                            new AdaptiveText()
+                            {
+                                Text = question
+                            },
+                        },
+                        HeroImage = new ToastGenericHeroImage()
+                        {
+                            Source = path
+                        },
+
+                        Attribution = new ToastGenericAttributionText()
+                        {
+                            Text = "Repeats (Beta)"
+                        }
+                    }
+                };
+            }
+            else
+            {
+                visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = ofname
+                            },
+
+                            new AdaptiveText()
+                            {
+                                Text = question
+                            },
+                        },
+
+                        Attribution = new ToastGenericAttributionText()
+                        {
+                            Text = "Repeats (Beta)"
+                        }
+                    }
+                };
+            }
+
+
+
+            ToastActionsCustom actions = new ToastActionsCustom()
+            {
+                Inputs =
+                {
+                    new ToastTextBox("tbReply")
+                    {
+                        PlaceholderContent = "Tutaj wpisz odpowiedź"
+                    }
+                },
+
+                Buttons =
+                {
+                    new ToastButton("Reply", answer)
+                    {
+                        ActivationType = ToastActivationType.Background,
+                        TextBoxId = "tbReply"
+                    }
+                }
+            };
+
+            ToastContent toastContent = new ToastContent()
+            {
+                Visual = visual,
+                Actions = actions,
+
+                Launch = new QueryString()
+                {
+                    {"action", "viewQuestion" },
+                    {"conversationId", conversationId.ToString() }
+                }.ToString()
+            };
+
+            var toast = new ToastNotification(toastContent.GetXml());
+            //toast.Tag = answer;
+
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
+        }
+
+        public static IList<string> GrabData(string FROM, string WHAT)
+        {
+            IList<string> data = new List<string>();
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM, db);
+                SqliteDataReader query;
+                //try
+                //{
+                query = selectCommand.ExecuteReader();
+                //}
+                //catch (SqliteException)
+                //{
+                //return data;
+                //}
+                while (query.Read())
+                {
+                    data.Add(query.GetString(0));
+                }
+                db.Close();
+            }
+            return data;
+        }
+
+        public static IList<string> GrabTitles(string FROM, string WHAT)
+        {
+            IList<string> titles = new List<string>();
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM + " WHERE " + "IsEnabled='true'", db);
+                SqliteDataReader query;
+                //try
+                //{
+                query = selectCommand.ExecuteReader();
+                //}
+                //catch (SqliteException)
+                //{
+                //return data;
+                //}
+                while (query.Read())
+                {
+                    titles.Add(query.GetString(0));
+                }
+                db.Close();
+            }
+            return titles;
         }
 
         private static async void ExceptionUps()

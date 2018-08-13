@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Storage;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -21,13 +22,10 @@ namespace Repeats
         public static MainPage Current;
 
         public static Frame FRAME;
-        public static int ConversationId;
 
         public MainPage()
         {
             this.InitializeComponent();
-
-            ConversationId = 1111;
 
             var frame = new Frame();
             frame.ContentTransitions = new TransitionCollection();
@@ -35,7 +33,15 @@ namespace Repeats
 
             FRAME = ContentFrame;
 
+            CreateFolder();
+
             ContentFrame.Navigate(typeof(RepeatsList));
+        }
+
+        async void CreateFolder()
+        {
+            StorageFolder MainStorage = ApplicationData.Current.LocalFolder;
+            StorageFolder b = await MainStorage.CreateFolderAsync("QImages", CreationCollisionOption.OpenIfExists);
         }
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)

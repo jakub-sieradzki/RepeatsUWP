@@ -36,13 +36,16 @@
             </GridView.ItemContainerStyle>
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Name="GridRel" >
+                    <Grid Name="GridRel">
                         <RelativePanel  x:Name="REL" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="SaveButton" Grid.Column="1" Margin="0,0,40,0">
                             <Rectangle Name="Rectangle" RelativePanel.AlignHorizontalCenterWithPanel="True" Width="5"/>
-                            <TextBox Name="quest" PlaceholderText="Pytanie" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="Rectangle" Margin="10,0,0,0"/>
-                            <TextBox Name="answer" PlaceholderText="Odpowiedź"  RelativePanel.AlignRightWithPanel="True" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0"/>
+                            <Image Name="ImagePreview" Stretch="Uniform" Width="200" RelativePanel.AlignTopWithPanel="True" Margin="10,10,0,8" Visibility="Collapsed"/>
+                            <Button Name="DeleteImage" Click="DeleteImage_Click" FontFamily="Segoe MDL2 Assets" Content="&#xE106;" FontSize="18" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Margin="10,10,0,0" Visibility="Collapsed" Background="#66000000"/>
+                            <TextBox Name="quest" PlaceholderText="Pytanie" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="Rectangle" RelativePanel.Below="ImagePreview" Margin="10,0,0,0"/>
+                            <TextBox Name="answer" PlaceholderText="Odpowiedź"  RelativePanel.LeftOf="AddPhoto" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0" RelativePanel.Below="ImagePreview"/>
+                            <Button Name="AddPhoto" Tag="" Click="AddPhoto_Click" RelativePanel.AlignRightWithPanel="True" FontFamily="Segoe MDL2 Assets" Content="&#xE722;" FontSize="16" RelativePanel.AlignVerticalCenterWithPanel="True"/>
                         </RelativePanel>
-                        <Button Name="SaveButton" Tag="{Binding ClickCount}" Content="&#xE107;" FontSize="16" FontFamily="Segoe MDL2 Assets" Foreground="White" HorizontalAlignment="Right" Click="DeleteItemClick"/>
+                        <Button Name="SaveButton" Tag="{Binding ClickCount}" Content="&#xE107;" FontSize="16" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Right" Click="DeleteItemClick"/>
                     </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>
