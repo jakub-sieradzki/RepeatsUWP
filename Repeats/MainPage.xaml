@@ -34,7 +34,18 @@
                 TextChanged="AutoSuggestBox_TextChanged"
                 QuerySubmitted="AutoSuggestBox_QuerySubmitted"
                 SuggestionChosen="AutoSuggestBox_SuggestionChosen"
-                PlaceholderText="Szukaj"/>
+                PlaceholderText="Szukaj" GotFocus="ASB_Focus">
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Question}" TextWrapping="Wrap" FontSize="15" Margin="0,6,0,4"/>
+                                <TextBlock Text="{Binding Answer}" TextWrapping="Wrap" FontSize="15"/>
+                                <TextBlock Text="{Binding SetName}" TextWrapping="Wrap" FontSize="11" Margin="0,2,0,6"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </AutoSuggestBox.ItemTemplate>
+                </AutoSuggestBox>
+
             </NavigationView.AutoSuggestBox>
 
             <Frame x:Name="ContentFrame">

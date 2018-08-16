@@ -1,6 +1,7 @@
 ﻿using Repeats.Pages;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.Storage;
 using Windows.System;
@@ -17,6 +18,42 @@ namespace Repeats
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    /// 
+
+    public class SearchBind
+    {
+        public string Question { get; set; }
+        public string Answer { get; set; }
+        public string SetName { get; set; }
+        public string SetTable { get; set; }
+    }
+
+    public class SearchBindModel
+    {
+        private ObservableCollection<SearchBind> search = new ObservableCollection<SearchBind>();
+        public ObservableCollection<SearchBind> Search { get { return this.search; } }
+        public SearchBindModel()
+        {
+            List<string> Oname = GetFromDB.GrabData("TitleTable", "title");
+            List<string> name = GetFromDB.GrabData("TitleTable", "TableName");
+
+            int count = name.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                List<string> Questions = GetFromDB.GrabData(name.ElementAt(i), "question");
+                List<string> Answers = GetFromDB.GrabData(name.ElementAt(i), "answer");
+
+                int All = Questions.Count;
+
+                for(int j = 0; j < All; j++)
+                {
+                    this.search.Add(new SearchBind() { Question = "Q: " + Questions.ElementAt(j), Answer = "A: " + Answers.ElementAt(j), SetName = Oname.ElementAt(i), SetTable = name.ElementAt(i) });
+                }
+            }
+        }
+    }
+
     public sealed partial class MainPage : Page
     {
         public static MainPage Current;
@@ -27,15 +64,23 @@ namespace Repeats
         {
             this.InitializeComponent();
 
-            var frame = new Frame();
-            frame.ContentTransitions = new TransitionCollection();
-            frame.ContentTransitions.Add(new NavigationThemeTransition());
+            //var frame = new Frame();
+            //frame.ContentTransitions = new TransitionCollection();
+            //frame.ContentTransitions.Add(new NavigationThemeTransition());
 
             FRAME = ContentFrame;
 
             CreateFolder();
 
-            ContentFrame.Navigate(typeof(RepeatsList));
+            ContentFrame.Navigate(typeof(RepeatsList), null, new SuppressNavigationTransitionInfo());
+        }
+
+        public SearchBindModel BindModel { get; set; }
+
+
+        private void ASB_Focus(object sender, RoutedEventArgs e)
+        {
+            this.BindModel = new SearchBindModel();
         }
 
         async void CreateFolder()
@@ -167,13 +212,10 @@ namespace Repeats
 
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            // Only get results when it was a user typing,
-            // otherwise assume the value got filled in by TextMemberPath
-            // or the handler for SuggestionChosen.
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
                 //Set the ItemsSource to be your filtered dataset
-                //sender.ItemsSource = 
+                sender.ItemsSource = BindModel.Search.Where(x=>x.Question.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase) || x.Answer.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
             }
         }
 

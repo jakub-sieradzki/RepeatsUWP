@@ -20,8 +20,10 @@
         <GridView Name="GRID" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel1.AddRepeat}">
             <GridView.Header>
                 <RelativePanel>
-                    <PersonPicture Name="Pic" Margin="40"/>
+                    <PersonPicture Name="Pic" Margin="40" Width="100" Height="100"/>
                     <TextBox Name="AskName" RelativePanel.RightOf="Pic" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="100,0,100,0" RelativePanel.AlignRightWithPanel="True" PlaceholderText="Nazwa zestawu"/>
+                    <Button Name="EditAvatar" RelativePanel.AlignHorizontalCenterWith="Pic" RelativePanel.AlignVerticalCenterWith="Pic" FontFamily="Segoe MDL2 Assets" Content="&#xE104;" Width="100" Height="100" Background="#4C000000" Click="ChangeAvatar_Click">
+                    </Button>
                 </RelativePanel>
             </GridView.Header>
             <GridView.ItemsPanel>

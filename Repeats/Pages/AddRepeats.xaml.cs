@@ -15,6 +15,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Input;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -73,6 +74,28 @@ namespace Repeats.Pages
         }
 
         public BindViewModel ViewModel1 { get; set; }
+
+        private void Person_Entered(object sender, PointerRoutedEventArgs e)
+        {
+            e.Handled = true;
+            EditAvatar.Visibility = Visibility.Visible;
+        }
+
+        private void Person_Moved(object sender, PointerRoutedEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void Person_Exited(object sender, PointerRoutedEventArgs e)
+        {
+            e.Handled = true;
+            EditAvatar.Visibility = Visibility.Collapsed;
+        }
+
+        private void ChangeAvatar_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         private async void DeleteItemClick(object sender, RoutedEventArgs e)
         {
@@ -262,6 +285,7 @@ namespace Repeats.Pages
             }
 
             notifi();
+
 
             //AskTimeDialog TIME = new AskTimeDialog();
             //await TIME.ShowAsync();

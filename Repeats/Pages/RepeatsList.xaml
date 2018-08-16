@@ -20,7 +20,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowMediumHighBrush}">
 
 
         <GridView x:Name="GridRepeats" Margin="4,0,0,0"  IsItemClickEnabled="True" ItemClick="ItemClick_Click" ItemsSource="{x:Bind ViewModel.Datas}">
@@ -42,6 +42,7 @@
                     <RelativePanel 
                         Height="200" 
                         Width="150"
+                        Background="{ThemeResource SystemControlAcrylicElementBrush}"
                         >
                         <PersonPicture 
                             x:Name="Person"
