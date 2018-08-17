@@ -5,14 +5,22 @@
     xmlns:local="using:Repeats">
     <Application.Resources>
         <ResourceDictionary>
-            <!--<AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
-        BackgroundSource="Backdrop" TintColor="#247EE6" TintOpacity=".4" FallbackColor="#FF616161"/>
-            <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground"
-        BackgroundSource="HostBackdrop" TintColor="#247EE6" TintOpacity=".4" FallbackColor="#FF616161"/>-->
-            <AcrylicBrush x:Key="MyAcrylicBrush" BackgroundSource="HostBackdrop" TintColor="#247EE6" 
-        TintOpacity="0.1" FallbackColor="#FF424242"/>
-            <!--<AcrylicBrush x:Key="ListAcrylic" BackgroundSource="HostBackdrop" TintColor="#247EE6"
-                          TintOpacity="0.3" FallbackColor="#FF424242"/>-->
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <AcrylicBrush x:Key="MyAcrylicBrush"
+            BackgroundSource="Backdrop"
+            TintColor="White"
+            TintOpacity="0.7"
+            FallbackColor="White"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <AcrylicBrush x:Key="MyAcrylicBrush"
+            BackgroundSource="Backdrop"
+            TintColor="Black"
+            TintOpacity="0.7"
+            FallbackColor="#FF383838"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 

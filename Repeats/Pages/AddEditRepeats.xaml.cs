@@ -1,21 +1,18 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.QueryStringDotNET;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Toolkit.Uwp.UI.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Microsoft.Data.Sqlite;
-using System.Collections.ObjectModel;
-using Microsoft.Toolkit.Uwp.UI.Extensions;
-using System.Linq;
-using System.Collections.Generic;
-using Windows.UI.Notifications;
-using Microsoft.Toolkit.Uwp.Notifications;
-using Windows.ApplicationModel.Background;
-using Microsoft.QueryStringDotNET;
-using System.Diagnostics;
-using Windows.Storage.Pickers;
-using Windows.Storage;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Input;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -24,10 +21,16 @@ namespace Repeats.Pages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-
-    public class bind1
+    /// 
+    public class AddEditBind
     {
         public int ClickCount { get; set; }
+        public string GetQuestion { get; set; }
+        public string GetAnswer { get; set; }
+        public string GetImage { get; set; }
+        public string ImageTag { get; set; }
+        public Visibility visibility { get; set; }
+        public bool enabled { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -37,7 +40,7 @@ namespace Repeats.Pages
             if (ReferenceEquals(this, obj))
                 return true;
 
-            var bi = (bind1)obj;
+            var bi = (AddEditBind)obj;
             return this.ClickCount == bi.ClickCount;
         }
         public override int GetHashCode()
@@ -46,50 +49,208 @@ namespace Repeats.Pages
         }
     }
 
-    public class BindViewModel
+    public class AddEditBindModel
     {
-        private ObservableCollection<bind1> addRepeat = new ObservableCollection<bind1>();
-        public ObservableCollection<bind1> AddRepeat { get { return this.addRepeat; } }
-        public BindViewModel()
+        private ObservableCollection<AddEditBind> addEditBinds = new ObservableCollection<AddEditBind>();
+        public ObservableCollection<AddEditBind> AddEditBinds { get { return this.addEditBinds; } }
+        public AddEditBindModel()
         {
 
         }
     }
 
-    public sealed partial class AddRepeats : Page
+    public sealed partial class AddEditRepeats : Page
     {
-        public int count;
-
-        public AddRepeats()
+        public int Count;
+        public bool edit;
+        public string tablename;
+        public AddEditRepeats()
         {
+            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
+
             this.InitializeComponent();
 
-            Ring.IsActive = false;
+            this.EditBindModel = new AddEditBindModel();
 
-            count = 0;
+            Count = 0;
 
-            this.ViewModel1 = new BindViewModel();
+            edit = RepeatsList.IsEdit;
 
-            ViewModel1.AddRepeat.Add(new bind1() { ClickCount = count });
+            if(edit)
+            {
+                ConnectedAnimation imageAnimation =
+                    ConnectedAnimationService.GetForCurrentView().GetAnimation("image");
+                if (imageAnimation != null)
+                {
+                    imageAnimation.TryStart(Pic);
+                }
+
+                tablename = RepeatsList.name;
+                string name = RepeatsList.OfficialName;
+
+                AskName.Text = name;
+
+                List<string> questions = GetFromDB.GrabData(tablename, "question");
+                List<string> answers = GetFromDB.GrabData(tablename, "answer");
+                List<string> images = GetFromDB.GrabData(tablename, "image");
+
+                int count = questions.Count;
+
+                for(int i = 0; i < count; i++)
+                {
+                    string QUESTION = questions.ElementAt(i);
+                    string ANSWER = answers.ElementAt(i);
+                    string IMAGE = images.ElementAt(i);
+
+                    if(IMAGE == "")
+                    {
+                        EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, GetQuestion = QUESTION, GetAnswer = ANSWER, GetImage = IMAGE, visibility = Visibility.Collapsed, enabled = true, ImageTag = "" });
+                    }
+                    else
+                    {
+                        EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, GetQuestion = QUESTION, GetAnswer = ANSWER, GetImage = RepeatsList.folder.Path + "\\" + IMAGE, visibility = Visibility.Visible, enabled = false, ImageTag = IMAGE});
+                    }
+
+                    Count++;
+                }
+            }
+            else
+            {
+                EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, visibility = Visibility.Collapsed, enabled = true, ImageTag = "" });
+                Count++;
+            }
         }
 
-        public BindViewModel ViewModel1 { get; set; }
+        public AddEditBindModel EditBindModel { get; set; }
 
-        private void Person_Entered(object sender, PointerRoutedEventArgs e)
+        private void NewItemClick(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
-            EditAvatar.Visibility = Visibility.Visible;
+            EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, enabled = true, visibility = Visibility.Collapsed, ImageTag = "" });
+            Count++;
         }
 
-        private void Person_Moved(object sender, PointerRoutedEventArgs e)
+        private void SaveClick(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
-        }
+            Ring.Visibility = Visibility.Visible;
+            Ring.IsActive = true;
 
-        private void Person_Exited(object sender, PointerRoutedEventArgs e)
-        {
-            e.Handled = true;
-            EditAvatar.Visibility = Visibility.Collapsed;
+            var findrelative = GRID.FindDescendants<RelativePanel>();
+            var listrel = findrelative.ToList();
+            int relcount = GRID.Items.Count;
+
+            var date = DateTime.Now.ToString("yyyyMMddHHmmss");
+            date = "R" + date;
+
+            string realDate = DateTime.Now.ToShortDateString();
+            string getname = AskName.Text;
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+
+                #region Create table
+                String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL, image NVARCHAR(2048) NULL)";
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                //try
+                //{
+                createTable.ExecuteReader();
+                //}
+                //catch(SqliteException)
+                //{
+
+                //}
+                #endregion
+
+                #region Get & save sets
+                for (int i = 1; i <= relcount; i++)
+                {
+                    RelativePanel panel = listrel[i];
+                    TextBox questbox = panel.FindChildByName("quest") as TextBox;
+                    TextBox answerbox = panel.FindChildByName("answer") as TextBox;
+                    Image photoButton = panel.FindChildByName("ImagePreview") as Image;
+
+                    string question = questbox.Text;
+                    string answer = answerbox.Text;
+                    string tag = photoButton.Tag.ToString();
+
+                    SqliteCommand insertCommand = new SqliteCommand();
+                    insertCommand.Connection = db;
+
+                    insertCommand.CommandText = "INSERT INTO " + date + " VALUES (NULL, @question, @answer, @image);";
+                    insertCommand.Parameters.AddWithValue("@question", question);
+                    insertCommand.Parameters.AddWithValue("@answer", answer);
+                    insertCommand.Parameters.AddWithValue("@image", tag);
+                    //try
+                    //{
+                    insertCommand.ExecuteReader();
+                    //}
+                    //catch (SqliteException)
+                    //{
+                    //    return;
+                    //}
+                }
+                #endregion
+
+                #region save to RepeatsList
+                SqliteCommand insertCommand2 = new SqliteCommand();
+                insertCommand2.Connection = db;
+
+                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate, @IsEnabled);";
+                insertCommand2.Parameters.AddWithValue("@title", getname);
+                insertCommand2.Parameters.AddWithValue("@TableName", date);
+                insertCommand2.Parameters.AddWithValue("@CreateDate", realDate);
+                insertCommand2.Parameters.AddWithValue("@IsEnabled", "true");
+                try
+                {
+                    insertCommand2.ExecuteReader();
+                }
+                catch (SqliteException)
+                {
+                    return;
+                }
+                #endregion
+
+                if(edit)
+                {
+                    #region Drop table
+                    String tableCommand2 = "DROP TABLE " + tablename;
+                    SqliteCommand createTable2 = new SqliteCommand(tableCommand2, db);
+                    try
+                    {
+                        createTable2.ExecuteReader();
+                    }
+                    catch (SqliteException)
+                    {
+
+                    }
+                    #endregion
+
+                    #region Delete from RepeatsList
+                    SqliteCommand insertCommand3 = new SqliteCommand();
+                    insertCommand3.Connection = db;
+
+                    insertCommand3.CommandText = "DELETE FROM TitleTable WHERE TableName=" + "\"" + tablename + "\"";
+                    try
+                    {
+                        insertCommand3.ExecuteReader();
+                    }
+                    catch (SqliteException)
+                    {
+                        return;
+                    }
+                    #endregion
+                }
+
+                db.Close();
+            }
+
+            notifi();
+
+
+            //AskTimeDialog TIME = new AskTimeDialog();
+            //await TIME.ShowAsync();
+
+            Frame.Navigate(typeof(RepeatsList));
         }
 
         private void ChangeAvatar_Click(object sender, RoutedEventArgs e)
@@ -97,45 +258,28 @@ namespace Repeats.Pages
 
         }
 
-        private async void DeleteItemClick(object sender, RoutedEventArgs e)
+        private async void DeleteImage_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            string strtag = button.Tag.ToString();
+            Button but = sender as Button;
+            string tag = but.Tag.ToString();
 
-            int count = Int32.Parse(strtag);
 
-            Grid find = button.Parent as Grid;
+            StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
 
-            var find2 = find.FindName("REL") as RelativePanel;
+            tag = tag.Replace(folder.Path.ToString() +"\\", "");
 
-            var q = find2.FindName("quest") as TextBox;
-            var a = find2.FindName("answer") as TextBox;
-            Button btn1 = find2.FindName("AddPhoto") as Button;
-            Button btn2 = find2.FindName("DeleteImage") as Button;
-            Image img = find2.FindName("ImagePreview") as Image;
+            var file = await folder.GetFileAsync(tag);
+            await file.DeleteAsync();
 
-            if(img.Visibility == Visibility.Visible)
-            {
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
-                var file = await folder.GetFileAsync(btn2.Tag.ToString());
-                await file.DeleteAsync();
-            }
-            q.Text = "";
-            a.Text = "";
-            btn1.Tag = "";
-            btn2.Tag = "";
-            btn1.IsEnabled = true;
-            btn2.Visibility = Visibility.Collapsed;
-            img.Source = null;
+            RelativePanel find = but.FindAscendantByName("REL") as RelativePanel;
+            Image img = find.FindChildByName("ImagePreview") as Image;
             img.Visibility = Visibility.Collapsed;
+            Button btn = find.FindChildByName("AddPhoto") as Button;
 
-            ViewModel1.AddRepeat.Remove(new bind1() { ClickCount = count });
-        }
-
-        public void NewItemClick(object sender, RoutedEventArgs e)
-        {
-            count++;
-            ViewModel1.AddRepeat.Add(new bind1() { ClickCount = count });
+            btn.Tag = "";
+            img.Tag = "";
+            btn.IsEnabled = true;
+            but.Visibility = Visibility.Collapsed;
         }
 
         private async void AddPhoto_Click(object sender, RoutedEventArgs e)
@@ -167,6 +311,7 @@ namespace Repeats.Pages
                 Button x = find.FindChildByName("DeleteImage") as Button;
 
                 x.Tag = date + type;
+                img.Tag = date + type;
 
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.UriSource = new Uri(img.BaseUri, File.Path);
@@ -180,117 +325,39 @@ namespace Repeats.Pages
             }
         }
 
-        private async void DeleteImage_Click(object sender, RoutedEventArgs e)
+        private async void DeleteItemClick(object sender, RoutedEventArgs e)
         {
-            Button but = sender as Button;
+            var button = sender as Button;
+            string strtag = button.Tag.ToString();
 
-            StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
-            var file = await folder.GetFileAsync(but.Tag.ToString());
-            await file.DeleteAsync();
+            int count = Int32.Parse(strtag);
 
-            RelativePanel find = but.FindAscendantByName("REL") as RelativePanel;
-            Image img = find.FindChildByName("ImagePreview") as Image;
-            img.Visibility = Visibility.Collapsed;
-            Button btn = find.FindChildByName("AddPhoto") as Button;
+            Grid find = button.Parent as Grid;
 
-            btn.Tag = "";
-            btn.IsEnabled = true;
-            but.Visibility = Visibility.Collapsed;
+            var find2 = find.FindName("REL") as RelativePanel;
 
+            var q = find2.FindName("quest") as TextBox;
+            var a = find2.FindName("answer") as TextBox;
+            Button btn1 = find2.FindName("AddPhoto") as Button;
+            Button btn2 = find2.FindName("DeleteImage") as Button;
+            Image img = find2.FindName("ImagePreview") as Image;
 
-        }
-
-        private async void SaveClick(object sender, RoutedEventArgs e)
-        {
-            Ring.Visibility = Visibility.Visible;
-            Ring.IsActive = true;
-
-            var findrelative = GRID.FindDescendants<RelativePanel>();
-            var listrel = findrelative.ToList();
-            int relcount = GRID.Items.Count;
-
-            var date = DateTime.Now.ToString("yyyyMMddHHmmss");
-            date = "R" + date;
-
-            string realDate = DateTime.Now.ToShortDateString();
-            string getname = AskName.Text;
-
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            if (img.Visibility == Visibility.Visible)
             {
-                db.Open();
-
-                #region Create table
-                String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL, image NVARCHAR(2048) NULL)";
-                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-                //try
-                //{
-                    createTable.ExecuteReader();
-                //}
-                //catch(SqliteException)
-                //{
-
-                //}
-                #endregion
-
-                #region Get & save sets
-                for (int i = 1; i <= relcount; i++)
-                {
-                    RelativePanel panel = listrel[i];
-                    TextBox questbox = panel.FindChildByName("quest") as TextBox;
-                    TextBox answerbox = panel.FindChildByName("answer") as TextBox;
-                    Button photoButton = panel.FindChildByName("AddPhoto") as Button;
-
-                    string question = questbox.Text;
-                    string answer = answerbox.Text;
-                    string tag = photoButton.Tag.ToString();
-
-                    SqliteCommand insertCommand = new SqliteCommand();
-                    insertCommand.Connection = db;
-
-                    insertCommand.CommandText = "INSERT INTO " + date + " VALUES (NULL, @question, @answer, @image);";
-                    insertCommand.Parameters.AddWithValue("@question", question);
-                    insertCommand.Parameters.AddWithValue("@answer", answer);
-                    insertCommand.Parameters.AddWithValue("@image", tag);
-                    //try
-                    //{
-                        insertCommand.ExecuteReader();
-                    //}
-                    //catch (SqliteException)
-                    //{
-                    //    return;
-                    //}
-                }
-                #endregion
-
-                #region save to RepeatsList
-                SqliteCommand insertCommand2 = new SqliteCommand();
-                insertCommand2.Connection = db;
-
-                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate, @IsEnabled);";
-                insertCommand2.Parameters.AddWithValue("@title", getname);
-                insertCommand2.Parameters.AddWithValue("@TableName", date);
-                insertCommand2.Parameters.AddWithValue("@CreateDate", realDate);
-                insertCommand2.Parameters.AddWithValue("@IsEnabled", "true");
-                try
-                {
-                    insertCommand2.ExecuteReader();
-                }
-                catch (SqliteException)
-                {
-                    return;
-                }
-                #endregion
-
-                db.Close();
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+                var file = await folder.GetFileAsync(btn2.Tag.ToString());
+                await file.DeleteAsync();
             }
+            q.Text = "";
+            a.Text = "";
+            btn1.Tag = "";
+            btn2.Tag = "";
+            btn1.IsEnabled = true;
+            btn2.Visibility = Visibility.Collapsed;
+            img.Source = null;
+            img.Visibility = Visibility.Collapsed;
 
-            notifi();
-
-
-            //AskTimeDialog TIME = new AskTimeDialog();
-            //await TIME.ShowAsync();
-
-            Frame.Navigate(typeof(RepeatsList));
+            EditBindModel.AddEditBinds.Remove(new AddEditBind() { ClickCount = count });
         }
 
         async void notifi()
@@ -349,7 +416,7 @@ namespace Repeats.Pages
 
             ToastVisual visual;
 
-            if(image != "")
+            if (image != "")
             {
                 StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
                 StorageFile img = await folder.GetFileAsync(image);
@@ -502,53 +569,5 @@ namespace Repeats.Pages
             return titles;
         }
 
-        private static async void ExceptionUps()
-        {
-            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-            var strerr1 = loader.GetString("Error1");
-            var strerr2 = loader.GetString("Error2");
-            var strerr3 = loader.GetString("Error3");
-
-            ContentDialog ExcUPS = new ContentDialog
-            {
-                Title = strerr1,
-                Content = strerr2,
-                CloseButtonText = strerr3
-            };
-
-            ContentDialogResult result = await ExcUPS.ShowAsync();
-        }
-
-        private static async void CountDialog()
-        {
-            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-            var stratt1 = loader.GetString("Attention1");
-            var stratt2 = loader.GetString("Attention2");
-
-            ContentDialog ConDia = new ContentDialog
-            {
-                Title = stratt1,
-                Content = stratt2,
-                CloseButtonText = "OK"
-            };
-
-            ContentDialogResult result = await ConDia.ShowAsync();
-        }
-
-        private static async void WriteDialog()
-        {
-            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-            var stratt11 = loader.GetString("Attention1");
-            var stratt22 = loader.GetString("Attention3");
-
-            ContentDialog WriDia = new ContentDialog
-            {
-                Title = stratt11,
-                Content = stratt22,
-                CloseButtonText = "OK"
-            };
-
-            ContentDialogResult result = await WriDia.ShowAsync();
-        }
     }
 }

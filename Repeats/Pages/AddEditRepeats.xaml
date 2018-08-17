@@ -1,11 +1,12 @@
 ﻿<Page
-    x:Class="Repeats.Pages.AddRepeats"
+    x:Class="Repeats.Pages.AddEditRepeats"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Repeats.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
     <Page.BottomAppBar>
         <CommandBar Background="{x:Null}">
             <CommandBar.Content>
@@ -17,7 +18,7 @@
     </Page.BottomAppBar>
 
     <Grid Name="grid" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-        <GridView Name="GRID" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel1.AddRepeat}">
+        <GridView Name="GRID" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind EditBindModel.AddEditBinds}">
             <GridView.Header>
                 <RelativePanel>
                     <PersonPicture Name="Pic" Margin="40" Width="100" Height="100"/>
@@ -41,11 +42,11 @@
                     <Grid Name="GridRel">
                         <RelativePanel  x:Name="REL" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="SaveButton" Grid.Column="1" Margin="0,0,40,0">
                             <Rectangle Name="Rectangle" RelativePanel.AlignHorizontalCenterWithPanel="True" Width="5"/>
-                            <Image Name="ImagePreview" Stretch="Uniform" Width="200" RelativePanel.AlignTopWithPanel="True" Margin="10,10,0,8" Visibility="Collapsed"/>
-                            <Button Name="DeleteImage" Click="DeleteImage_Click" FontFamily="Segoe MDL2 Assets" Content="&#xE106;" FontSize="18" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Margin="10,10,0,0" Visibility="Collapsed" Background="#66000000"/>
-                            <TextBox Name="quest" PlaceholderText="Pytanie" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="Rectangle" RelativePanel.Below="ImagePreview" Margin="10,0,0,0"/>
-                            <TextBox Name="answer" PlaceholderText="Odpowiedź"  RelativePanel.LeftOf="AddPhoto" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0" RelativePanel.Below="ImagePreview"/>
-                            <Button Name="AddPhoto" Tag="" Click="AddPhoto_Click" RelativePanel.AlignRightWithPanel="True" FontFamily="Segoe MDL2 Assets" Content="&#xE722;" FontSize="16" RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                            <Image Name="ImagePreview"  Tag="{Binding ImageTag}" Stretch="Uniform" Width="200" RelativePanel.AlignTopWithPanel="True" Margin="10,10,0,8" Visibility="{Binding visibility}" Source="{Binding GetImage}"/>
+                            <Button Name="DeleteImage" Tag="{Binding GetImage}" Click="DeleteImage_Click" FontFamily="Segoe MDL2 Assets" Content="&#xE106;" FontSize="18" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Margin="10,10,0,0" Visibility="{Binding visibility}" Background="#66000000"/>
+                            <TextBox Name="quest" PlaceholderText="Pytanie" Text="{Binding GetQuestion}" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="Rectangle" RelativePanel.Below="ImagePreview" Margin="10,0,0,0"/>
+                            <TextBox Name="answer" PlaceholderText="Odpowiedź" Text="{Binding GetAnswer}" RelativePanel.LeftOf="AddPhoto" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0" RelativePanel.Below="ImagePreview"/>
+                            <Button Name="AddPhoto" Tag="" Click="AddPhoto_Click" RelativePanel.AlignRightWithPanel="True" IsEnabled="{Binding enabled}" FontFamily="Segoe MDL2 Assets" Content="&#xE722;" FontSize="16" RelativePanel.AlignVerticalCenterWithPanel="True"/>
                         </RelativePanel>
                         <Button Name="SaveButton" Tag="{Binding ClickCount}" Content="&#xE107;" FontSize="16" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Right" Click="DeleteItemClick"/>
                     </Grid>

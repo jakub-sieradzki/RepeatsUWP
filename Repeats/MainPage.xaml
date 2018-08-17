@@ -15,7 +15,7 @@
                     Loaded="NavView_Loaded"
                     BackRequested="NavView_BackRequested"
                     AlwaysShowHeader="False" >
-            
+
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Uid="HomeNavItem" Content="Twoje powtórki" Tag="repeats">
                     <NavigationViewItem.Icon>
@@ -34,7 +34,7 @@
                 TextChanged="AutoSuggestBox_TextChanged"
                 QuerySubmitted="AutoSuggestBox_QuerySubmitted"
                 SuggestionChosen="AutoSuggestBox_SuggestionChosen"
-                PlaceholderText="Szukaj" GotFocus="ASB_Focus">
+                 PlaceholderText="Szukaj" GotFocus="ASB_Focus" MinWidth="250">
                     <AutoSuggestBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">

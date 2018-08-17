@@ -40,10 +40,11 @@
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="local:RepeatsListData">
                     <RelativePanel 
-                        Height="200" 
+                        Name="RelativeRepeatsList"
+                        Height="200"
                         Width="150"
                         Background="{ThemeResource SystemControlAcrylicElementBrush}"
-                        >
+                        Tag="{Binding ProjectName}">
                         <PersonPicture 
                             x:Name="Person"
                             RelativePanel.AlignHorizontalCenterWithPanel="True"

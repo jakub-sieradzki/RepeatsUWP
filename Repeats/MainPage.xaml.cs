@@ -190,10 +190,9 @@ namespace Repeats
                 {
                     {typeof(RepeatsList), "repeats"},
                     {typeof(InkPage), "ink"},
-                    {typeof(AddRepeats), "addrepeats" },
-                    {typeof(EditItems), "edit"},
                     {typeof(TakeTestPage), "taketest" },
-                    {typeof(TestResults), "testresults" }
+                    {typeof(TestResults), "testresults" },
+                    {typeof(AddEditRepeats), "addeditrepeats" }
                 };
 
                 String stringTag = lookup[ContentFrame.SourcePageType];

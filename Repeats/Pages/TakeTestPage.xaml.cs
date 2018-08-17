@@ -26,6 +26,8 @@ namespace Repeats.Pages
             stopwatch.Start();
 
             this.ViewTestModel = new TakeTestPageDataModel();
+
+            SetTitleBlock.Text = "Sprawdzian z: " + RepeatsList.OfficialName;
         }
 
         public TakeTestPageDataModel ViewTestModel { get; set; }

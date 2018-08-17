@@ -5,11 +5,20 @@
     xmlns:local="using:Repeats.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
 
         <GridView Name="GridTakeTest" ItemsSource="{x:Bind ViewTestModel.Test}" SelectionMode="None" IsItemClickEnabled="False">
+            <GridView.Header>
+                <controls:ScrollHeader Mode="QuickReturn">
+                    <RelativePanel Background="{ThemeResource MyAcrylicBrush}">
+                        <Button Name="btn" Click="Check_Click" RelativePanel.AlignRightWithPanel="True" FontFamily="Segoe MDL2 Assets" Content="&#xEE92;" FontSize="20" RelativePanel.AlignVerticalCenterWithPanel="True" BorderBrush="{x:Null}" Margin="0,10,10,10" Background="{x:Null}"/>
+                        <TextBlock Name="SetTitleBlock" Text="Sprawdzian z: " FontSize="20" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="10,0,10,0" RelativePanel.LeftOf="btn" RelativePanel.AlignLeftWithPanel="True"/>
+                    </RelativePanel>
+                </controls:ScrollHeader>
+            </GridView.Header>
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsStackPanel Orientation="Vertical"/>
@@ -23,28 +32,12 @@
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="local:TakeTestPageData">
                     <RelativePanel>
-                        <TextBlock Text="{Binding Question}" Foreground="White" Name="QuestionPlace" RelativePanel.AlignTopWithPanel="True" Margin="10"/>
+                        <Image Name="ImageTest" Stretch="Uniform" Width="250" Margin="10,10,0,0" RelativePanel.AlignTopWithPanel="True" Visibility="{Binding visibility}" Source="{Binding Image}"/>
+                        <TextBlock Text="{Binding Question}" Foreground="White" Name="QuestionPlace" Margin="10,6,0,10" RelativePanel.Below="ImageTest"/>
                         <TextBox PlaceholderText="Twoja odpowiedź" Name="AnswerPlace" RelativePanel.Below="QuestionPlace" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="10,0,10,0"/>
                     </RelativePanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
-        <Button Click="Check_Click" Content="Button" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <!--<RelativePanel Background="#19000000">
-            <Button Name="Button2" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" Background="#FF029EF7" Foreground="White" Margin="0,20" Click="Next_Click">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Uid="TextNext" Text="" FontSize="21"/>
-                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="  &#xE00F;" FontSize="30"/>
-                </StackPanel>
-            </Button>
-            <TextBlock Name="TextFlip1" RelativePanel.AlignHorizontalCenterWithPanel="True"  FontSize="25" TextWrapping="Wrap" RelativePanel.AlignTopWithPanel="True" Margin="0,100" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            <TextBox x:Uid="TestBox" Name="BoxFlip1" RelativePanel.Below="TextFlip1"  RelativePanel.AlignHorizontalCenterWith="TextFlip1" MinWidth="300" PlaceholderText=""/>
-            <StackPanel Name="StackFlip1" Orientation="Horizontal"  RelativePanel.AlignHorizontalCenterWith="BoxFlip1" RelativePanel.Below="BoxFlip1" Margin="0,15">
-                <TextBlock Name="Stack1" FontFamily="Segoe MDL2 Assets" FontSize="30" Foreground="Green"/>
-                <TextBlock Name="Stack2" FontSize="20"/>
-            </StackPanel>
-            <Button x:Uid="TestButton" Name="ButtonFlip1" RelativePanel.AlignHorizontalCenterWith="StackFlip1" RelativePanel.Below="StackFlip1" MinWidth="200" Height="50" Background="#FFFF8000" Content="" Foreground="White" Margin="0,50" Click="Check_Click"/>
-            <TextBlock Name="TEXT3" RelativePanel.Above="BoxFlip1" RelativePanel.AlignHorizontalCenterWith="BoxFlip1"/>
-        </RelativePanel>-->
     </Grid>
 </Page>
