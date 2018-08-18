@@ -19,12 +19,9 @@ namespace Repeats.Pages
     {
         private ObservableCollection<TakeTestPageData> test = new ObservableCollection<TakeTestPageData>();
         public ObservableCollection<TakeTestPageData> Test { get { return this.test; } }
-        public static StorageFolder folder;
         public TakeTestPageDataModel()
         {
             string NAME = RepeatsList.name;
-
-            GetFolder();
 
             List<string> Grab_Test = GetFromDB.GrabData(NAME, "question");
             List<string> Grab_Correct = GetFromDB.GrabData(NAME, "answer");
@@ -40,16 +37,11 @@ namespace Repeats.Pages
                 }
                 else
                 {
-                    this.test.Add(new TakeTestPageData() { Question = Grab_Test.ElementAt(i), Answer = Grab_Correct.ElementAt(i), Image = folder.Path + "\\" + Grab_Images.ElementAt(i), visibility = Visibility.Visible });
+                    this.test.Add(new TakeTestPageData() { Question = Grab_Test.ElementAt(i), Answer = Grab_Correct.ElementAt(i), Image = RepeatsList.folder.Path + "\\" + Grab_Images.ElementAt(i), visibility = Visibility.Visible });
                 }
 
 
             }
-        }
-
-        async void GetFolder()
-        {
-            folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
         }
     }
 }

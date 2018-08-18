@@ -64,6 +64,9 @@ namespace Repeats.Pages
         public int Count;
         public bool edit;
         public string tablename;
+        public string date;
+        public string realDate;
+
         public AddEditRepeats()
         {
             NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
@@ -71,6 +74,11 @@ namespace Repeats.Pages
             this.InitializeComponent();
 
             this.EditBindModel = new AddEditBindModel();
+
+            date = DateTime.Now.ToString("yyyyMMddHHmmss");
+            date = "R" + date;
+
+            realDate = DateTime.Now.ToShortDateString();
 
             Count = 0;
 
@@ -138,10 +146,6 @@ namespace Repeats.Pages
             var listrel = findrelative.ToList();
             int relcount = GRID.Items.Count;
 
-            var date = DateTime.Now.ToString("yyyyMMddHHmmss");
-            date = "R" + date;
-
-            string realDate = DateTime.Now.ToShortDateString();
             string getname = AskName.Text;
 
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
@@ -299,19 +303,21 @@ namespace Repeats.Pages
                 StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
                 StorageFile File = await file.CopyAsync(folder);
 
-                var date = DateTime.Now.ToString("yyyyMMddHHmmss");
-                date = "I" + date;
+                string Date = date;
+                string DATE = Date.Replace("R", "I");
 
-                await File.RenameAsync(date + type, NameCollisionOption.GenerateUniqueName);
+                await File.RenameAsync(DATE + type, NameCollisionOption.GenerateUniqueName);
 
-                but.Tag = date + type;
+                string realName = File.Name;
+
+                but.Tag = realName;
 
                 RelativePanel find = but.FindAscendantByName("REL") as RelativePanel;
                 Image img = find.FindChildByName("ImagePreview") as Image;
                 Button x = find.FindChildByName("DeleteImage") as Button;
 
-                x.Tag = date + type;
-                img.Tag = date + type;
+                x.Tag = realName;
+                img.Tag = realName;
 
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.UriSource = new Uri(img.BaseUri, File.Path);

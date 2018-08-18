@@ -81,6 +81,8 @@ namespace Repeats.Pages
         {
             Button del = sender as Button;
             string gettag = del.Tag.ToString();
+            string imgtag = gettag;
+            string IMGtag = imgtag = imgtag.Replace("R", "I");
 
             ContentDialog delete = new ContentDialog
             {
@@ -129,6 +131,17 @@ namespace Repeats.Pages
                     }
 
                     db.Close();
+                }
+
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+                var allimages = await folder.GetFilesAsync();
+                var results = allimages.Where(x => x.Name.Contains(IMGtag));
+                int count = results.Count();
+
+                for(int i = 0; i < count; i++)
+                {
+                    var item = await folder.GetFileAsync(results.ElementAt(i).Name);
+                    await item.DeleteAsync();
                 }
             }
         }
