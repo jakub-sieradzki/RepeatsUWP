@@ -11,10 +11,12 @@ using Windows.UI.Notifications;
 
 namespace BackgroundTask
 {
-    public sealed class Task: IBackgroundTask
+    public sealed class Task : IBackgroundTask
     {
+        BackgroundTaskDeferral _deferral;
         public void Run(IBackgroundTaskInstance taskInstance)
         {
+            _deferral = taskInstance.GetDeferral();
             ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
             object value = localSettings.Values["Frequency"];
@@ -29,120 +31,165 @@ namespace BackgroundTask
                 c++;
                 Thread.Sleep(freq);
             }
+            _deferral.Complete();
         }
 
-        void notifi()
+        async void notifi()
         {
-            //IList<string> GetNames = GrabTitles("TitleTable", "TableName");
-            //IList<string> GetOfficial = GrabTitles("TitleTable", "title");
+            IList<string> GetNames = GrabTitles("TitleTable", "TableName");
+            IList<string> GetOfficial = GrabTitles("TitleTable", "title");
 
-            //int NameCount = GetNames.Count;
+            int NameCount = GetNames.Count;
 
-            //if(NameCount == 0)
-            //{
-            //    var exampleTaskName = "RepeatsNotificationTask";
+            if (NameCount == 0)
+            {
+                var exampleTaskName = "RepeatsNotificationTask";
 
-            //    foreach (var task in BackgroundTaskRegistration.AllTasks)
-            //    {
-            //        if (task.Value.Name == exampleTaskName)
-            //        {
-            //            task.Value.Unregister(true);
-            //            break;
-            //        }
-            //    }
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == exampleTaskName)
+                    {
+                        task.Value.Unregister(true);
+                        break;
+                    }
+                }
 
-            //    var tskName = "ToastBackgroundTask";
-            //    foreach (var tsk in BackgroundTaskRegistration.AllTasks)
-            //    {
-            //        if (tsk.Value.Name == tskName)
-            //        {
-            //            tsk.Value.Unregister(true);
-            //            break;
-            //        }
-            //    }
+                var tskName = "ToastBackgroundTask";
+                foreach (var tsk in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (tsk.Value.Name == tskName)
+                    {
+                        tsk.Value.Unregister(true);
+                        break;
+                    }
+                }
 
-            //    Process.GetCurrentProcess().Kill();
-            //}
+                Process.GetCurrentProcess().Kill();
+            }
 
-            //Random rnd = new Random();
-            //int r = rnd.Next(NameCount);
+            Random rnd = new Random();
+            int r = rnd.Next(NameCount);
 
-            //string name = GetNames[r];
-            //string ofname = GetOfficial[r];
+            string name = GetNames[r];
+            string ofname = GetOfficial[r];
 
-            //IList<string> qu = GrabData(name, "question");
-            //IList<string> an = GrabData(name, "answer");
+            IList<string> qu = GrabData(name, "question");
+            IList<string> an = GrabData(name, "answer");
+            IList<string> im = GrabData(name, "image");
 
-            //int ItemsCount = qu.Count;
+            int ItemsCount = qu.Count;
 
-            //Random rnd2 = new Random();
-            //int r2 = rnd2.Next(ItemsCount);
+            Random rnd2 = new Random();
+            int r2 = rnd2.Next(ItemsCount);
 
-            //string question = qu[r2];
-            //string answer = an[r2];
+            string question = qu[r2];
+            string answer = an[r2];
+            string image = im[r2];
 
-            //int conversationId = 384928;
+            int conversationId = 384928;
 
-            //ToastVisual visual = new ToastVisual()
-            //{
-            //    BindingGeneric = new ToastBindingGeneric()
-            //    {
-            //        Children =
-            //        {
-            //            new AdaptiveText()
-            //            {
-            //                Text = ofname
-            //            },
+            ToastVisual visual;
 
-            //            new AdaptiveText()
-            //            {
-            //                Text = question
-            //            },
-            //        },
+            if (image != "")
+            {
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
+                StorageFile img = await folder.GetFileAsync(image);
 
-            //        Attribution = new ToastGenericAttributionText()
-            //        {
-            //            Text = "Repeats (Beta)"
-            //        }
-            //    }
-            //};
+                string path = img.Path;
 
-            //ToastActionsCustom actions = new ToastActionsCustom()
-            //{
-            //    Inputs =
-            //    {
-            //        new ToastTextBox("tbReply")
-            //        {
-            //            PlaceholderContent = "Tutaj wpisz odpowiedź"
-            //        }
-            //    },
+                visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = ofname
+                            },
 
-            //    Buttons =
-            //    {
-            //        new ToastButton("Reply", answer)
-            //        {
-            //            ActivationType = ToastActivationType.Background,
-            //            TextBoxId = "tbReply"
-            //        }
-            //    }
-            //};
+                            new AdaptiveText()
+                            {
+                                Text = question
+                            },
+                        },
+                        HeroImage = new ToastGenericHeroImage()
+                        {
+                            Source = path
+                        },
 
-            //ToastContent toastContent = new ToastContent()
-            //{
-            //    Visual = visual,
-            //    Actions = actions,
+                        Attribution = new ToastGenericAttributionText()
+                        {
+                            Text = "Repeats (Beta)"
+                        }
+                    }
+                };
+            }
+            else
+            {
+                visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = ofname
+                            },
 
-            //    Launch = new QueryString()
-            //    {
-            //        {"action", "viewQuestion" },
-            //        {"conversationId", conversationId.ToString() }
-            //    }.ToString()
-            //};
+                            new AdaptiveText()
+                            {
+                                Text = question
+                            },
+                        },
 
-            //var toast = new ToastNotification(toastContent.GetXml());
+                        Attribution = new ToastGenericAttributionText()
+                        {
+                            Text = "Repeats (Beta)"
+                        }
+                    }
+                };
+            }
+
+
+
+            ToastActionsCustom actions = new ToastActionsCustom()
+            {
+                Inputs =
+                {
+                    new ToastTextBox("tbReply")
+                    {
+                        PlaceholderContent = "Tutaj wpisz odpowiedź"
+                    }
+                },
+
+                Buttons =
+                {
+                    new ToastButton("Reply", answer)
+                    {
+                        ActivationType = ToastActivationType.Background,
+                        TextBoxId = "tbReply"
+                    }
+                }
+            };
+
+            ToastContent toastContent = new ToastContent()
+            {
+                Visual = visual,
+                Actions = actions,
+
+                Launch = new QueryString()
+                {
+                    {"action", "viewQuestion" },
+                    {"conversationId", conversationId.ToString() }
+                }.ToString()
+            };
+
+            var toast = new ToastNotification(toastContent.GetXml());
             //toast.Tag = answer;
 
-            //ToastNotificationManager.CreateToastNotifier().Show(toast);
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
 
         public static IList<string> GrabData(string FROM, string WHAT)
@@ -155,11 +202,11 @@ namespace BackgroundTask
                 SqliteDataReader query;
                 //try
                 //{
-                    query = selectCommand.ExecuteReader();
+                query = selectCommand.ExecuteReader();
                 //}
                 //catch (SqliteException)
                 //{
-                    //return data;
+                //return data;
                 //}
                 while (query.Read())
                 {

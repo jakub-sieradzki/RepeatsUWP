@@ -86,7 +86,7 @@ namespace Repeats
         async void CreateFolder()
         {
             StorageFolder MainStorage = ApplicationData.Current.LocalFolder;
-            StorageFolder b = await MainStorage.CreateFolderAsync("QImages", CreationCollisionOption.OpenIfExists);
+            await MainStorage.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
         }
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
@@ -221,7 +221,8 @@ namespace Repeats
 
         private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-            // Set sender.Text. You can use args.SelectedItem to build your text string.
+            // Set sender.Text. You can use args.SelectedItem to build your text string
+            sender.Text = "";
         }
 
 

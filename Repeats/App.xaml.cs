@@ -34,7 +34,7 @@ namespace Repeats
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
             {
                 db.Open();
-                String tableCommand = "CREATE TABLE IF NOT EXISTS TitleTable (id INTEGER PRIMARY KEY AUTOINCREMENT, title NVARCHAR(2048) NULL, TableName NVARCHAR(2048) NULL, CreateDate NVARCHAR(2048) NULL, IsEnabled NVARCHAR(2048) NULL)";
+                String tableCommand = "CREATE TABLE IF NOT EXISTS TitleTable (id INTEGER PRIMARY KEY AUTOINCREMENT, title NVARCHAR(2048) NULL, TableName NVARCHAR(2048) NULL, CreateDate NVARCHAR(2048) NULL, IsEnabled NVARCHAR(2048) NULL, Avatar NVARCHAR(2048) NULL)";
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
                 try
                 {
@@ -421,10 +421,10 @@ namespace Repeats
             deferral.Complete();
         }
 
-        void notifi()
+        async void notifi()
         {
-            IList<string> GetNames = GrabData("TitleTable", "TableName");
-            IList<string> GetOfficial = GrabData("TitleTable", "title");
+            IList<string> GetNames = GrabTitles("TitleTable", "TableName");
+            IList<string> GetOfficial = GrabTitles("TitleTable", "title");
 
             int NameCount = GetNames.Count;
 
@@ -436,6 +436,7 @@ namespace Repeats
 
             IList<string> qu = GrabData(name, "question");
             IList<string> an = GrabData(name, "answer");
+            IList<string> im = GrabData(name, "image");
 
             int ItemsCount = qu.Count;
 
@@ -444,32 +445,73 @@ namespace Repeats
 
             string question = qu[r2];
             string answer = an[r2];
+            string image = im[r2];
 
             int conversationId = 384928;
 
-            ToastVisual visual = new ToastVisual()
+            ToastVisual visual;
+
+            if (image != "")
             {
-                BindingGeneric = new ToastBindingGeneric()
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+                StorageFile img = await folder.GetFileAsync(image);
+
+                string path = img.Path;
+
+                visual = new ToastVisual()
                 {
-                    Children =
+                    BindingGeneric = new ToastBindingGeneric()
                     {
-                        new AdaptiveText()
+                        Children =
                         {
-                            Text = ofname
+                            new AdaptiveText()
+                            {
+                                Text = ofname
+                            },
+
+                            new AdaptiveText()
+                            {
+                                Text = question
+                            },
+                        },
+                        HeroImage = new ToastGenericHeroImage()
+                        {
+                            Source = path
                         },
 
-                        new AdaptiveText()
+                        Attribution = new ToastGenericAttributionText()
                         {
-                            Text = question
-                        },
-                    },
-
-                    Attribution = new ToastGenericAttributionText()
-                    {
-                        Text = "Repeats (Beta)"
+                            Text = "Repeats (Beta)"
+                        }
                     }
-                }
-            };
+                };
+            }
+            else
+            {
+                visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = ofname
+                            },
+
+                            new AdaptiveText()
+                            {
+                                Text = question
+                            },
+                        },
+
+                        Attribution = new ToastGenericAttributionText()
+                        {
+                            Text = "Repeats (Beta)"
+                        }
+                    }
+                };
+            }
 
             ToastActionsCustom actions = new ToastActionsCustom()
             {
@@ -503,15 +545,10 @@ namespace Repeats
                 }.ToString()
             };
 
-            var toast = new ToastNotification(toastContent.GetXml())
-            {
-                Tag="NextQuestion"
-            };
-            
+            var toast = new ToastNotification(toastContent.GetXml());
+            //toast.Tag = answer;
 
             ToastNotificationManager.CreateToastNotifier().Show(toast);
-
-            int i = 0;
         }
 
         public static IList<string> GrabData(string FROM, string WHAT)
@@ -522,14 +559,14 @@ namespace Repeats
                 db.Open();
                 SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM, db);
                 SqliteDataReader query;
-                try
-                {
-                    query = selectCommand.ExecuteReader();
-                }
-                catch (SqliteException)
-                {
-                    return data;
-                }
+                //try
+                //{
+                query = selectCommand.ExecuteReader();
+                //}
+                //catch (SqliteException)
+                //{
+                //return data;
+                //}
                 while (query.Read())
                 {
                     data.Add(query.GetString(0));
@@ -539,12 +576,38 @@ namespace Repeats
             return data;
         }
 
-        /// <summary>
-        /// Invoked when Navigation to a certain page fails
-        /// </summary>
-        /// <param name="sender">The Frame which failed navigation</param>
-        /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        public static IList<string> GrabTitles(string FROM, string WHAT)
+        {
+            IList<string> titles = new List<string>();
+
+            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            {
+                db.Open();
+                SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM + " WHERE " + "IsEnabled='true'", db);
+                SqliteDataReader query;
+                //try
+                //{
+                query = selectCommand.ExecuteReader();
+                //}
+                //catch (SqliteException)
+                //{
+                //return data;
+                //}
+                while (query.Read())
+                {
+                    titles.Add(query.GetString(0));
+                }
+                db.Close();
+            }
+            return titles;
+        }
+
+    /// <summary>
+    /// Invoked when Navigation to a certain page fails
+    /// </summary>
+    /// <param name="sender">The Frame which failed navigation</param>
+    /// <param name="e">Details about the navigation failure</param>
+    void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }

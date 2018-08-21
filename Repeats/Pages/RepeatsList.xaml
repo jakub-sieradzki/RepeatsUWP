@@ -20,18 +20,18 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource SystemControlAcrylicWindowMediumHighBrush}">
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
 
 
-        <GridView x:Name="GridRepeats" Margin="4,0,0,0"  IsItemClickEnabled="True" ItemClick="ItemClick_Click" ItemsSource="{x:Bind ViewModel.Datas}">
+        <GridView x:Name="GridRepeats" Margin="20,0,20,0"  IsItemClickEnabled="True" ItemClick="ItemClick_Click" ItemsSource="{x:Bind ViewModel.Datas}">
             <GridView.Header>
                 <Grid x:Name="MyHeaderGrid">
-                    <RelativePanel Height="200">
-                        <TextBlock Text="Witaj w Repeats!" FontSize="40" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,-3,70"/>
-                        <Button RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" Margin="20,-46,20,70" Background="{x:Null}" Click="AddClick" Style="{StaticResource ButtonRevealStyle}">
+                    <RelativePanel Height="100">
+                        <TextBlock Text="Witaj w Repeats!" FontSize="30" RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                        <Button RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Background="{x:Null}" Click="AddClick" Style="{StaticResource ButtonRevealStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#xE109;" FontSize="25" FontFamily="Segoe MDL2 Assets"/>
-                                <TextBlock Text="  Dodaj" FontSize="18"/>
+                                <TextBlock Text="&#xE109;" FontSize="20" FontFamily="Segoe MDL2 Assets" Margin="0,0,10,0"/>
+                                <TextBlock Text="Utwórz nowy zestaw" FontSize="15"/>
                             </StackPanel>
                         </Button>
                     </RelativePanel>
@@ -43,15 +43,18 @@
                         Name="RelativeRepeatsList"
                         Height="200"
                         Width="150"
-                        Background="{ThemeResource SystemControlAcrylicElementBrush}"
+                        Background="{ThemeResource SystemControlAltHighAcrylicElementBrush}"
                         Tag="{Binding ProjectName}">
-                        <PersonPicture 
+                        <Button Background="{x:Null}" RelativePanel.AlignRightWithPanel="True" Width="24" Padding="1" Click="Delete_Click" Tag="{Binding TableName}">
+                        <TextBlock Text="&#xE107;" FontFamily="Segoe MDL2 Assets" FontSize="18"/>
+                    </Button>
+                    <PersonPicture 
                             x:Name="Person"
                             RelativePanel.AlignHorizontalCenterWithPanel="True"
                             Margin="0,20,0,0"
                             FontSize="10"
                             Height="70"
-                            ProfilePicture="ms-appx:///Assets/new logo2.png"/>
+                            ProfilePicture="{Binding avatar}"/>
                         <TextBlock 
                             Text="{Binding ProjectName}"
                             TextWrapping="NoWrap"
@@ -60,18 +63,18 @@
                             RelativePanel.AlignHorizontalCenterWithPanel="True"
                             RelativePanel.Below="Person"
                             Margin="20,10,20,10"/>
-                        <Button 
+                    <Button 
                             Name="TEST"
-                            Content="&#xEE92;"
-                            FontFamily="Segoe MDL2 Assets"
-                            Height="35" 
-                            Margin="0,0,40,0" 
-                            Width="35"
-                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
                             RelativePanel.Below="SetName"
                             Tag="{Binding TableName}"
-                            Click="TakeTestButton"/>
-                        <Button 
+                            Click="TakeTestButton">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xEE92;" FontFamily="Segoe MDL2 Assets" FontSize="20" Margin="0,0,10,0"/>
+                            <TextBlock Text="Sprawdzian"/>
+                        </StackPanel>
+                    </Button>
+                        <!--<Button 
                             Content="&#xE107;"
                             FontFamily="Segoe MDL2 Assets"
                             HorizontalAlignment="Center"
@@ -82,7 +85,7 @@
                             RelativePanel.Below="SetName"
                             RelativePanel.LeftOf="TEST"
                             Tag="{Binding TableName}"
-                            Click="Delete_Click"/>
+                            Click="Delete_Click"/>-->
                         <TextBlock 
                             Name="ModifiDate" 
                             Text="{Binding ProjectDate}" 

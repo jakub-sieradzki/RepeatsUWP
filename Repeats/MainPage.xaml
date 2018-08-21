@@ -17,7 +17,7 @@
                     AlwaysShowHeader="False" >
 
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="HomeNavItem" Content="Twoje powtórki" Tag="repeats">
+                <NavigationViewItem x:Uid="HomeNavItem" Content="Twoje zestawy" Tag="repeats">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8F1;"/>
                     </NavigationViewItem.Icon>
@@ -55,11 +55,7 @@
                     </TransitionCollection>
                 </Frame.ContentTransitions>
             </Frame>
-
         </NavigationView>
-
-        <!--</RelativePanel>-->
-
 
         <!-- <UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
         AdUnitId="355896"

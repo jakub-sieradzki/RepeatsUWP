@@ -11,6 +11,8 @@ namespace Repeats.Pages
         public string ProjectDate { get; set; }
         public string TableName { get; set; }
         public object IsENABLED { get; set; }
+        public string avatar { get; set; }
+        public string avatarTag { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -43,13 +45,20 @@ namespace Repeats.Pages
             List<string> Grab_Dates = GetFromDB.GrabData("TitleTable", "CreateDate");
             List<string> Grab_Names = GetFromDB.GrabData("TitleTable", "TableName");
             List<string> Grab_Enabled = GetFromDB.GrabData("TitleTable", "IsEnabled");
+            List<string> Grab_Avatars = GetFromDB.GrabData("TitleTable", "Avatar");
             count = Grab_Titles.Count;
 
             for (int i = 0; i < count; i++)
             {
-                this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles.ElementAt(i), ProjectDate = Grab_Dates.ElementAt(i), TableName = Grab_Names.ElementAt(i), IsENABLED = Grab_Enabled.ElementAt(i) });
+                //if (Grab_Avatars.ElementAt(i) == "")
+                //{
+                    //this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles.ElementAt(i), ProjectDate = Grab_Dates.ElementAt(i), TableName = Grab_Names.ElementAt(i), IsENABLED = Grab_Enabled.ElementAt(i), avatar = "ms-appx:///Assets/new logo2.png" });
+                //}
+                //else
+                //{
+                this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles.ElementAt(i), ProjectDate = Grab_Dates.ElementAt(i), TableName = Grab_Names.ElementAt(i), IsENABLED = Grab_Enabled.ElementAt(i), avatar = RepeatsList.folder.Path + "\\" + Grab_Avatars.ElementAt(i), avatarTag = Grab_Avatars.ElementAt(i) });
+                //}
             }
-
         }
     }
 }

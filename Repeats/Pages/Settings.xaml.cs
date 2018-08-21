@@ -126,12 +126,8 @@ namespace Repeats.Pages
             await TIME.ShowAsync();
 
             ResetStack.Children.Remove(ring);
-            TextBlock textBlock = new TextBlock();
-            textBlock.FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe MDL2 Assets");
-            textBlock.FontSize = 25;
-            textBlock.Text = "\uE081";
-            ResetStack.Children.Add(textBlock);
             RESETbutton.Content = "Zresetowano pomyślnie";
+            CheckText.Visibility = Visibility.Visible;
         }
 
         private void Set_Toggled(object sender, RoutedEventArgs e)

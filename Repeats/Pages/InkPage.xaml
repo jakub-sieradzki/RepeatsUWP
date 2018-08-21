@@ -7,18 +7,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="White">
+    <Grid Background="{x:Null}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel x:Name="ToolPanel" Orientation="Horizontal" Grid.Row="1">
+        <RelativePanel x:Name="ToolPanel" Grid.Row="1" Background="{x:Null}">
             <InkToolbar x:Name="inkToolbar" 
-                        VerticalAlignment="Top" 
-                        Margin="10,0,10,0"
-                        TargetInkCanvas="{x:Bind inkCanvas}">
+                        RelativePanel.AlignHorizontalCenterWithPanel="True"
+                        TargetInkCanvas="{x:Bind inkCanvas}"
+                        Background="{ThemeResource MyAcrylicBrush}">
             </InkToolbar>
             <Button x:Name="buttonSave" 
             FontFamily="Segoe MDL2 Assets"
@@ -26,8 +26,9 @@
             Click="buttonSave_ClickAsync"
             Width="50"
             Height="48"
-            Margin="-5,0,-5,2"
-            FontSize="20"/>
+            FontSize="20"
+            Background="{x:Null}"
+            RelativePanel.AlignRightWithPanel="True"/>
             <Button x:Name="buttonLoad" 
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="20"
@@ -35,10 +36,12 @@
                     Click="buttonLoad_ClickAsync"
                     Width="50"
                     Height="48"
-                    Margin="8,0,8,2"/>
-        </StackPanel>
+                    Background="{x:Null}"
+                    RelativePanel.LeftOf="buttonSave"/>
 
-        <Grid x:Name="drawingCanvas" Grid.Row="2">
+        </RelativePanel>
+
+        <Grid x:Name="drawingCanvas" Background="White" Grid.Row="2">
             <InkCanvas x:Name="inkCanvas" />
         </Grid>
 

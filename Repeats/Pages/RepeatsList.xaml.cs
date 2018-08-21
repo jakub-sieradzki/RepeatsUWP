@@ -20,23 +20,25 @@ namespace Repeats.Pages
         public static string name;
         public static string OfficialName;
         public static bool IsEdit;
+        public static string AV;
         public static StorageFolder folder;
+        public static StorageFolder folder2;
 
         public RepeatsList()
         {
             this.InitializeComponent();
 
+            GetFolder();
+
             this.ViewModel = new MainPageDataModel();
             IsEdit = false;
-
-            GetFolder();
         }
 
         public MainPageDataModel ViewModel { get; set; }
 
         async void GetFolder()
         {
-            folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+            folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
         }
 
         private void TakeTestButton(object sender, RoutedEventArgs e)
@@ -56,6 +58,7 @@ namespace Repeats.Pages
             var g = GridRepeats.PrepareConnectedAnimation("image", item, "Person");
             OfficialName = data.ProjectName;
             name = data.TableName;
+            AV = data.avatarTag;
             IsEdit = true;
             Frame.Navigate(typeof(AddEditRepeats), null, new SuppressNavigationTransitionInfo());
         }
@@ -133,7 +136,7 @@ namespace Repeats.Pages
                     db.Close();
                 }
 
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
                 var allimages = await folder.GetFilesAsync();
                 var results = allimages.Where(x => x.Name.Contains(IMGtag));
                 int count = results.Count();
