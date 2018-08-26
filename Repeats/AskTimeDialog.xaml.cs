@@ -1,5 +1,4 @@
-﻿using Repeats.Pages;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel;
@@ -62,20 +61,14 @@ namespace Repeats
 
         private async void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            //try
-            //{
             IsCancel = false;
-                string txt = GetTimeTxt.Text;
-                int GetIntTime = Int32.Parse(txt);
-                GetIntTime = GetIntTime * 60000;
+            string txt = GetTimeTxt.Text;
+            int GetIntTime = Int32.Parse(txt);
+            GetIntTime = GetIntTime * 60000;
 
-                ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-                localSettings.Values["Frequency"] = GetIntTime;
-                localSettings.Values["IsBackgroundEnabled"] = true;
-
-
-
-            var reResult = await BackgroundExecutionManager.RequestAccessAsync();
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            localSettings.Values["Frequency"] = GetIntTime;
+            localSettings.Values["IsBackgroundEnabled"] = true;
 
             var taskRegistered = false;
             var exampleTaskName = "RepeatsNotificationTask";
@@ -105,57 +98,43 @@ namespace Repeats
 
             const string taskName = "ToastBackgroundTask";
 
-            // If background task is already registered, do nothing
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
                 return;
 
-            // Otherwise request access
-            BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
-
-            // Create the background task
             BackgroundTaskBuilder build = new BackgroundTaskBuilder()
             {
                 Name = taskName
             };
 
-            // Assign the toast action trigger
             build.SetTrigger(new ToastNotificationActionTrigger());
-
-            // And register the task
             BackgroundTaskRegistration registration = build.Register();
-            //}
-            //catch (Exception)
-            //{
-            //    ExceptionUps();
-            //}
 
-            //StartupTask startupTask = await StartupTask.GetAsync("RepeatsNotifi");
-            //startupTask.Disable();
-            //switch (startupTask.State)
-            //{
-            //    case StartupTaskState.Disabled:
-            //        // Task is disabled but can be enabled.
-            //        StartupTaskState newState = await startupTask.RequestEnableAsync();
-            //        Debug.WriteLine("Request to enable startup, result = {0}", newState);
-            //        break;
-            //    case StartupTaskState.DisabledByUser:
-            //        // Task is disabled and user must enable it manually.
-            //        MessageDialog dialog = new MessageDialog(
-            //            "I know you don't want this app to run " +
-            //            "as soon as you sign in, but if you change your mind, " +
-            //            "you can enable this in the Startup tab in Task Manager.",
-            //            "TestStartup");
-            //        await dialog.ShowAsync();
-            //        break;
-            //    case StartupTaskState.DisabledByPolicy:
-            //        Debug.WriteLine(
-            //            "Startup disabled by group policy, or not supported on this device");
-            //        break;
-            //    case StartupTaskState.Enabled:
-            //        Debug.WriteLine("Startup is enabled.");
-            //        break;
-            //}
-
+            StartupTask startupTask = await StartupTask.GetAsync("RepeatsNotifi");
+            startupTask.Disable();
+            switch (startupTask.State)
+            {
+                case StartupTaskState.Disabled:
+                    // Task is disabled but can be enabled.
+                    StartupTaskState newState = await startupTask.RequestEnableAsync();
+                    Debug.WriteLine("Request to enable startup, result = {0}", newState);
+                    break;
+                case StartupTaskState.DisabledByUser:
+                    // Task is disabled and user must enable it manually.
+                    MessageDialog dialog = new MessageDialog(
+                        "I know you don't want this app to run " +
+                        "as soon as you sign in, but if you change your mind, " +
+                        "you can enable this in the Startup tab in Task Manager.",
+                        "TestStartup");
+                    await dialog.ShowAsync();
+                    break;
+                case StartupTaskState.DisabledByPolicy:
+                    Debug.WriteLine(
+                        "Startup disabled by group policy, or not supported on this device");
+                    break;
+                case StartupTaskState.Enabled:
+                    Debug.WriteLine("Startup is enabled.");
+                    break;
+            }
         }
     }
 }

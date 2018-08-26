@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
@@ -94,7 +95,7 @@ namespace Repeats.Pages
                 string name = RepeatsList.OfficialName;
 
                 BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.UriSource = new Uri(RepeatsList.folder.Path + "\\" + RepeatsList.AV);
+                bitmapImage.UriSource = new Uri(RepeatsList.AV);
 
                 Pic.ProfilePicture = bitmapImage;
 
@@ -131,10 +132,11 @@ namespace Repeats.Pages
                 EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, visibility = Visibility.Collapsed, enabled = true, ImageTag = "" });
                 Count++;
 
-                //BitmapImage bitmapImage = new BitmapImage();
-                //bitmapImage.UriSource = new Uri("ms-appx:///Assets/new logo2.png");
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.UriSource = new Uri("ms-appx:///Assets/new logo2.png");
 
-                //Pic.ProfilePicture = bitmapImage;
+                Pic.ProfilePicture = bitmapImage;
+                PicRel.Tag = "ms-appx:///Assets/new logo2.png";
             }
         }
 
@@ -258,8 +260,23 @@ namespace Repeats.Pages
                 db.Close();
             }
 
-            AskTimeDialog TIME = new AskTimeDialog();
-            await TIME.ShowAsync();
+            bool taskRegistered = false;
+            var exampleTaskName = "RepeatsNotificationTask";
+
+            foreach (var task in BackgroundTaskRegistration.AllTasks)
+            {
+                if (task.Value.Name == exampleTaskName)
+                {
+                    taskRegistered = true;
+                    break;
+                }
+            }
+
+            if(!taskRegistered)
+            {
+                AskTimeDialog TIME = new AskTimeDialog();
+                await TIME.ShowAsync();
+            }
 
             Frame.Navigate(typeof(RepeatsList));
         }
@@ -286,7 +303,7 @@ namespace Repeats.Pages
 
                 await File.RenameAsync(DATE + type, NameCollisionOption.GenerateUniqueName);
 
-                string realName = File.Name;
+                string realName = File.Path;
 
                 but.Tag = realName;
 

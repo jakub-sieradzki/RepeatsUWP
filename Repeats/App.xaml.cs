@@ -13,6 +13,9 @@ using Windows.Storage;
 using System.Linq;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System.IO;
+using Windows.ApplicationModel.Background;
+using Windows.ApplicationModel;
+using System.Diagnostics;
 
 namespace Repeats
 {
@@ -28,7 +31,7 @@ namespace Repeats
         public App()
         {
             this.InitializeComponent();
-            //this.Suspending += OnSuspending;
+            this.Suspending += OnSuspending;
 
             SqliteEngine.UseWinSqlite3();
             using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
@@ -211,7 +214,11 @@ namespace Repeats
 
         protected override void OnActivated(IActivatedEventArgs e)
         {
-            if (e is ToastNotificationActivatedEventArgs)
+            if (e.Kind == ActivationKind.StartupTask)
+            {
+                IsStartup = true;
+            }
+            else
             {
                 IsStartup = false;
 
@@ -227,10 +234,6 @@ namespace Repeats
                     rootFrame.BackStack.Add(new PageStackEntry(typeof(MainPage), null, null));
 
                 Window.Current.Activate();
-            }
-            else if (e.Kind == ActivationKind.StartupTask)
-            {
-                IsStartup = true;
             }
         }
 
@@ -425,14 +428,42 @@ namespace Repeats
         {
             IList<string> GetNames = GrabTitles("TitleTable", "TableName");
             IList<string> GetOfficial = GrabTitles("TitleTable", "title");
+            IList<string> GetAvatars = GrabTitles("TitleTable", "Avatar");
 
             int NameCount = GetNames.Count;
+
+            if (NameCount == 0)
+            {
+                var exampleTaskName = "RepeatsNotificationTask";
+
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == exampleTaskName)
+                    {
+                        task.Value.Unregister(true);
+                        break;
+                    }
+                }
+
+                var tskName = "ToastBackgroundTask";
+                foreach (var tsk in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (tsk.Value.Name == tskName)
+                    {
+                        tsk.Value.Unregister(true);
+                        break;
+                    }
+                }
+
+                Process.GetCurrentProcess().Kill();
+            }
 
             Random rnd = new Random();
             int r = rnd.Next(NameCount);
 
             string name = GetNames[r];
             string ofname = GetOfficial[r];
+            string avatar = GetAvatars[r];
 
             IList<string> qu = GrabData(name, "question");
             IList<string> an = GrabData(name, "answer");
@@ -453,10 +484,12 @@ namespace Repeats
 
             if (image != "")
             {
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("QImages");
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
                 StorageFile img = await folder.GetFileAsync(image);
+                StorageFile av = await folder.GetFileAsync(avatar);
 
                 string path = img.Path;
+                string pathAv = av.Path;
 
                 visual = new ToastVisual()
                 {
@@ -477,6 +510,12 @@ namespace Repeats
                         HeroImage = new ToastGenericHeroImage()
                         {
                             Source = path
+                        },
+
+                        AppLogoOverride = new ToastGenericAppLogo()
+                        {
+                            Source = pathAv,
+                            HintCrop = ToastGenericAppLogoCrop.Circle
                         },
 
                         Attribution = new ToastGenericAttributionText()
@@ -513,6 +552,8 @@ namespace Repeats
                 };
             }
 
+
+
             ToastActionsCustom actions = new ToastActionsCustom()
             {
                 Inputs =
@@ -545,8 +586,10 @@ namespace Repeats
                 }.ToString()
             };
 
-            var toast = new ToastNotification(toastContent.GetXml());
-            //toast.Tag = answer;
+            var toast = new ToastNotification(toastContent.GetXml())
+            {
+                Tag = "NextQuestion"
+            };
 
             ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
@@ -621,59 +664,59 @@ namespace Repeats
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
 
-        //private async void OnSuspending(object sender, SuspendingEventArgs e)
-        //{
-        //    var deferral = e.SuspendingOperation.GetDeferral();
-        //   if(IsStartup)
-        //   {
-        //        var reResult = await BackgroundExecutionManager.RequestAccessAsync();
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
+        {
+            var deferral = e.SuspendingOperation.GetDeferral();
+            if (IsStartup)
+            {
+                var reResult = await BackgroundExecutionManager.RequestAccessAsync();
 
-        //        var exampleTaskName = "RepeatsNotificationTask";
+                var exampleTaskName = "RepeatsNotificationTask";
 
-        //        foreach (var task in BackgroundTaskRegistration.AllTasks)
-        //        {
-        //            if (task.Value.Name == exampleTaskName)
-        //            {
-        //                task.Value.Unregister(true);
-        //                break;
-        //            }
-        //        }
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == exampleTaskName)
+                    {
+                        task.Value.Unregister(true);
+                        break;
+                    }
+                }
 
-        //        var builder = new BackgroundTaskBuilder();
+                var builder = new BackgroundTaskBuilder();
 
-        //        ApplicationTrigger trigger = new ApplicationTrigger();
+                ApplicationTrigger trigger = new ApplicationTrigger();
 
-        //        builder.Name = exampleTaskName;
-        //        builder.SetTrigger(trigger);
-        //        builder.TaskEntryPoint = "BackgroundTask.Task";
-        //        BackgroundTaskRegistration builders = builder.Register();
+                builder.Name = exampleTaskName;
+                builder.SetTrigger(trigger);
+                builder.TaskEntryPoint = "BackgroundTask.Task";
+                BackgroundTaskRegistration builders = builder.Register();
 
-        //        var result = await trigger.RequestAsync();
+                var result = await trigger.RequestAsync();
 
-        //        const string taskName = "ToastBackgroundTask";
+                const string taskName = "ToastBackgroundTask";
 
-        //        foreach (var tasks in BackgroundTaskRegistration.AllTasks)
-        //        {
-        //            if (tasks.Value.Name == taskName)
-        //            {
-        //                tasks.Value.Unregister(true);
-        //                break;
-        //            }
-        //        }
+                foreach (var tasks in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (tasks.Value.Name == taskName)
+                    {
+                        tasks.Value.Unregister(true);
+                        break;
+                    }
+                }
 
-        //        BackgroundTaskBuilder build = new BackgroundTaskBuilder()
-        //        {
-        //            Name = taskName
-        //        };
+                BackgroundTaskBuilder build = new BackgroundTaskBuilder()
+                {
+                    Name = taskName
+                };
 
-        //        build.SetTrigger(new ToastNotificationActionTrigger());
+                build.SetTrigger(new ToastNotificationActionTrigger());
 
-        //        BackgroundTaskRegistration registration = build.Register();
+                BackgroundTaskRegistration registration = build.Register();
 
-        //        Process.GetCurrentProcess().Kill();
-        //    }
-        //    deferral.Complete();
-        //}
+                Process.GetCurrentProcess().Kill();
+            }
+            deferral.Complete();
+        }
     }
 }
 

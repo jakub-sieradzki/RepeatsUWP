@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Background;
@@ -42,9 +41,10 @@ namespace Repeats.Pages
             {
                 this.setRepeat.Add(new bind3() { SetName = Grab_Titles.ElementAt(i), TName = Grab_Table.ElementAt(i), ISON = Boolean.Parse(Grab_Enabled.ElementAt(i))});
             }
-        }
-        
+        }  
     }
+
+
     public sealed partial class Settings : Page
     {
         public static int time;
@@ -71,20 +71,58 @@ namespace Repeats.Pages
             }
             else
             {
+                Time.Text = "Powiadomienia przychodzą co 0 minut";
                 Switch.IsOn = false;
+                LISTofSets.IsEnabled = false;
+                ChangeButton.IsEnabled = false;
             }
 
             Switch.Toggled += Switch_Toggled;
 
             this.VIEWMODEL = new BindSettingsViewModel();
 
-            int i = 0;
+            GetTime();
+
+            if(VIEWMODEL.SetRepeat.Count == 0)
+            {
+                RESETbutton.IsEnabled = false;
+                Switch.IsEnabled = false;
+            }
+        }
+
+        void GetTime()
+        {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            object value = localSettings.Values["Frequency"];
+            int freq = Convert.ToInt32(value);
+            freq = freq / 60000;
+
+            if (freq == 1)
+            {
+                Time.Text = "Powiadomienia wysyłane są co " + freq.ToString() + " minutę";
+            }
+            else
+            {
+                Time.Text = "Powiadomienia wysyłane są co " + freq.ToString() + " minut(y)";
+            }
+        }
+
+
+        private async void ChangeTime_Click(object sender, RoutedEventArgs e)
+        {
+            UnregisterNotifications();
+
+            AskTimeDialog TIME = new AskTimeDialog();
+            await TIME.ShowAsync();
+
+            GetTime();
         }
 
         public BindSettingsViewModel VIEWMODEL { get; set; }
 
         private async void Reset_Click(object sender, RoutedEventArgs e)
         {
+            Switch.Toggled -= Switch_Toggled;
             ProgressRing ring = new ProgressRing();
             ring.IsActive = true;
             ResetStack.Children.Add(ring);
@@ -119,60 +157,71 @@ namespace Repeats.Pages
             }
 
             this.VIEWMODEL = new BindSettingsViewModel();
-            LISTofSets.ItemsSource = VIEWMODEL.SetRepeat;
             #endregion
 
             AskTimeDialog TIME = new AskTimeDialog();
             await TIME.ShowAsync();
 
+            GetTime();
             ResetStack.Children.Remove(ring);
             RESETbutton.Content = "Zresetowano pomyślnie";
             CheckText.Visibility = Visibility.Visible;
+            LISTofSets.ItemsSource = VIEWMODEL.SetRepeat;
+            Switch.IsOn = true;
+            Switch.Toggled += Switch_Toggled;
         }
 
         private void Set_Toggled(object sender, RoutedEventArgs e)
         {
             ToggleSwitch toggle = sender as ToggleSwitch;
 
-
             if (toggle != null)
             {
-                string name = toggle.Tag.ToString();
-
-                if (toggle.IsOn == true)
+                if(toggle.Tag != null)
                 {
-                    using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                    {
-                        db.Open();
-                        String tableCommand = "UPDATE TitleTable SET IsEnabled='true' WHERE TableName='" + name + "'";
-                        SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-                        try
-                        {
-                            createTable.ExecuteReader();
-                        }
-                        catch (SqliteException)
-                        {
+                    string name = toggle.Tag.ToString();
 
+                    if (toggle.IsOn == true)
+                    {
+                        using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+                        {
+                            db.Open();
+                            String tableCommand = "UPDATE TitleTable SET IsEnabled='true' WHERE TableName='" + name + "'";
+                            SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                            try
+                            {
+                                createTable.ExecuteReader();
+                            }
+                            catch (SqliteException)
+                            {
+
+                            }
+                            db.Close();
                         }
-                        db.Close();
                     }
-                }
-                else
-                {
-                    using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+                    else
                     {
-                        db.Open();
-                        String tableCommand = "UPDATE TitleTable SET IsEnabled='false' WHERE TableName='" + name + "'";
-                        SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-                        try
+                        using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
                         {
-                            createTable.ExecuteReader();
-                        }
-                        catch (SqliteException)
-                        {
+                            db.Open();
+                            String tableCommand = "UPDATE TitleTable SET IsEnabled='false' WHERE TableName='" + name + "'";
+                            SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+                            try
+                            {
+                                createTable.ExecuteReader();
+                            }
+                            catch (SqliteException)
+                            {
 
+                            }
+                            db.Close();
                         }
-                        db.Close();
+
+                        List<string> Enabled = GetFromDB.GrabData("TitleTable", "IsEnabled");
+                        if (!Enabled.Contains("true"))
+                        {
+                            Switch.IsOn = false;
+                        }
                     }
                 }
             }
@@ -185,16 +234,38 @@ namespace Repeats.Pages
             {
                 if (toggleSwitch.IsOn == true)
                 {
-                    AskTimeDialog TIME = new AskTimeDialog();
-                    await TIME.ShowAsync();
-
-                    if(AskTimeDialog.IsCancel)
+                    List<string> Enabled = GetFromDB.GrabData("TitleTable", "IsEnabled");
+                    if (!Enabled.Contains("true"))
                     {
                         Switch.IsOn = false;
+                    }
+                    else
+                    {
+                        AskTimeDialog TIME = new AskTimeDialog();
+                        await TIME.ShowAsync();
+
+                        if (AskTimeDialog.IsCancel)
+                        {
+                            Switch.IsOn = false;
+                        }
+                        else
+                        {
+                            ChangeButton.IsEnabled = true;
+                            LISTofSets.IsEnabled = true;
+                        }
+                        GetTime();
                     }
                 }
                 else
                 {
+                    Time.Text = "Powiadomienia przychodzą co 0 minut";
+                    ChangeButton.IsEnabled = false;
+                    if(LISTofSets.Items.Count == 0)
+                    {
+                        LISTofSets.IsEnabled = false;
+                    }
+                    ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+                    localSettings.Values["Frequency"] = 0;
                     UnregisterNotifications();
                 }
             }
@@ -233,9 +304,6 @@ namespace Repeats.Pages
                     break;
                 }
             }
-
-            BackgroundExecutionManager.RemoveAccess();
         }
     }
-
 }

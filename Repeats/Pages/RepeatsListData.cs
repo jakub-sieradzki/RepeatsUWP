@@ -56,7 +56,15 @@ namespace Repeats.Pages
                 //}
                 //else
                 //{
-                this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles.ElementAt(i), ProjectDate = Grab_Dates.ElementAt(i), TableName = Grab_Names.ElementAt(i), IsENABLED = Grab_Enabled.ElementAt(i), avatar = RepeatsList.folder.Path + "\\" + Grab_Avatars.ElementAt(i), avatarTag = Grab_Avatars.ElementAt(i) });
+                this.datas.Add(new RepeatsListData()
+                {
+                    ProjectName = Grab_Titles.ElementAt(i),
+                    ProjectDate = Grab_Dates.ElementAt(i),
+                    TableName = Grab_Names.ElementAt(i),
+                    IsENABLED = Grab_Enabled.ElementAt(i),
+                    avatar = Grab_Avatars.ElementAt(i),
+                    avatarTag = Grab_Avatars.ElementAt(i)
+                });
                 //}
             }
         }

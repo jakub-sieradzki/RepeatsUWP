@@ -38,6 +38,7 @@ namespace BackgroundTask
         {
             IList<string> GetNames = GrabTitles("TitleTable", "TableName");
             IList<string> GetOfficial = GrabTitles("TitleTable", "title");
+            IList<string> GetAvatars = GrabTitles("TitleTable", "Avatar");
 
             int NameCount = GetNames.Count;
 
@@ -72,6 +73,7 @@ namespace BackgroundTask
 
             string name = GetNames[r];
             string ofname = GetOfficial[r];
+            string avatar = GetAvatars[r];
 
             IList<string> qu = GrabData(name, "question");
             IList<string> an = GrabData(name, "answer");
@@ -94,8 +96,8 @@ namespace BackgroundTask
             {
                 StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
                 StorageFile img = await folder.GetFileAsync(image);
-
                 string path = img.Path;
+
 
                 visual = new ToastVisual()
                 {
@@ -118,10 +120,11 @@ namespace BackgroundTask
                             Source = path
                         },
 
-                        Attribution = new ToastGenericAttributionText()
+                        AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Text = "Repeats (Beta)"
-                        }
+                            Source = avatar,
+                            HintCrop = ToastGenericAppLogoCrop.Circle
+                        },
                     }
                 };
             }
@@ -144,15 +147,14 @@ namespace BackgroundTask
                             },
                         },
 
-                        Attribution = new ToastGenericAttributionText()
+                        AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Text = "Repeats (Beta)"
-                        }
+                            Source = avatar,
+                            HintCrop = ToastGenericAppLogoCrop.Circle
+                        },
                     }
                 };
             }
-
-
 
             ToastActionsCustom actions = new ToastActionsCustom()
             {
