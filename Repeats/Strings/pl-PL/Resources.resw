@@ -117,164 +117,106 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About.Header" xml:space="preserve">
-    <value>O aplikacji</value>
-  </data>
   <data name="AddButton.Label" xml:space="preserve">
     <value>Dodaj</value>
   </data>
-  <data name="Answer" xml:space="preserve">
+  <data name="AllA" xml:space="preserve">
+    <value>Wszystkich odpowiedzi:</value>
+  </data>
+  <data name="AnswerBox.PlaceholderText" xml:space="preserve">
     <value>Odpowiedź</value>
   </data>
-  <data name="ASK1" xml:space="preserve">
-    <value>Wprowadź nazwę dla projektu</value>
-  </data>
-  <data name="ASK2" xml:space="preserve">
-    <value>Anuluj</value>
-  </data>
-  <data name="ASK3" xml:space="preserve">
-    <value>Dalej</value>
-  </data>
-  <data name="ASK4" xml:space="preserve">
-    <value>Używasz niedozwolonego znaku.</value>
-  </data>
-  <data name="ASK5" xml:space="preserve">
-    <value>Niedozwolone znaki: </value>
-  </data>
-  <data name="ASK6" xml:space="preserve">
-    <value>Projekt o takiej nazwie już istnieje.</value>
-  </data>
-  <data name="Attention1" xml:space="preserve">
-    <value>Uwaga!</value>
-  </data>
-  <data name="Attention2" xml:space="preserve">
-    <value>Musisz dodać co najmniej 2 pytania.</value>
-  </data>
-  <data name="Attention3" xml:space="preserve">
-    <value>Nie możesz zostawić pustego pola.</value>
-  </data>
-  <data name="Bad" xml:space="preserve">
-    <value> Źle!</value>
-  </data>
-  <data name="Correct" xml:space="preserve">
-    <value>Poprawna odpowiedź: </value>
-  </data>
-  <data name="DELETE1" xml:space="preserve">
-    <value>Czy na pewno chcesz to usunąć?</value>
-  </data>
-  <data name="DELETE2" xml:space="preserve">
-    <value>Tak</value>
-  </data>
-  <data name="DELETE3" xml:space="preserve">
-    <value>Nie</value>
-  </data>
-  <data name="DeleteButton.Label" xml:space="preserve">
-    <value>Usuń</value>
-  </data>
-  <data name="EditButton.Label" xml:space="preserve">
-    <value>Edytuj</value>
-  </data>
-  <data name="Error1" xml:space="preserve">
-    <value>Błąd</value>
-  </data>
-  <data name="Error2" xml:space="preserve">
-    <value>Wystąpił błąd i nie mogliśmy tego zrobić.</value>
-  </data>
-  <data name="Error3" xml:space="preserve">
-    <value>Spróbuj ponownie</value>
-  </data>
-  <data name="Error4" xml:space="preserve">
-    <value>Nie mogliśmy załadować tego projektu, ponieważ nie został stworzony w tej aplikacji.</value>
-  </data>
-  <data name="Feedback.Text" xml:space="preserve">
-    <value>  Wyślij opinię</value>
-  </data>
-  <data name="Go.Label" xml:space="preserve">
-    <value>Start</value>
-  </data>
-  <data name="Good" xml:space="preserve">
-    <value> Dobrze!</value>
-  </data>
-  <data name="InkProject" xml:space="preserve">
-    <value>Projekt</value>
-  </data>
-  <data name="ListText.Text" xml:space="preserve">
-    <value>Wybierz, z czego chcesz napisać sprawdzian:</value>
-  </data>
-  <data name="MAIN1" xml:space="preserve">
-    <value>Twoje powtórki</value>
-  </data>
-  <data name="MAIN2" xml:space="preserve">
-    <value>Sprawdź się!</value>
-  </data>
-  <data name="MAIN3" xml:space="preserve">
-    <value>Notatki odręczne</value>
-  </data>
-  <data name="MAIN4" xml:space="preserve">
-    <value>Ustawienia</value>
-  </data>
-  <data name="MAIN5" xml:space="preserve">
-    <value>Wyszukaj</value>
-  </data>
-  <data name="NothingSearch" xml:space="preserve">
-    <value>Nic nie znaleziono.</value>
-  </data>
-  <data name="notifi1" xml:space="preserve">
+  <data name="AnswerHere" xml:space="preserve">
     <value>Tutaj wpisz odpowiedź</value>
   </data>
-  <data name="notifi2" xml:space="preserve">
-    <value>Sprawdź</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Odrzuć</value>
   </data>
-  <data name="notifi3" xml:space="preserve">
-    <value>Brawo! To poprawna odpowiedź!</value>
+  <data name="ChangeB.Content" xml:space="preserve">
+    <value>Zmień</value>
   </data>
-  <data name="notifi4" xml:space="preserve">
-    <value>Ups, to nie była poprawna odpowiedź.</value>
+  <data name="Concretsets.Text" xml:space="preserve">
+    <value>Powiadomienia z konkretnych zestawów</value>
   </data>
-  <data name="notifi5" xml:space="preserve">
-    <value>Poprawna odpowiedź to: </value>
+  <data name="CorrectA" xml:space="preserve">
+    <value>Poprawnych odpowiedzi:</value>
   </data>
-  <data name="NotificationSettings.Header" xml:space="preserve">
+  <data name="CorrectOne" xml:space="preserve">
+    <value>Poprawna odpowiedź:</value>
+  </data>
+  <data name="CreateSetB.Text" xml:space="preserve">
+    <value>Utwórz nowy zestaw</value>
+  </data>
+  <data name="deldialog1" xml:space="preserve">
+    <value>Czy na pewno chcesz usunąć ten zestaw?</value>
+  </data>
+  <data name="deldialog2" xml:space="preserve">
+    <value>Usuwanie zestawów jest nieodwracalne.</value>
+  </data>
+  <data name="deldialog3" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="deldialog4" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="DIALOG1" xml:space="preserve">
+    <value>Uwaga! Powiadomienia nie będą działać po ponownym uruchomieniu urządzenia</value>
+  </data>
+  <data name="DIALOG2" xml:space="preserve">
+    <value>Aby powiadomienia działały nawet po ponownym uruchomieniu urządzenia, musisz włączyć Repeats Startup Task w karcie Uruchamianie w Menedżerze Zadań.</value>
+  </data>
+  <data name="EmptyInfo.Text" xml:space="preserve">
+    <value>Trochę tu pusto...
+
+Dodaj nowy zestaw klikając na + w prawym górnym rogu.</value>
+  </data>
+  <data name="feedback.Text" xml:space="preserve">
+    <value>Wyślij opinię</value>
+  </data>
+  <data name="Follow.Content" xml:space="preserve">
+    <value>Obserwuj Repeats na Twitterze</value>
+  </data>
+  <data name="HomeNavItem.Content" xml:space="preserve">
+    <value>Twoje zestawy</value>
+  </data>
+  <data name="IncorrectA" xml:space="preserve">
+    <value>Niepoprawnych odpowiedzi:</value>
+  </data>
+  <data name="InkNavItem.Content" xml:space="preserve">
+    <value>Szkicownik</value>
+  </data>
+  <data name="Like.Content" xml:space="preserve">
+    <value>Polub Repeats na Facebooku</value>
+  </data>
+  <data name="NextQuestion" xml:space="preserve">
+    <value>Kolejne pytanie</value>
+  </data>
+  <data name="NotifiCorrect" xml:space="preserve">
+    <value>Brawo! To poprawna odpowiedź</value>
+  </data>
+  <data name="Notifigreat" xml:space="preserve">
+    <value>Szybko się uczysz</value>
+  </data>
+  <data name="NotifiIncorrect" xml:space="preserve">
+    <value>Niestety, to nie była poprawna odpowiedź</value>
+  </data>
+  <data name="Pivot1.Header" xml:space="preserve">
     <value>Powiadomienia</value>
   </data>
-  <data name="off" xml:space="preserve">
-    <value>Wyłączono</value>
+  <data name="Pivot2.Header" xml:space="preserve">
+    <value>O aplikacji</value>
   </data>
-  <data name="ON" xml:space="preserve">
-    <value>Włączono</value>
-  </data>
-  <data name="Question" xml:space="preserve">
+  <data name="QuestBox.PlaceholderText" xml:space="preserve">
     <value>Pytanie</value>
   </data>
-  <data name="R1.Content" xml:space="preserve">
-    <value>15 minut</value>
-  </data>
-  <data name="R2.Content" xml:space="preserve">
-    <value>30 minut</value>
-  </data>
-  <data name="R3.Content" xml:space="preserve">
-    <value>45 minut</value>
-  </data>
-  <data name="R4.Content" xml:space="preserve">
-    <value>60 minut</value>
-  </data>
-  <data name="Radio1.Content" xml:space="preserve">
-    <value>15 minut</value>
-  </data>
-  <data name="Radio2.Content" xml:space="preserve">
-    <value>30 minut</value>
-  </data>
-  <data name="Radio3.Content" xml:space="preserve">
-    <value>45 minut</value>
-  </data>
-  <data name="Radio4.Content" xml:space="preserve">
-    <value>60 minut</value>
-  </data>
   <data name="Rate.Text" xml:space="preserve">
-    <value>  Oceń w Sklepie</value>
+    <value>Oceń aplikację</value>
   </data>
-  <data name="SAVE.Label" xml:space="preserve">
-    <value>Zapisz</value>
+  <data name="ResetB.Content" xml:space="preserve">
+    <value>Resetuj powiadomienia</value>
+  </data>
+  <data name="ResetOK" xml:space="preserve">
+    <value>Zresetowano pomyślnie</value>
   </data>
   <data name="SaveButton.Label" xml:space="preserve">
     <value>Zapisz</value>
@@ -282,35 +224,20 @@
   <data name="SearchBox.PlaceholderText" xml:space="preserve">
     <value>Szukaj</value>
   </data>
-  <data name="SearchButton.Label" xml:space="preserve">
-    <value>Szukaj</value>
+  <data name="SetNameBox.PlaceholderText" xml:space="preserve">
+    <value>Nazwa zestawu</value>
   </data>
-  <data name="SearchText.Text" xml:space="preserve">
-    <value>Wybierz projekt, który chcesz przeszukać:</value>
+  <data name="ShowCorrect" xml:space="preserve">
+    <value>Prawidłowa odpowiedź to:</value>
   </data>
-  <data name="TEST1" xml:space="preserve">
-    <value>Wszystkie odpowiedzi: </value>
+  <data name="switch.Header" xml:space="preserve">
+    <value>Powiadomienia</value>
   </data>
-  <data name="TEST2" xml:space="preserve">
-    <value>Poprawnych odpowiedzi: </value>
-  </data>
-  <data name="TEST3" xml:space="preserve">
-    <value>Niepoprawnych odpowiedzi: </value>
-  </data>
-  <data name="TestButton.Content" xml:space="preserve">
-    <value>SPRAWDŹ!</value>
-  </data>
-  <data name="TextBox.PlaceholderText" xml:space="preserve">
-    <value>Wpisz odpowiedź</value>
-  </data>
-  <data name="TextNext.Text" xml:space="preserve">
-    <value>Przejdź dalej  </value>
-  </data>
-  <data name="TextSetting.Text" xml:space="preserve">
-    <value>Wybierz, co jaki czas mają wyświetlać się powiadomienia:</value>
+  <data name="TakeTestButton.Text" xml:space="preserve">
+    <value>Sprawdzian</value>
   </data>
   <data name="TIME1" xml:space="preserve">
-    <value>Co jaki czas mają wyświetlać się powiadomienia (w minutach)?</value>
+    <value>Co jaki czas mają wysyłać się powiadomienia (w minutach)?</value>
   </data>
   <data name="TIME2" xml:space="preserve">
     <value>Anuluj</value>
@@ -318,52 +245,25 @@
   <data name="TIME3" xml:space="preserve">
     <value>Zapisz</value>
   </data>
-  <data name="toff.Content" xml:space="preserve">
-    <value>Wyłącz powiadomienia</value>
+  <data name="ToggleActive.OffContent" xml:space="preserve">
+    <value>Nieaktywne</value>
   </data>
-  <data name="ToggleNotification.Header" xml:space="preserve">
-    <value>Powiadomienia</value>
+  <data name="ToggleActive.OnContent" xml:space="preserve">
+    <value>Aktywne</value>
   </data>
-  <data name="ton.Content" xml:space="preserve">
-    <value>Włącz powiadomienia</value>
+  <data name="WelcomeRepeats.Text" xml:space="preserve">
+    <value>Witaj w Repeats!</value>
   </data>
-  <data name="W1.Text" xml:space="preserve">
-    <value>Witaj w aplikacji Repeats!</value>
+  <data name="YourAnswer" xml:space="preserve">
+    <value>Twoja odpowiedź:</value>
   </data>
-  <data name="W10.Text" xml:space="preserve">
-    <value>W Ustawieniach możesz sterować najważniejszymi funkcjami aplikacji.</value>
+  <data name="YourTime" xml:space="preserve">
+    <value>Twój czas:</value>
   </data>
-  <data name="W11.Text" xml:space="preserve">
-    <value>Wszystko gotowe, możemy zaczynać!</value>
+  <data name="FrequencyInfo1" xml:space="preserve">
+    <value>Powiadomienia przychodzą co</value>
   </data>
-  <data name="W2.Text" xml:space="preserve">
-    <value>Nauka to teraz przyjemność!</value>
-  </data>
-  <data name="W3.Text" xml:space="preserve">
-    <value>Moduł Twoje powtórki oderwie Cię od książek!</value>
-  </data>
-  <data name="W4.Text" xml:space="preserve">
-    <value>Dodaj kilka pytań i odpowiedzi i ustaw aplikację tak, aby Cię z nich co jakiś czas odpytywała. Dzięki temu podczas wykonywania swoich ulubionych zajęć, jednocześnie będziesz się uczył!</value>
-  </data>
-  <data name="W5.Text" xml:space="preserve">
-    <value>Moduł Sprawdź się przygotuje Cię do sprawdzianu!</value>
-  </data>
-  <data name="W6.Text" xml:space="preserve">
-    <value>Na podstawie dodanych wcześniej przez Ciebie pytań i odpowiedzi aplikacja tworzy sprawdzian, który od razu wyświetla prawidłową odpowiedź oraz liczy dobre i złe odpowiedzi.</value>
-  </data>
-  <data name="W7.Text" xml:space="preserve">
-    <value>Moduł Notatki odręczne zastąpi papier i długopis!</value>
-  </data>
-  <data name="W8.Text" xml:space="preserve">
-    <value>Możesz tworzyć notatki odręczne, tak samo jak na papierze! Masz do wyboru kolorowe pisaki, kolorowe kredki, linijkę i wiele więcej!</value>
-  </data>
-  <data name="W9.Text" xml:space="preserve">
-    <value>Wyszukiwarka pomoże szybko znaleźć odpowiedź na Twoje pytanie!</value>
-  </data>
-  <data name="WB1.Content" xml:space="preserve">
-    <value>Przejdź do aplikacji</value>
-  </data>
-  <data name="WB2.Content" xml:space="preserve">
-    <value>Pomiń intro</value>
+  <data name="Version" xml:space="preserve">
+    <value>Wersja</value>
   </data>
 </root>

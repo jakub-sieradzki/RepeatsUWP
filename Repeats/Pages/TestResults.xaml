@@ -21,13 +21,13 @@
                 Width="150"
                 Height="150"
                 RelativePanel.AlignLeftWithPanel="True"/>
-                    <TextBlock Name="percentScore" Text="100%" FontSize="40" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Height="60"/>
+                    <TextBlock Name="percentScore" FontSize="40" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Height="60"/>
                 </RelativePanel>
                 <StackPanel Name="Results" RelativePanel.RightOf="radialRelative" RelativePanel.AlignVerticalCenterWith="radialRelative" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                    <TextBlock Name="Score1" Text="Poprawnych odpowiedzi: 15" FontSize="20"  TextWrapping="Wrap" Margin="0,0,0,5"/>
-                    <TextBlock Name="Score2" Text="Niepoprawnych odpowiedzi: 15" FontSize="20"  TextWrapping="Wrap" Margin="0,0,0,5"/>
-                    <TextBlock Name="Score3" Text="Wszystkich odpowiedzi: 30" FontSize="20"  TextWrapping="Wrap"  Margin="0,0,0,5"/>
-                    <TextBlock Name="Score4" Text="Twój czas: 00h 10m 25s" FontSize="20"  TextWrapping="Wrap"/>
+                    <TextBlock Name="Score1" FontSize="20"  TextWrapping="Wrap" Margin="0,0,0,5"/>
+                    <TextBlock Name="Score2" FontSize="20"  TextWrapping="Wrap" Margin="0,0,0,5"/>
+                    <TextBlock Name="Score3" FontSize="20"  TextWrapping="Wrap"  Margin="0,0,0,5"/>
+                    <TextBlock Name="Score4" FontSize="20"  TextWrapping="Wrap"/>
                 </StackPanel>
             </StackPanel>
             <GridView x:Name="GRIDresults" RelativePanel.Below="STACK" Margin="0,20,0,0" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewResultsModel.Test}">

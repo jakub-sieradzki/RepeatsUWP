@@ -15,7 +15,7 @@
                 <controls:ScrollHeader Mode="QuickReturn">
                     <RelativePanel Background="{ThemeResource MyAcrylicBrush}">
                         <Button Name="btn" Click="Check_Click" RelativePanel.AlignRightWithPanel="True" FontFamily="Segoe MDL2 Assets" Content="&#xEE92;" FontSize="20" RelativePanel.AlignVerticalCenterWithPanel="True" BorderBrush="{x:Null}" Margin="0,10,10,10" Background="{x:Null}"/>
-                        <TextBlock Name="SetTitleBlock" Text="Sprawdzian z: " FontSize="20" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="10,0,10,0" RelativePanel.LeftOf="btn" RelativePanel.AlignLeftWithPanel="True"/>
+                        <TextBlock Name="SetTitleBlock" FontSize="20" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="10,0,10,0" RelativePanel.LeftOf="btn" RelativePanel.AlignLeftWithPanel="True"/>
                     </RelativePanel>
                 </controls:ScrollHeader>
             </GridView.Header>

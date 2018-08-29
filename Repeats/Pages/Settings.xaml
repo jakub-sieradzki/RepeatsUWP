@@ -9,19 +9,19 @@
 
     <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
         <Pivot>
-            <PivotItem Header="Powiadomienia">
+            <PivotItem x:Uid="Pivot1" Header="">
                 <StackPanel Orientation="Vertical">
-                    <ToggleSwitch x:Name="Switch" Header="Powiadomienia" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" />
+                    <ToggleSwitch x:Uid="switch" x:Name="Switch" Header="" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" />
                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                        <TextBlock Name="Time" Text="Powiadomienia przychodzą co 5 minut" VerticalAlignment="Center"/>
-                        <Button Name="ChangeButton" Content="Zmień" Margin="10,0,0,0" Click="ChangeTime_Click"/>
+                        <TextBlock x:Uid="freqtext" Name="Time" VerticalAlignment="Center"/>
+                        <Button x:Uid="ChangeB" Name="ChangeButton" Margin="10,0,0,0" Click="ChangeTime_Click"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="10,20,0,15" Name="ResetStack">
-                        <Button Name="RESETbutton" Content="Resetuj powiadomienia" Click="Reset_Click" Margin="0,0,10,0"/>
+                        <Button x:Uid="ResetB" Name="RESETbutton" Click="Reset_Click" Margin="0,0,10,0"/>
                         <TextBlock Name="CheckText" FontFamily="Segoe MDL2 Assets" FontSize="20" Text="&#xE081;" VerticalAlignment="Center" Visibility="Collapsed"/>
                     </StackPanel>
                     <!--<Button Content="Button" HorizontalAlignment="Center" Height="32" Margin="0,0,0,0" VerticalAlignment="Center" Width="65" Click="Button_Click"/>-->
-                    <TextBlock Text="Powiadomienia z konkretnych zestawów" Margin="10,10,0,0"/>
+                    <TextBlock x:Uid="Concretsets" Margin="10,10,0,0"/>
                     <ListView Name="LISTofSets" ItemsSource="{x:Bind VIEWMODEL.SetRepeat}" SelectionMode="None" IsItemClickEnabled="False" Margin="0,10,0,0">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -37,15 +37,41 @@
                             <DataTemplate>
                                 <RelativePanel>
                                     <TextBlock RelativePanel.AlignLeftWithPanel="True" x:Name="setNAME" Text="{Binding SetName}" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="5,0"/>
-                                    <ToggleSwitch RelativePanel.AlignRightWithPanel="True" Tag="{Binding TName}" IsOn="{Binding ISON}" x:Name="setToggle" Toggled="Set_Toggled" OnContent="Aktywne" OffContent="Nieaktywne"/>
+                                    <ToggleSwitch x:Uid="ToggleActive" RelativePanel.AlignRightWithPanel="True" Tag="{Binding TName}" IsOn="{Binding ISON}" x:Name="setToggle" Toggled="Set_Toggled" OnContent="" OffContent=""/>
                                 </RelativePanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackPanel>
             </PivotItem>
-            <PivotItem Header="Personalizacja">
-                
+            <PivotItem x:Uid="Pivot2" Header="">
+                <StackPanel>
+                    <Image Source="ms-appx:///Assets/SplashScreen.scale-400.png" Width="200"/>
+                    <TextBlock Name="InfoBlock" Text="Wersja 2.0.0.0&#x0a;&#x0a;Developer: Jakub Sieradzki" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                        <Button Name="Rate" Click="RATE" Margin="0,0,10,0" Style="{StaticResource ButtonRevealStyle}" Background="{x:Null}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE0B4;" FontSize="20" Margin="0,0,7,0"/>
+                                <TextBlock x:Uid="Rate"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="FEEDBACK" Click="Feedback_Click" Style="{StaticResource ButtonRevealStyle}" Background="{x:Null}" >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE19D;" FontSize="20" Margin="0,0,7,0"/>
+                                <TextBlock x:Uid="feedback"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                        <HyperlinkButton x:Uid="Like" Content="Polub Repeats na Facebooku" NavigateUri="https://www.facebook.com/RepeatsApp/" Margin="0,0,10,0"/>
+                        <HyperlinkButton x:Uid="Follow" Content="Obserwuj Repeats na Twitterze" NavigateUri="https://twitter.com/repeatsapp" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                        <TextBlock x:Uid="contact" Text="Kontakt:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <HyperlinkButton Content="rootekstudio@outlook.com" NavigateUri="mailto:rootekstudio@outlook.com"/>
+                    </StackPanel>
+
+                </StackPanel>
             </PivotItem>
         </Pivot>
     </Grid>

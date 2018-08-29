@@ -27,27 +27,10 @@ namespace Repeats.Pages
 
             this.ViewTestModel = new TakeTestPageDataModel();
 
-            SetTitleBlock.Text = "Sprawdzian z: " + RepeatsList.OfficialName;
+            SetTitleBlock.Text = RepeatsList.OfficialName;
         }
 
         public TakeTestPageDataModel ViewTestModel { get; set; }
-
-        private static async void ExceptionUps()
-        {
-            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-            var strerr1 = loader.GetString("Error1");
-            var strerr2 = loader.GetString("Error2");
-            var strerr3 = loader.GetString("Error3");
-
-            ContentDialog ExcUPS = new ContentDialog
-            {
-                Title = strerr1,
-                Content = strerr2,
-                CloseButtonText = strerr3
-            };
-
-            ContentDialogResult result = await ExcUPS.ShowAsync();
-        }
 
         public static List<string> yanswers;
         public static List<string> canswers;

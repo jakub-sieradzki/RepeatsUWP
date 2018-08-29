@@ -1,8 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
+using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Background;
@@ -48,11 +50,23 @@ namespace Repeats.Pages
     public sealed partial class Settings : Page
     {
         public static int time;
+        public static bool TimeOnly;
+        public string language;
 
         public Settings()
         {
             this.InitializeComponent();
 
+            var ci = CultureInfo.InstalledUICulture;
+            language = ci.Name;
+
+            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var vs = loader.GetString("Version");
+
+            string ApplicationVersion = $"{SystemInformation.ApplicationVersion.Major}.{SystemInformation.ApplicationVersion.Minor}.{SystemInformation.ApplicationVersion.Build}";
+
+            InfoBlock.Text = vs + " " + ApplicationVersion + Environment.NewLine + Environment.NewLine + "Developer: Jakub Sieradzki";
+            TimeOnly = false;
             var taskRegistered = false;
             var exampleTaskName = "RepeatsNotificationTask";
 
@@ -71,7 +85,15 @@ namespace Repeats.Pages
             }
             else
             {
-                Time.Text = "Powiadomienia przychodzą co 0 minut";
+                if (language == "pl-PL")
+                {
+                    Time.Text = "Powiadomienia przychodzą co 0 minut";
+                }
+                else
+                {
+                    Time.Text = "Notifications are sent every 0 minutes";
+                }
+
                 Switch.IsOn = false;
                 LISTofSets.IsEnabled = false;
                 ChangeButton.IsEnabled = false;
@@ -88,6 +110,11 @@ namespace Repeats.Pages
                 RESETbutton.IsEnabled = false;
                 Switch.IsEnabled = false;
             }
+
+            if (!Microsoft.Services.Store.Engagement.StoreServicesFeedbackLauncher.IsSupported())
+            {
+                FEEDBACK.Visibility = Visibility.Collapsed;
+            }
         }
 
         void GetTime()
@@ -97,13 +124,35 @@ namespace Repeats.Pages
             int freq = Convert.ToInt32(value);
             freq = freq / 60000;
 
-            if (freq == 1)
+            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var time1 = loader.GetString("FrequencyInfo1");
+
+            if(language == "pl-PL")
             {
-                Time.Text = "Powiadomienia wysyłane są co " + freq.ToString() + " minutę";
+                if (freq == 1)
+                {
+                    Time.Text = time1 + " " + freq.ToString() + " minutę";
+                }
+                else if (freq == 2 || freq == 3 || freq == 4)
+                {
+                    Time.Text = time1 + " " + freq.ToString() + " minuty";
+                }
+                else
+                {
+                    Time.Text = time1 + " " + freq.ToString() + " minut";
+                }
             }
             else
             {
-                Time.Text = "Powiadomienia wysyłane są co " + freq.ToString() + " minut(y)";
+                if (freq == 1)
+                {
+                    Time.Text = time1 + " " + freq.ToString() + " minute";
+                }
+                else
+                {
+                    Time.Text = time1 + " " + freq.ToString() + " minutes";
+                }
+
             }
         }
 
@@ -111,6 +160,8 @@ namespace Repeats.Pages
         private async void ChangeTime_Click(object sender, RoutedEventArgs e)
         {
             UnregisterNotifications();
+
+            TimeOnly = true;
 
             AskTimeDialog TIME = new AskTimeDialog();
             await TIME.ShowAsync();
@@ -162,9 +213,12 @@ namespace Repeats.Pages
             AskTimeDialog TIME = new AskTimeDialog();
             await TIME.ShowAsync();
 
+            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var reset = loader.GetString("ResetOK");
+
             GetTime();
             ResetStack.Children.Remove(ring);
-            RESETbutton.Content = "Zresetowano pomyślnie";
+            RESETbutton.Content = reset;
             CheckText.Visibility = Visibility.Visible;
             LISTofSets.ItemsSource = VIEWMODEL.SetRepeat;
             Switch.IsOn = true;
@@ -258,7 +312,15 @@ namespace Repeats.Pages
                 }
                 else
                 {
-                    Time.Text = "Powiadomienia przychodzą co 0 minut";
+                    if(language == "pl-PL")
+                    {
+                        Time.Text = "Powiadomienia przychodzą co 0 minut";
+                    }
+                    else
+                    {
+                        Time.Text = "Notifications are sent every 0 minutes";
+                    }
+
                     ChangeButton.IsEnabled = false;
                     if(LISTofSets.Items.Count == 0)
                     {
@@ -271,7 +333,7 @@ namespace Repeats.Pages
             }
         }
 
-        void UnregisterNotifications()
+        async void UnregisterNotifications()
         {
             var exampleTaskName = "RepeatsNotificationTask";
 
@@ -304,6 +366,23 @@ namespace Repeats.Pages
                     break;
                 }
             }
+
+
+            StartupTask startupTask = await StartupTask.GetAsync("RepeatsNotifi");
+            startupTask.Disable();
+        }
+
+        private async void RATE(object sender, RoutedEventArgs e)
+        {
+            var uriBing = new Uri(@"ms-windows-store://review/?ProductId=9NXLCWT9DQF2");
+
+            var success = await Windows.System.Launcher.LaunchUriAsync(uriBing);
+        }
+
+        private async void Feedback_Click(object sender, RoutedEventArgs e)
+        {
+            var launcher = Microsoft.Services.Store.Engagement.StoreServicesFeedbackLauncher.GetDefault();
+            await launcher.LaunchAsync();
         }
     }
 }

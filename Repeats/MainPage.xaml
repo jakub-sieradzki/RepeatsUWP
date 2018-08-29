@@ -17,12 +17,12 @@
                     AlwaysShowHeader="False" >
 
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="HomeNavItem" Content="Twoje zestawy" Tag="repeats">
+                <NavigationViewItem x:Uid="HomeNavItem" Content="" Tag="repeats">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8F1;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="GamesNavItem" Content="Rysunki" Tag="ink">
+                <NavigationViewItem x:Uid="InkNavItem" Content="" Tag="ink">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEDC6;"/>
                     </NavigationViewItem.Icon>
@@ -30,11 +30,11 @@
             </NavigationView.MenuItems>
 
             <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="ASB" QueryIcon="Find"                 
+                <AutoSuggestBox x:Name="ASB" x:Uid="SearchBox" QueryIcon="Find"                 
                 TextChanged="AutoSuggestBox_TextChanged"
                 QuerySubmitted="AutoSuggestBox_QuerySubmitted"
                 SuggestionChosen="AutoSuggestBox_SuggestionChosen"
-                 PlaceholderText="Szukaj" GotFocus="ASB_Focus" MinWidth="250">
+                 PlaceholderText="" GotFocus="ASB_Focus" MinWidth="250">
                     <AutoSuggestBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
@@ -48,21 +48,22 @@
 
             </NavigationView.AutoSuggestBox>
 
-            <Frame x:Name="ContentFrame">
-                <Frame.ContentTransitions>
-                    <TransitionCollection>
-                        <NavigationThemeTransition/>
-                    </TransitionCollection>
-                </Frame.ContentTransitions>
-            </Frame>
-        </NavigationView>
+            <RelativePanel>
+                <UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
+                    AdUnitId="355896"
+                    Height="50"
+                    Width="300"
+                    RelativePanel.AlignBottomWithPanel="True"
+                    RelativePanel.AlignHorizontalCenterWithPanel="True"/>
 
-        <!-- <UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
-        AdUnitId="355896"
-        HorizontalAlignment="Center"
-        Height="50"
-        VerticalAlignment="Bottom"
-        Width="300"
-        Margin="0,60"/> -->
+                <Frame x:Name="ContentFrame" Margin="0,0,0,50" RelativePanel.Above="add" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True">
+                    <Frame.ContentTransitions>
+                        <TransitionCollection>
+                            <NavigationThemeTransition/>
+                        </TransitionCollection>
+                    </Frame.ContentTransitions>
+                </Frame>
+            </RelativePanel>
+        </NavigationView>
     </Grid>
 </Page>

@@ -117,164 +117,100 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About.Header" xml:space="preserve">
-    <value>About</value>
-  </data>
   <data name="AddButton.Label" xml:space="preserve">
     <value>Add</value>
   </data>
-  <data name="Answer" xml:space="preserve">
+  <data name="AllA" xml:space="preserve">
+    <value>All answers:</value>
+  </data>
+  <data name="AnswerBox.PlaceholderText" xml:space="preserve">
     <value>Answer</value>
   </data>
-  <data name="ASK1" xml:space="preserve">
-    <value>Enter a name for the project</value>
+  <data name="AnswerHere" xml:space="preserve">
+    <value>Answer here</value>
   </data>
-  <data name="ASK2" xml:space="preserve">
+  <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="ASK3" xml:space="preserve">
-    <value>Next</value>
+  <data name="ChangeB.Content" xml:space="preserve">
+    <value>Change</value>
   </data>
-  <data name="ASK4" xml:space="preserve">
-    <value>You are using an illegal character.</value>
+  <data name="Concretsets.Text" xml:space="preserve">
+    <value>Notifications from specific sets</value>
   </data>
-  <data name="ASK5" xml:space="preserve">
-    <value>Illegal characters: </value>
+  <data name="CorrectA" xml:space="preserve">
+    <value>Correct answers:</value>
   </data>
-  <data name="ASK6" xml:space="preserve">
-    <value>A project with that name already exists.</value>
+  <data name="CorrectOne" xml:space="preserve">
+    <value>Correct answer:</value>
   </data>
-  <data name="Attention1" xml:space="preserve">
-    <value>Attention!</value>
+  <data name="CreateSetB.Text" xml:space="preserve">
+    <value>Create new set</value>
   </data>
-  <data name="Attention2" xml:space="preserve">
-    <value>You must add at least 2 questions.</value>
+  <data name="deldialog1" xml:space="preserve">
+    <value>Are you sure you want to delete this set?</value>
   </data>
-  <data name="Attention3" xml:space="preserve">
-    <value>You can not leave a blank field.</value>
+  <data name="deldialog2" xml:space="preserve">
+    <value>You will not be able to restore this set anymore.</value>
   </data>
-  <data name="Bad" xml:space="preserve">
-    <value> Wrong!</value>
-  </data>
-  <data name="Correct" xml:space="preserve">
-    <value>Correct answer: </value>
-  </data>
-  <data name="DELETE1" xml:space="preserve">
-    <value>Are you sure you want to delete this?</value>
-  </data>
-  <data name="DELETE2" xml:space="preserve">
-    <value>Yes</value>
-  </data>
-  <data name="DELETE3" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="DeleteButton.Label" xml:space="preserve">
+  <data name="deldialog3" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="EditButton.Label" xml:space="preserve">
-    <value>Edit</value>
+  <data name="deldialog4" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="Error1" xml:space="preserve">
-    <value>Error</value>
+  <data name="DIALOG1" xml:space="preserve">
+    <value>Warning! Notifications will not work after restarting the device</value>
   </data>
-  <data name="Error2" xml:space="preserve">
-    <value>There was an error and we couldn't do it.</value>
+  <data name="DIALOG2" xml:space="preserve">
+    <value>For notifications to work even after the device is restarted, you must enable Repeats Startup Task in the Startup tab in Task Manager.</value>
   </data>
-  <data name="Error3" xml:space="preserve">
-    <value>Try again</value>
+  <data name="EmptyInfo.Text" xml:space="preserve">
+    <value>It's a bit empty here...
+
+Create new set by clicking on + at the top right corner.</value>
   </data>
-  <data name="Error4" xml:space="preserve">
-    <value>We couldn't load this project because it was not created in this application.</value>
+  <data name="feedback.Text" xml:space="preserve">
+    <value>Send feedback</value>
   </data>
-  <data name="Feedback.Text" xml:space="preserve">
-    <value>  Send feedback</value>
+  <data name="HomeNavItem.Content" xml:space="preserve">
+    <value>Your sets</value>
   </data>
-  <data name="Go.Label" xml:space="preserve">
-    <value>Start</value>
+  <data name="IncorrectA" xml:space="preserve">
+    <value>Incorrect answers:</value>
   </data>
-  <data name="Good" xml:space="preserve">
-    <value> Corretly!</value>
-  </data>
-  <data name="InkProject" xml:space="preserve">
-    <value>Project</value>
-  </data>
-  <data name="ListText.Text" xml:space="preserve">
-    <value>Choose what you want to write a test:</value>
-  </data>
-  <data name="MAIN1" xml:space="preserve">
-    <value>Your Repeats</value>
-  </data>
-  <data name="MAIN2" xml:space="preserve">
-    <value>Check yourself!</value>
-  </data>
-  <data name="MAIN3" xml:space="preserve">
+  <data name="InkNavItem.Content" xml:space="preserve">
     <value>Ink</value>
   </data>
-  <data name="MAIN4" xml:space="preserve">
-    <value>Settings</value>
+  <data name="NextQuestion" xml:space="preserve">
+    <value>Next question</value>
   </data>
-  <data name="MAIN5" xml:space="preserve">
-    <value>Search</value>
+  <data name="NotifiCorrect" xml:space="preserve">
+    <value>Great! It's a correct answer!</value>
   </data>
-  <data name="NothingSearch" xml:space="preserve">
-    <value>Nothing found.</value>
+  <data name="Notifigreat" xml:space="preserve">
+    <value>You learn very quickly</value>
   </data>
-  <data name="notifi1" xml:space="preserve">
-    <value>Enter your answer here</value>
+  <data name="NotifiIncorrect" xml:space="preserve">
+    <value>Unfortunately it's not a correct answer</value>
   </data>
-  <data name="notifi2" xml:space="preserve">
-    <value>Check</value>
-  </data>
-  <data name="notifi3" xml:space="preserve">
-    <value>Awesome! That's the correct answer!</value>
-  </data>
-  <data name="notifi4" xml:space="preserve">
-    <value>Oops, that was not the correct answer.</value>
-  </data>
-  <data name="notifi5" xml:space="preserve">
-    <value>The correct answer is: </value>
-  </data>
-  <data name="NotificationSettings.Header" xml:space="preserve">
+  <data name="Pivot1.Header" xml:space="preserve">
     <value>Notifications</value>
   </data>
-  <data name="off" xml:space="preserve">
-    <value>Turned off</value>
+  <data name="Pivot2.Header" xml:space="preserve">
+    <value>About</value>
   </data>
-  <data name="ON" xml:space="preserve">
-    <value>Turned on</value>
-  </data>
-  <data name="Question" xml:space="preserve">
+  <data name="QuestBox.PlaceholderText" xml:space="preserve">
     <value>Question</value>
   </data>
-  <data name="R1.Content" xml:space="preserve">
-    <value>15 minutes</value>
-  </data>
-  <data name="R2.Content" xml:space="preserve">
-    <value>30 minutes</value>
-  </data>
-  <data name="R3.Content" xml:space="preserve">
-    <value>45 minutes</value>
-  </data>
-  <data name="R4.Content" xml:space="preserve">
-    <value>60 minutes</value>
-  </data>
-  <data name="Radio1.Content" xml:space="preserve">
-    <value>15 minutes</value>
-  </data>
-  <data name="Radio2.Content" xml:space="preserve">
-    <value>30 minutes</value>
-  </data>
-  <data name="Radio3.Content" xml:space="preserve">
-    <value>45 minutes</value>
-  </data>
-  <data name="Radio4.Content" xml:space="preserve">
-    <value>60 minutes</value>
-  </data>
   <data name="Rate.Text" xml:space="preserve">
-    <value>  Rate in the Store</value>
+    <value>Rate app</value>
   </data>
-  <data name="SAVE.Label" xml:space="preserve">
-    <value>Save</value>
+  <data name="ResetB.Content" xml:space="preserve">
+    <value>Reset notifications</value>
+  </data>
+  <data name="ResetOK" xml:space="preserve">
+    <value>Reset Successfully</value>
   </data>
   <data name="SaveButton.Label" xml:space="preserve">
     <value>Save</value>
@@ -282,32 +218,17 @@
   <data name="SearchBox.PlaceholderText" xml:space="preserve">
     <value>Search</value>
   </data>
-  <data name="SearchButton.Label" xml:space="preserve">
-    <value>Search</value>
+  <data name="SetNameBox.PlaceholderText" xml:space="preserve">
+    <value>Name of the set</value>
   </data>
-  <data name="SearchText.Text" xml:space="preserve">
-    <value>Select the project you want to search for:</value>
+  <data name="ShowCorrect" xml:space="preserve">
+    <value>Correct answer:</value>
   </data>
-  <data name="TEST1" xml:space="preserve">
-    <value>All answers: </value>
+  <data name="switch.Header" xml:space="preserve">
+    <value>Notifications</value>
   </data>
-  <data name="TEST2" xml:space="preserve">
-    <value>Correct Answers: </value>
-  </data>
-  <data name="TEST3" xml:space="preserve">
-    <value>Incorrect answers: </value>
-  </data>
-  <data name="TestButton.Content" xml:space="preserve">
-    <value>CHECK</value>
-  </data>
-  <data name="TextBox.PlaceholderText" xml:space="preserve">
-    <value>Enter the answer</value>
-  </data>
-  <data name="TextNext.Text" xml:space="preserve">
-    <value>Next  </value>
-  </data>
-  <data name="TextSetting.Text" xml:space="preserve">
-    <value>Choose what time you want notifications to appear:</value>
+  <data name="TakeTestButton.Text" xml:space="preserve">
+    <value>Test</value>
   </data>
   <data name="TIME1" xml:space="preserve">
     <value>Set the frequency of sending notifications (in minutes):</value>
@@ -318,52 +239,34 @@
   <data name="TIME3" xml:space="preserve">
     <value>Save</value>
   </data>
-  <data name="toff.Content" xml:space="preserve">
-    <value>Turn off notifications</value>
+  <data name="ToggleActive.OffContent" xml:space="preserve">
+    <value>Inactive</value>
   </data>
-  <data name="ToggleNotification.Header" xml:space="preserve">
-    <value>Notifications</value>
+  <data name="ToggleActive.OnContent" xml:space="preserve">
+    <value>Active</value>
   </data>
-  <data name="ton.Content" xml:space="preserve">
-    <value>Turn on notifications</value>
-  </data>
-  <data name="W1.Text" xml:space="preserve">
+  <data name="WelcomeRepeats.Text" xml:space="preserve">
     <value>Welcome to Repeats!</value>
   </data>
-  <data name="W10.Text" xml:space="preserve">
-    <value>In Settings you can control the most important functions of the application.</value>
+  <data name="YourAnswer" xml:space="preserve">
+    <value>Your answer:</value>
   </data>
-  <data name="W11.Text" xml:space="preserve">
-    <value>All ready, we can start!</value>
+  <data name="YourTime" xml:space="preserve">
+    <value>Time:</value>
   </data>
-  <data name="W2.Text" xml:space="preserve">
-    <value>The learning is pleasure now.</value>
+  <data name="contact.Text" xml:space="preserve">
+    <value>Contact:</value>
   </data>
-  <data name="W3.Text" xml:space="preserve">
-    <value>Your Repeats module will take you away from books!</value>
+  <data name="Follow.Content" xml:space="preserve">
+    <value>Follow Repeats on Twitter</value>
   </data>
-  <data name="W4.Text" xml:space="preserve">
-    <value>Add some questions and answers and set your app to ask you out from time to time. Thanks to this, while doing your favorite activities, you will also learn at the same time!</value>
+  <data name="FrequencyInfo1" xml:space="preserve">
+    <value>Notifications are sent every</value>
   </data>
-  <data name="W5.Text" xml:space="preserve">
-    <value>Check yourself module will prepare you for the test!</value>
+  <data name="Like.Content" xml:space="preserve">
+    <value>Like Repeats on Facebook</value>
   </data>
-  <data name="W6.Text" xml:space="preserve">
-    <value>Based on your questions and answers, the app creates a test that immediately displays the correct answer and counts the good and bad answers.</value>
-  </data>
-  <data name="W7.Text" xml:space="preserve">
-    <value>The Ink module will replace pen and paper!</value>
-  </data>
-  <data name="W8.Text" xml:space="preserve">
-    <value>You can create handwritten notes just like paper! You have a choice of colorful pens, colored pencils, ruler and more!</value>
-  </data>
-  <data name="W9.Text" xml:space="preserve">
-    <value>Search engine will help you quickly find the answer to your question!</value>
-  </data>
-  <data name="WB1.Content" xml:space="preserve">
-    <value>Go to the application</value>
-  </data>
-  <data name="WB2.Content" xml:space="preserve">
-    <value>Skip</value>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
   </data>
 </root>

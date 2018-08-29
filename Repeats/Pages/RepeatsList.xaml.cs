@@ -2,7 +2,6 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Data.Sqlite;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Animation;
 using System.Linq;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
@@ -32,6 +31,11 @@ namespace Repeats.Pages
 
             this.ViewModel = new MainPageDataModel();
             IsEdit = false;
+
+            if(ViewModel.Datas.Count == 0)
+            {
+                emptystack.Visibility = Visibility.Visible;
+            }
         }
 
         public MainPageDataModel ViewModel { get; set; }
@@ -63,36 +67,26 @@ namespace Repeats.Pages
             Frame.Navigate(typeof(AddEditRepeats), null, new SuppressNavigationTransitionInfo());
         }
 
-        private static async void ExceptionUps()
-        {
-            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
-            var strerr1 = loader.GetString("Error1");
-            var strerr2 = loader.GetString("Error2");
-            var strerr3 = loader.GetString("Error3");
-
-            ContentDialog ExcUPS = new ContentDialog
-            {
-                Title = strerr1,
-                Content = strerr2,
-                CloseButtonText = strerr3
-            };
-
-            ContentDialogResult result = await ExcUPS.ShowAsync();
-        }
-
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
             Button del = sender as Button;
             string gettag = del.Tag.ToString();
             string imgtag = gettag;
-            string IMGtag = imgtag = imgtag.Replace("R", "I");
+            string IMGtag = imgtag.Replace("R", "I");
+            string AVtag = imgtag.Replace("R", "A");
+
+            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var dialog1 = loader.GetString("deldialog1");
+            var dialog2 = loader.GetString("deldialog2");
+            var dialog3 = loader.GetString("deldialog3");
+            var dialog4 = loader.GetString("deldialog4");
 
             ContentDialog delete = new ContentDialog
             {
-                Title = "Czy na pewno chcesz usunąć ten zestaw?",
-                Content = "Usuwanie zestawów jest nieodwracalne.",
-                PrimaryButtonText = "Usuń",
-                CloseButtonText = "Anuluj"
+                Title = dialog1,
+                Content = dialog2,
+                PrimaryButtonText = dialog3,
+                CloseButtonText = dialog4
             };
 
             ContentDialogResult result = await delete.ShowAsync();
@@ -145,6 +139,19 @@ namespace Repeats.Pages
                 {
                     var item = await folder.GetFileAsync(results.ElementAt(i).Name);
                     await item.DeleteAsync();
+                }
+
+                var avatars = allimages.Where(x => x.Name.Contains(AVtag));
+
+                if(avatars.Count() != 0)
+                {
+                    var av = await folder.GetFileAsync(avatars.FirstOrDefault().Name);
+                    await av.DeleteAsync();
+                }       
+
+                if (ViewModel.Datas.Count == 0)
+                {
+                    emptystack.Visibility = Visibility.Visible;
                 }
             }
         }

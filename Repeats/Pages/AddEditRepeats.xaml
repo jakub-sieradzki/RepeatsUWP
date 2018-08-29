@@ -12,17 +12,17 @@
             <CommandBar.Content>
                 <Grid/>
             </CommandBar.Content>
-            <AppBarButton x:Uid="AddButton" Name="Add" Icon="Add" Label="" Click="NewItemClick"/>
-            <AppBarButton x:Uid="SaveButton" Name="Save" Icon="Save" Click="SaveClick" Label="Zapisz"/>
+            <AppBarButton x:Uid="AddButton" Name="Add" Icon="Add" Click="NewItemClick"/>
+            <AppBarButton x:Uid="SaveButton" Name="Save" Icon="Save" Click="SaveClick"/>
         </CommandBar>
     </Page.TopAppBar>
 
     <Grid Name="grid" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
         <GridView Name="GRID" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind EditBindModel.AddEditBinds}">
             <GridView.Header>
-                <RelativePanel Name="PicRel" Tag="">
-                    <PersonPicture Name="Pic" Margin="20,0,0,30" Width="100" Height="100"/>
-                    <TextBox Name="AskName" RelativePanel.RightOf="Pic" RelativePanel.AlignVerticalCenterWith="Pic" Margin="60,0,30,0" RelativePanel.AlignRightWithPanel="True" PlaceholderText="Nazwa zestawu"/>
+                <RelativePanel Name="PicRel" Tag="" Margin="20,0,0,30">
+                    <PersonPicture Name="Pic"  Width="100" Height="100"/>
+                    <TextBox x:Uid="SetNameBox" Name="AskName" RelativePanel.RightOf="Pic" RelativePanel.AlignVerticalCenterWith="Pic" Margin="60,0,30,0" RelativePanel.AlignRightWithPanel="True"/>
                     <Button Background="{x:Null}" Name="EditAvatar" Margin="0,0,0,0" FontSize="25" FontFamily="Segoe MDL2 Assets" Content="&#xE104;" RelativePanel.RightOf="Pic" Click="ChangeAvatar_Click" Padding="2">
                     </Button>
                 </RelativePanel>
@@ -44,8 +44,8 @@
                             <Rectangle Name="Rectangle" RelativePanel.AlignHorizontalCenterWithPanel="True" Width="5"/>
                             <Image Name="ImagePreview"  Tag="{Binding ImageTag}" Stretch="Uniform" Width="200" RelativePanel.AlignTopWithPanel="True" Margin="10,10,0,8" Visibility="{Binding visibility}" Source="{Binding GetImage}"/>
                             <Button Name="DeleteImage" Tag="{Binding GetImage}" Foreground="White" Click="DeleteImage_Click" FontFamily="Segoe MDL2 Assets" Content="&#xE106;" FontSize="18" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Margin="10,10,0,0" Visibility="{Binding visibility}"/>
-                            <TextBox Name="quest" PlaceholderText="Pytanie" Text="{Binding GetQuestion}" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="Rectangle" RelativePanel.Below="ImagePreview" Margin="10,0,0,0"/>
-                            <TextBox Name="answer" PlaceholderText="Odpowiedź" Text="{Binding GetAnswer}" RelativePanel.LeftOf="AddPhoto" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0" RelativePanel.Below="ImagePreview"/>
+                            <TextBox x:Uid="QuestBox" Name="quest" Text="{Binding GetQuestion}" RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="Rectangle" RelativePanel.Below="ImagePreview" Margin="10,0,0,0"/>
+                            <TextBox x:Uid="AnswerBox" Name="answer" Text="{Binding GetAnswer}" RelativePanel.LeftOf="AddPhoto" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0" RelativePanel.Below="ImagePreview"/>
                             <Button Name="AddPhoto" Tag="" Click="AddPhoto_Click" RelativePanel.AlignRightWithPanel="True" IsEnabled="{Binding enabled}" FontFamily="Segoe MDL2 Assets" Content="&#xE722;" FontSize="16" RelativePanel.AlignVerticalCenterWithPanel="True"/>
                         </RelativePanel>
                         <Button Name="SaveButton" Tag="{Binding ClickCount}" Content="&#xE107;" FontSize="16" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Right" Click="DeleteItemClick"/>

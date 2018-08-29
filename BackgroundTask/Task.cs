@@ -92,6 +92,9 @@ namespace BackgroundTask
 
             ToastVisual visual;
 
+            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var answerhere = loader.GetString("AnswerHere");
+
             if (image != "")
             {
                 StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
@@ -162,7 +165,7 @@ namespace BackgroundTask
                 {
                     new ToastTextBox("tbReply")
                     {
-                        PlaceholderContent = "Tutaj wpisz odpowiedź"
+                        PlaceholderContent = answerhere
                     }
                 },
 
@@ -171,6 +174,7 @@ namespace BackgroundTask
                     new ToastButton("Reply", answer)
                     {
                         ActivationType = ToastActivationType.Background,
+                        ImageUri = "ms-appx:///Assets/checking.png",
                         TextBoxId = "tbReply"
                     }
                 }
@@ -189,7 +193,7 @@ namespace BackgroundTask
             };
 
             var toast = new ToastNotification(toastContent.GetXml());
-            //toast.Tag = answer;
+            toast.Tag = "NextQuestion";
 
             ToastNotificationManager.CreateToastNotifier().Show(toast);
         }

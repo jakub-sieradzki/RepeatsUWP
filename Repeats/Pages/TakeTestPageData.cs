@@ -33,7 +33,7 @@ namespace Repeats.Pages
             {
                 if(Grab_Images.ElementAt(i) == "")
                 {
-                    this.test.Add(new TakeTestPageData() { Question = Grab_Test.ElementAt(i), Answer = Grab_Correct.ElementAt(i), Image = "" ,visibility = Visibility.Collapsed });
+                    this.test.Add(new TakeTestPageData() { Question = Grab_Test.ElementAt(i), Answer = Grab_Correct.ElementAt(i), Image = null, visibility = Visibility.Collapsed });
                 }
                 else
                 {

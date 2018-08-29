@@ -48,7 +48,7 @@ namespace Repeats
 
                 for(int j = 0; j < All; j++)
                 {
-                    this.search.Add(new SearchBind() { Question = "Q: " + Questions.ElementAt(j), Answer = "A: " + Answers.ElementAt(j), SetName = Oname.ElementAt(i), SetTable = name.ElementAt(i) });
+                    this.search.Add(new SearchBind() { Question = Questions.ElementAt(j), Answer = Answers.ElementAt(j), SetName = Oname.ElementAt(i), SetTable = name.ElementAt(i) });
                 }
             }
         }
@@ -71,6 +71,8 @@ namespace Repeats
             FRAME = ContentFrame;
 
             CreateFolder();
+
+            
 
             ContentFrame.Navigate(typeof(RepeatsList), null, new SuppressNavigationTransitionInfo());
         }
@@ -216,6 +218,10 @@ namespace Repeats
                 //Set the ItemsSource to be your filtered dataset
                 sender.ItemsSource = BindModel.Search.Where(x=>x.Question.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase) || x.Answer.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
             }
+            else
+            {
+                sender.Text = "";
+            }
         }
 
 
@@ -231,10 +237,12 @@ namespace Repeats
             if (args.ChosenSuggestion != null)
             {
                 // User selected an item from the suggestion list, take an action on it here.
+                sender.Text = "";
             }
             else
             {
                 // Use args.QueryText to determine what to do.
+                sender.ItemsSource = BindModel.Search.Where(x => x.Question.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase) || x.Answer.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
             }
         }
     }

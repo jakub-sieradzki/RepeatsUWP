@@ -224,6 +224,22 @@ namespace Repeats
 
                 Frame rootFrame = Window.Current.Content as Frame;
 
+                if (rootFrame == null)
+                {
+                    // Create a Frame to act as the navigation context and navigate to the first page
+                    rootFrame = new Frame();
+
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+
+                    if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                    {
+                        //TODO: Load state from previously suspended application
+                    }
+
+                    // Place the frame in the current Window
+                    Window.Current.Content = rootFrame;
+                }
+
                 var toastActivationArgs = e as ToastNotificationActivatedEventArgs;
 
                 QueryString args = QueryString.Parse(toastActivationArgs.Argument);
@@ -241,13 +257,21 @@ namespace Repeats
         {
             var deferral = args.TaskInstance.GetDeferral();
 
+            var loader2 = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var respond1 = loader2.GetString("NotifiCorrect");
+            var respond2 = loader2.GetString("Notifigreat");
+            var respond3 = loader2.GetString("Cancel");
+            var respond4 = loader2.GetString("NextQuestion");
+            var respond5 = loader2.GetString("NotifiIncorrect");
+            var respond6 = loader2.GetString("ShowCorrect");
+
             switch (args.TaskInstance.Task.Name)
             {
                 case "ToastBackgroundTask":
                     var details = args.TaskInstance.TriggerDetails as ToastNotificationActionTriggerDetail;
                     if (details != null)
                     {
-                        string arguments = details.Argument;
+                        var arguments = details.Argument;
                         var userInput = details.UserInput;
                         var input = userInput.Values;
 
@@ -259,6 +283,17 @@ namespace Repeats
                         {
 
                         }
+                        else if(arguments == null)
+                        {
+                            Frame rootFrame = Window.Current.Content as Frame;
+
+                            rootFrame.Navigate(typeof(MainPage));
+
+                            if (rootFrame.BackStack.Count == 0)
+                                rootFrame.BackStack.Add(new PageStackEntry(typeof(MainPage), null, null));
+
+                            Window.Current.Activate();
+                        }
                         else
                         {
                             if (input.Contains(arguments))
@@ -269,21 +304,16 @@ namespace Repeats
                                     BindingGeneric = new ToastBindingGeneric()
                                     {
                                         Children =
-                                    {
-                                        new AdaptiveText()
                                         {
-                                            Text = "Brawo! To poprawna odpowiedź"
-                                        },
+                                            new AdaptiveText()
+                                            {
+                                                Text = respond1
+                                            },
 
-                                        new AdaptiveText()
-                                        {
-                                            Text = "Szybko się uczysz 😉"
-                                        },
-                                    },
-
-                                        Attribution = new ToastGenericAttributionText()
-                                        {
-                                            Text = "Repeats (Beta)"
+                                            new AdaptiveText()
+                                            {
+                                                Text = respond2 + " " + "😉"
+                                            },
                                         }
                                     }
                                 };
@@ -293,12 +323,12 @@ namespace Repeats
 
                                     Buttons =
                                     {
-                                        new ToastButton("Odrzuć", "cancel")
+                                        new ToastButton(respond3, "cancel")
                                         {
                                             ActivationType = ToastActivationType.Background,
                                         },
 
-                                        new ToastButton("Kolejne pytanie", "next")
+                                        new ToastButton(respond4, "next")
                                         {
                                             ActivationType = ToastActivationType.Background,
 
@@ -340,19 +370,14 @@ namespace Repeats
                                     {
                                         new AdaptiveText()
                                         {
-                                            Text = "Niestety, to nie była poprawna odpowiedź"
+                                            Text = respond5
                                         },
 
                                         new AdaptiveText()
                                         {
-                                            Text = "Prawidłowa odpowiedź to: " + arguments
+                                            Text = respond6 + " " + arguments
                                         },
                                     },
-
-                                        Attribution = new ToastGenericAttributionText()
-                                        {
-                                            Text = "Repeats (Beta)"
-                                        }
                                     }
                                 };
 
@@ -361,12 +386,12 @@ namespace Repeats
 
                                     Buttons =
                                     {
-                                        new ToastButton("Odrzuć", "cancel")
+                                        new ToastButton(respond3, "cancel")
                                         {
                                             ActivationType = ToastActivationType.Background,
                                         },
 
-                                        new ToastButton("Kolejne pytanie", "next")
+                                        new ToastButton(respond4, "next")
                                         {
                                             ActivationType = ToastActivationType.Background,
                                             ActivationOptions = new ToastActivationOptions()
@@ -399,26 +424,6 @@ namespace Repeats
                         }
                     }
                     break;
-
-                //case "RepeatsNotificationTask":
-                //    ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-
-                //    object value = localSettings.Values["Frequency"];
-                //    int freq = Convert.ToInt32(value);
-
-                //    int c = 1;
-                //    //for (int i = 0; i < c; i++)
-                //    //{
-                //    //    notifi();
-                //    //    c++;
-                //    //    Thread.Sleep(freq);
-                //    //}
-
-                //    System.Timers.Timer timer = new System.Timers.Timer(10000);
-                //    timer.Elapsed += nNotifi;
-                //    timer.AutoReset = true;
-                //    timer.Enabled = true;
-                //    break;
             }
 
             deferral.Complete();
@@ -429,6 +434,9 @@ namespace Repeats
             IList<string> GetNames = GrabTitles("TitleTable", "TableName");
             IList<string> GetOfficial = GrabTitles("TitleTable", "title");
             IList<string> GetAvatars = GrabTitles("TitleTable", "Avatar");
+
+            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var answerhere = loader.GetString("AnswerHere");
 
             int NameCount = GetNames.Count;
 
@@ -486,10 +494,8 @@ namespace Repeats
             {
                 StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
                 StorageFile img = await folder.GetFileAsync(image);
-                StorageFile av = await folder.GetFileAsync(avatar);
 
                 string path = img.Path;
-                string pathAv = av.Path;
 
                 visual = new ToastVisual()
                 {
@@ -514,13 +520,8 @@ namespace Repeats
 
                         AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Source = pathAv,
+                            Source = avatar,
                             HintCrop = ToastGenericAppLogoCrop.Circle
-                        },
-
-                        Attribution = new ToastGenericAttributionText()
-                        {
-                            Text = "Repeats (Beta)"
                         }
                     }
                 };
@@ -543,16 +544,14 @@ namespace Repeats
                                 Text = question
                             },
                         },
-
-                        Attribution = new ToastGenericAttributionText()
+                        AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Text = "Repeats (Beta)"
+                            Source = avatar,
+                            HintCrop = ToastGenericAppLogoCrop.Circle
                         }
                     }
                 };
             }
-
-
 
             ToastActionsCustom actions = new ToastActionsCustom()
             {
@@ -560,7 +559,7 @@ namespace Repeats
                 {
                     new ToastTextBox("tbReply")
                     {
-                        PlaceholderContent = "Tutaj wpisz odpowiedź"
+                        PlaceholderContent = answerhere
                     }
                 },
 
@@ -569,6 +568,7 @@ namespace Repeats
                     new ToastButton("Reply", answer)
                     {
                         ActivationType = ToastActivationType.Background,
+                        ImageUri = "ms-appx:///Assets/checking.png",
                         TextBoxId = "tbReply"
                     }
                 }

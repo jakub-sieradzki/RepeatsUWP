@@ -117,7 +117,7 @@ namespace Repeats.Pages
 
                     if(IMAGE == "")
                     {
-                        EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, GetQuestion = QUESTION, GetAnswer = ANSWER, GetImage = IMAGE, visibility = Visibility.Collapsed, enabled = true, ImageTag = "" });
+                        EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, GetQuestion = QUESTION, GetAnswer = ANSWER, GetImage = null, visibility = Visibility.Collapsed, enabled = true, ImageTag = "" });
                     }
                     else
                     {
@@ -391,37 +391,40 @@ namespace Repeats.Pages
 
         private async void DeleteItemClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            string strtag = button.Tag.ToString();
-
-            int count = Int32.Parse(strtag);
-
-            Grid find = button.Parent as Grid;
-
-            var find2 = find.FindName("REL") as RelativePanel;
-
-            var q = find2.FindName("quest") as TextBox;
-            var a = find2.FindName("answer") as TextBox;
-            Button btn1 = find2.FindName("AddPhoto") as Button;
-            Button btn2 = find2.FindName("DeleteImage") as Button;
-            Image img = find2.FindName("ImagePreview") as Image;
-
-            if (img.Visibility == Visibility.Visible)
+            if (EditBindModel.AddEditBinds.Count != 1)
             {
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
-                var file = await folder.GetFileAsync(btn2.Tag.ToString());
-                await file.DeleteAsync();
-            }
-            q.Text = "";
-            a.Text = "";
-            btn1.Tag = "";
-            btn2.Tag = "";
-            btn1.IsEnabled = true;
-            btn2.Visibility = Visibility.Collapsed;
-            img.Source = null;
-            img.Visibility = Visibility.Collapsed;
+                var button = sender as Button;
+                string strtag = button.Tag.ToString();
 
-            EditBindModel.AddEditBinds.Remove(new AddEditBind() { ClickCount = count });
+                int count = Int32.Parse(strtag);
+
+                Grid find = button.Parent as Grid;
+
+                var find2 = find.FindName("REL") as RelativePanel;
+
+                var q = find2.FindName("quest") as TextBox;
+                var a = find2.FindName("answer") as TextBox;
+                Button btn1 = find2.FindName("AddPhoto") as Button;
+                Button btn2 = find2.FindName("DeleteImage") as Button;
+                Image img = find2.FindName("ImagePreview") as Image;
+
+                if (img.Visibility == Visibility.Visible)
+                {
+                    StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
+                    var file = await folder.GetFileAsync(btn2.Tag.ToString());
+                    await file.DeleteAsync();
+                }
+                q.Text = "";
+                a.Text = "";
+                btn1.Tag = "";
+                btn2.Tag = "";
+                btn1.IsEnabled = true;
+                btn2.Visibility = Visibility.Collapsed;
+                img.Source = null;
+                img.Visibility = Visibility.Collapsed;
+
+                EditBindModel.AddEditBinds.Remove(new AddEditBind() { ClickCount = count });
+            }
         }
     }
 }
