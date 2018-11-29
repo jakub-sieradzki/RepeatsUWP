@@ -67,6 +67,45 @@ namespace Repeats
                 GetIntTime = GetIntTime * 60000;
                 ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
                 localSettings.Values["Frequency"] = GetIntTime;
+
+                var taskRegistered = false;
+                var exampleTaskName = "RepeatsNotificationTask";
+
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == exampleTaskName)
+                    {
+                        taskRegistered = true;
+                        break;
+                    }
+                }
+
+                if (taskRegistered == false)
+                {
+                    var builder = new BackgroundTaskBuilder();
+
+                    ApplicationTrigger trigger = new ApplicationTrigger();
+
+                    builder.Name = exampleTaskName;
+                    builder.SetTrigger(trigger);
+                    builder.TaskEntryPoint = "BackgroundTask.Task";
+                    BackgroundTaskRegistration task = builder.Register();
+
+                    var result = await trigger.RequestAsync();
+                }
+
+                const string taskName = "ToastBackgroundTask";
+
+                if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
+                    return;
+
+                BackgroundTaskBuilder build = new BackgroundTaskBuilder()
+                {
+                    Name = taskName
+                };
+
+                build.SetTrigger(new ToastNotificationActionTrigger());
+                BackgroundTaskRegistration registration = build.Register();
             }
             else
             {

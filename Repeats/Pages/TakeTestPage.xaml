@@ -33,7 +33,7 @@
                 <DataTemplate x:DataType="local:TakeTestPageData">
                     <RelativePanel>
                         <Image Name="ImageTest" Stretch="Uniform" Width="250" Margin="10,10,0,0" RelativePanel.AlignTopWithPanel="True" Visibility="{Binding visibility}" Source="{Binding Image}"/>
-                        <TextBlock Text="{Binding Question}" Foreground="White" Name="QuestionPlace" Margin="10,6,0,10" RelativePanel.Below="ImageTest"/>
+                        <TextBlock Text="{Binding Question}" Name="QuestionPlace" Margin="10,6,0,10" RelativePanel.Below="ImageTest"/>
                         <TextBox PlaceholderText="Twoja odpowiedź" Name="AnswerPlace" RelativePanel.Below="QuestionPlace" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="10,0,10,0"/>
                     </RelativePanel>
                 </DataTemplate>

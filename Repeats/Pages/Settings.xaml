@@ -44,10 +44,10 @@
                     </ListView>
                 </StackPanel>
             </PivotItem>
-            <PivotItem x:Uid="Pivot2" Header="">
-                <StackPanel>
-                    <Image Source="ms-appx:///Assets/SplashScreen.scale-400.png" Width="200"/>
-                    <TextBlock Name="InfoBlock" Text="Wersja 2.0.0.0&#x0a;&#x0a;Developer: Jakub Sieradzki" HorizontalAlignment="Center" TextAlignment="Center"/>
+            <PivotItem x:Uid="Pivot2" Header="" >
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,48">
+                    <Image Name="Logo" Width="200"/>
+                    <TextBlock Name="InfoBlock" Text="" HorizontalAlignment="Center" TextAlignment="Center" Margin="0,10,0,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                         <Button Name="Rate" Click="RATE" Margin="0,0,10,0" Style="{StaticResource ButtonRevealStyle}" Background="{x:Null}">
                             <StackPanel Orientation="Horizontal">
@@ -67,7 +67,7 @@
                         <HyperlinkButton x:Uid="Follow" Content="Obserwuj Repeats na Twitterze" NavigateUri="https://twitter.com/repeatsapp" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                        <TextBlock x:Uid="contact" Text="Kontakt:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBlock x:Uid="contact" Text="" VerticalAlignment="Center" Margin="0,0,5,0"/>
                         <HyperlinkButton Content="rootekstudio@outlook.com" NavigateUri="mailto:rootekstudio@outlook.com"/>
                     </StackPanel>
 

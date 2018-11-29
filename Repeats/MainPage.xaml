@@ -49,14 +49,14 @@
             </NavigationView.AutoSuggestBox>
 
             <RelativePanel>
-                <UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
+                <!--<UI:AdControl Name="add" ApplicationId="9nxlcwt9dqf2"
                     AdUnitId="355896"
                     Height="50"
                     Width="300"
                     RelativePanel.AlignBottomWithPanel="True"
-                    RelativePanel.AlignHorizontalCenterWithPanel="True"/>
+                    RelativePanel.AlignHorizontalCenterWithPanel="True"/>-->
 
-                <Frame x:Name="ContentFrame" Margin="0,0,0,50" RelativePanel.Above="add" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True">
+                <Frame x:Name="ContentFrame" Margin="0,0,0,50" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True">
                     <Frame.ContentTransitions>
                         <TransitionCollection>
                             <NavigationThemeTransition/>

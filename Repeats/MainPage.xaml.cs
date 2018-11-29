@@ -236,12 +236,11 @@ namespace Repeats
         {
             if (args.ChosenSuggestion != null)
             {
-                // User selected an item from the suggestion list, take an action on it here.
                 sender.Text = "";
             }
             else
             {
-                // Use args.QueryText to determine what to do.
+                this.BindModel = new SearchBindModel();
                 sender.ItemsSource = BindModel.Search.Where(x => x.Question.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase) || x.Answer.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
             }
         }

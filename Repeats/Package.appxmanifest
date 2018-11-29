@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5" IgnorableNamespaces="uap mp">
-  <Identity Name="51954JakubSieradzki.Repeats" Publisher="CN=BEA1AE76-9601-47BB-A245-5E63ADF35E13" Version="2.0.0.0" />
+  <Identity Name="51954JakubSieradzki.Repeats" Publisher="CN=BEA1AE76-9601-47BB-A245-5E63ADF35E13" Version="2.0.1.0" />
   <mp:PhoneIdentity PhoneProductId="0c1a1243-dbef-49c0-b47d-8f361c98b9e0" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Repeats</DisplayName>

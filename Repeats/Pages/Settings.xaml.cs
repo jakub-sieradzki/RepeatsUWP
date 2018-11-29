@@ -11,6 +11,7 @@ using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -52,13 +53,30 @@ namespace Repeats.Pages
         public static int time;
         public static bool TimeOnly;
         public string language;
+        public BitmapImage bitmaplight;
+        public BitmapImage bitmapdark;
 
         public Settings()
         {
             this.InitializeComponent();
 
+            BitmapImage bitmapdark = new BitmapImage();
+            bitmapdark.UriSource = new Uri("ms-appx:///Assets/Repeats-logo-extended-dark.png");
+
+            BitmapImage bitmaplight = new BitmapImage();
+            bitmaplight.UriSource = new Uri("ms-appx:///Assets/Repeats-logo-extended.png");
+
             var ci = CultureInfo.InstalledUICulture;
             language = ci.Name;
+
+            if(ActualTheme == ElementTheme.Light)
+            {
+                Logo.Source = bitmapdark;
+            }
+            else if(ActualTheme == ElementTheme.Dark)
+            {
+                Logo.Source = bitmaplight;
+            }
 
             var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
             var vs = loader.GetString("Version");

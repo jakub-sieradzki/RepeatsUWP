@@ -266,4 +266,7 @@ Dodaj nowy zestaw klikając na + w prawym górnym rogu.</value>
   <data name="Version" xml:space="preserve">
     <value>Wersja</value>
   </data>
+  <data name="contact.Text" xml:space="preserve">
+    <value>Kontakt:</value>
+  </data>
 </root>
