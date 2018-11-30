@@ -21,7 +21,7 @@
         <GridView Name="GRID" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind EditBindModel.AddEditBinds}">
             <GridView.Header>
                 <RelativePanel Name="PicRel" Tag="" Margin="20,0,0,30">
-                    <PersonPicture Name="Pic"  Width="100" Height="100"/>
+                    <PersonPicture Name="Pic" Tag="" Width="100" Height="100"/>
                     <TextBox x:Uid="SetNameBox" Name="AskName" RelativePanel.RightOf="Pic" RelativePanel.AlignVerticalCenterWith="Pic" Margin="60,0,30,0" RelativePanel.AlignRightWithPanel="True"/>
                     <Button Background="{x:Null}" Name="EditAvatar" Margin="0,0,0,0" FontSize="25" FontFamily="Segoe MDL2 Assets" Content="&#xE104;" RelativePanel.RightOf="Pic" Click="ChangeAvatar_Click" Padding="2">
                     </Button>

@@ -37,7 +37,6 @@ namespace Repeats.Pages
         }
     }
 
-
     public class AddEditBind
     {
         public int ClickCount { get; set; }
@@ -86,6 +85,7 @@ namespace Repeats.Pages
         public StorageFile AvatarFile;
         public bool AvatarChanged;
         public BitmapImage BITMAPImage;
+        public string ListAV;
 
         public AddEditRepeats()
         {
@@ -106,6 +106,12 @@ namespace Repeats.Pages
             Count = 0;
 
             edit = RepeatsList.IsEdit;
+
+            BITMAPImage = new BitmapImage();
+            BITMAPImage.UriSource = new Uri("ms-appx:///Assets/new logo2.png");
+
+
+            Pic.ProfilePicture = BITMAPImage;
 
             if (edit)
             {
@@ -182,9 +188,6 @@ namespace Repeats.Pages
                 });
 
                 Count++;
-
-                BITMAPImage = new BitmapImage();
-                BITMAPImage.UriSource = new Uri("ms-appx:///Assets/new logo2.png");
 
                 Pic.ProfilePicture = BITMAPImage;
                 PicRel.Tag = "ms-appx:///Assets/new logo2.png";
@@ -263,7 +266,7 @@ namespace Repeats.Pages
             }
 
             string TA = Pic.Tag.ToString();
-            string TAGPIC = "";
+            string TAGPIC = Pic.ProfilePicture.ToString();
 
             if (TA == "T")
             {
@@ -283,14 +286,13 @@ namespace Repeats.Pages
                 }
             }
 
-            DataAccess.SaveToTitleTable(getname, date, realDate, TAGPIC);
-
-
             if (edit)
             {
                 DataAccess.DropTable(tablename);
                 DataAccess.DelFromTitleTable(tablename);
             }
+
+            DataAccess.SaveToTitleTable(getname, date, realDate, TAGPIC);
 
             bool taskRegistered = false;
             var exampleTaskName = "RepeatsNotificationTask";

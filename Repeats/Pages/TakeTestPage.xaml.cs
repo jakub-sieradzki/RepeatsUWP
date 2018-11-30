@@ -42,7 +42,7 @@ namespace Repeats.Pages
         {
             stopwatch.Stop();
 
-            StopwatchResults = stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:ff");
+            StopwatchResults = stopwatch.Elapsed.ToString(@"hh\:mm\:ss\.ff");
 
             var findalltext = GridTakeTest.FindDescendants<TextBox>();
             var gridviewtxt = findalltext.ToList();

@@ -171,7 +171,6 @@ namespace Repeats
                         Debug.WriteLine("Request to enable startup, result = {0}", newState);
                         if (newState == StartupTaskState.DisabledByUser)
                         {
-
                             ContentDialog warning1 = new ContentDialog
                             {
                                 Title = dialog1,
