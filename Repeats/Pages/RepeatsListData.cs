@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using DataAccessLibrary;
 
 namespace Repeats.Pages
 {
@@ -41,21 +42,15 @@ namespace Repeats.Pages
         {
             int count;
 
-            List<string> Grab_Titles = GetFromDB.GrabData("TitleTable", "title");
-            List<string> Grab_Dates = GetFromDB.GrabData("TitleTable", "CreateDate");
-            List<string> Grab_Names = GetFromDB.GrabData("TitleTable", "TableName");
-            List<string> Grab_Enabled = GetFromDB.GrabData("TitleTable", "IsEnabled");
-            List<string> Grab_Avatars = GetFromDB.GrabData("TitleTable", "Avatar");
+            List<string> Grab_Titles = DataAccess.GrabData("TitleTable", "title");
+            List<string> Grab_Dates = DataAccess.GrabData("TitleTable", "CreateDate");
+            List<string> Grab_Names = DataAccess.GrabData("TitleTable", "TableName");
+            List<string> Grab_Enabled = DataAccess.GrabData("TitleTable", "IsEnabled");
+            List<string> Grab_Avatars = DataAccess.GrabData("TitleTable", "Avatar");
             count = Grab_Titles.Count;
 
             for (int i = 0; i < count; i++)
             {
-                //if (Grab_Avatars.ElementAt(i) == "")
-                //{
-                    //this.datas.Add(new RepeatsListData() { ProjectName = Grab_Titles.ElementAt(i), ProjectDate = Grab_Dates.ElementAt(i), TableName = Grab_Names.ElementAt(i), IsENABLED = Grab_Enabled.ElementAt(i), avatar = "ms-appx:///Assets/new logo2.png" });
-                //}
-                //else
-                //{
                 this.datas.Add(new RepeatsListData()
                 {
                     ProjectName = Grab_Titles.ElementAt(i),
@@ -65,7 +60,6 @@ namespace Repeats.Pages
                     avatar = Grab_Avatars.ElementAt(i),
                     avatarTag = Grab_Avatars.ElementAt(i)
                 });
-                //}
             }
         }
     }

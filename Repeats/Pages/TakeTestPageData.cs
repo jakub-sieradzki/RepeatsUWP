@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Windows.Storage;
 using Windows.UI.Xaml;
+using DataAccessLibrary;
 
 namespace Repeats.Pages
 {
@@ -23,9 +22,9 @@ namespace Repeats.Pages
         {
             string NAME = RepeatsList.name;
 
-            List<string> Grab_Test = GetFromDB.GrabData(NAME, "question");
-            List<string> Grab_Correct = GetFromDB.GrabData(NAME, "answer");
-            List<string> Grab_Images = GetFromDB.GrabData(NAME, "image");
+            List<string> Grab_Test = DataAccess.GrabData(NAME, "question");
+            List<string> Grab_Correct = DataAccess.GrabData(NAME, "answer");
+            List<string> Grab_Images = DataAccess.GrabData(NAME, "image");
 
             int count = Grab_Test.Count;
 

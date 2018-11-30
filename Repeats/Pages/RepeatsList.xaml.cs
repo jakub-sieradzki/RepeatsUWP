@@ -1,11 +1,11 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Microsoft.Data.Sqlite;
 using Windows.UI.Xaml.Media.Animation;
 using System.Linq;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using Windows.Storage;
+using DataAccessLibrary;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -95,40 +95,8 @@ namespace Repeats.Pages
             {
                 ViewModel.Datas.Remove(new RepeatsListData() { TableName = gettag });
 
-                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                {
-                    db.Open();
-                    String tableCommand = "DROP TABLE " + gettag;
-                    SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-                    try
-                    {
-                        createTable.ExecuteReader();
-                    }
-                    catch (SqliteException)
-                    {
-
-                    }
-                }
-
-                using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                {
-                    db.Open();
-                    SqliteCommand insertCommand = new SqliteCommand();
-                    insertCommand.Connection = db;
-
-                    insertCommand.CommandText = "DELETE FROM TitleTable WHERE TableName=" + "\"" + gettag + "\"";
-                    try
-                    {
-                        insertCommand.ExecuteReader();
-                    }
-                    catch (SqliteException)
-                    {
-                        //Handle error
-                        return;
-                    }
-
-                    db.Close();
-                }
+                DataAccess.DropTable(gettag);
+                DataAccess.DelFromTitleTable(gettag);
 
                 StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
                 var allimages = await folder.GetFilesAsync();

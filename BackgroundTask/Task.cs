@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.QueryStringDotNET;
+﻿using Microsoft.QueryStringDotNET;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
@@ -8,6 +7,7 @@ using System.Threading;
 using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.UI.Notifications;
+using DataAccessLibrary;
 
 namespace BackgroundTask
 {
@@ -36,9 +36,9 @@ namespace BackgroundTask
 
         async void notifi()
         {
-            IList<string> GetNames = GrabTitles("TitleTable", "TableName");
-            IList<string> GetOfficial = GrabTitles("TitleTable", "title");
-            IList<string> GetAvatars = GrabTitles("TitleTable", "Avatar");
+            IList<string> GetNames = DataAccess.GrabTitles("TitleTable", "TableName");
+            IList<string> GetOfficial = DataAccess.GrabTitles("TitleTable", "title");
+            IList<string> GetAvatars = DataAccess.GrabTitles("TitleTable", "Avatar");
 
             int NameCount = GetNames.Count;
 
@@ -75,9 +75,9 @@ namespace BackgroundTask
             string ofname = GetOfficial[r];
             string avatar = GetAvatars[r];
 
-            IList<string> qu = GrabData(name, "question");
-            IList<string> an = GrabData(name, "answer");
-            IList<string> im = GrabData(name, "image");
+            IList<string> qu = DataAccess.GrabData(name, "question");
+            IList<string> an = DataAccess.GrabData(name, "answer");
+            IList<string> im = DataAccess.GrabData(name, "image");
 
             int ItemsCount = qu.Count;
 
@@ -196,57 +196,6 @@ namespace BackgroundTask
             toast.Tag = "NextQuestion";
 
             ToastNotificationManager.CreateToastNotifier().Show(toast);
-        }
-
-        public static IList<string> GrabData(string FROM, string WHAT)
-        {
-            IList<string> data = new List<string>();
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM, db);
-                SqliteDataReader query;
-                //try
-                //{
-                query = selectCommand.ExecuteReader();
-                //}
-                //catch (SqliteException)
-                //{
-                //return data;
-                //}
-                while (query.Read())
-                {
-                    data.Add(query.GetString(0));
-                }
-                db.Close();
-            }
-            return data;
-        }
-
-        public static IList<string> GrabTitles(string FROM, string WHAT)
-        {
-            IList<string> titles = new List<string>();
-
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                SqliteCommand selectCommand = new SqliteCommand("SELECT " + WHAT + " from " + FROM + " WHERE " + "IsEnabled='true'", db);
-                SqliteDataReader query;
-                //try
-                //{
-                query = selectCommand.ExecuteReader();
-                //}
-                //catch (SqliteException)
-                //{
-                //return data;
-                //}
-                while (query.Read())
-                {
-                    titles.Add(query.GetString(0));
-                }
-                db.Close();
-            }
-            return titles;
         }
     }
 }

@@ -1,19 +1,17 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.Toolkit.Uwp.UI.Extensions;
+﻿using Microsoft.Toolkit.Uwp.UI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.ApplicationModel.Background;
-using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
+using DataAccessLibrary;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -39,7 +37,7 @@ namespace Repeats.Pages
         }
     }
 
-    
+
     public class AddEditBind
     {
         public int ClickCount { get; set; }
@@ -85,6 +83,9 @@ namespace Repeats.Pages
         public string date;
         public string realDate;
         public string ImageName;
+        public StorageFile AvatarFile;
+        public bool AvatarChanged;
+        public BitmapImage BITMAPImage;
 
         public AddEditRepeats()
         {
@@ -95,6 +96,8 @@ namespace Repeats.Pages
             this.EditBindModel = new AddEditBindModel();
             this.StreamBindModel = new StreamBindModel();
 
+            AvatarChanged = false;
+
             date = DateTime.Now.ToString("yyyyMMddHHmmss");
             date = "R" + date;
 
@@ -104,7 +107,7 @@ namespace Repeats.Pages
 
             edit = RepeatsList.IsEdit;
 
-            if(edit)
+            if (edit)
             {
                 ConnectedAnimation imageAnimation =
                     ConnectedAnimationService.GetForCurrentView().GetAnimation("image");
@@ -125,25 +128,43 @@ namespace Repeats.Pages
 
                 PicRel.Tag = RepeatsList.AV;
 
-                List<string> questions = GetFromDB.GrabData(tablename, "question");
-                List<string> answers = GetFromDB.GrabData(tablename, "answer");
-                List<string> images = GetFromDB.GrabData(tablename, "image");
+                List<string> questions = DataAccess.GrabData(tablename, "question");
+                List<string> answers = DataAccess.GrabData(tablename, "answer");
+                List<string> images = DataAccess.GrabData(tablename, "image");
 
                 int count = questions.Count;
 
-                for(int i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     string QUESTION = questions.ElementAt(i);
                     string ANSWER = answers.ElementAt(i);
                     string IMAGE = images.ElementAt(i);
 
-                    if(IMAGE == "")
+                    if (IMAGE == "")
                     {
-                        EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, GetQuestion = QUESTION, GetAnswer = ANSWER, GetImage = "", visibility = Visibility.Collapsed, enabled = true, ImageTag = "" });
+                        EditBindModel.AddEditBinds.Add(new AddEditBind()
+                        {
+                            ClickCount = Count,
+                            GetQuestion = QUESTION,
+                            GetAnswer = ANSWER,
+                            GetImage = "",
+                            visibility = Visibility.Collapsed,
+                            enabled = true,
+                            ImageTag = ""
+                        });
                     }
                     else
                     {
-                        EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, GetQuestion = QUESTION, GetAnswer = ANSWER, GetImage = RepeatsList.folder.Path + "\\" + IMAGE, visibility = Visibility.Visible, enabled = false, ImageTag = IMAGE});
+                        EditBindModel.AddEditBinds.Add(new AddEditBind()
+                        {
+                            ClickCount = Count,
+                            GetQuestion = QUESTION,
+                            GetAnswer = ANSWER,
+                            GetImage = RepeatsList.folder.Path + "\\" + IMAGE,
+                            visibility = Visibility.Visible,
+                            enabled = false,
+                            ImageTag = IMAGE
+                        });
                     }
 
                     Count++;
@@ -151,29 +172,45 @@ namespace Repeats.Pages
             }
             else
             {
-                EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, visibility = Visibility.Collapsed, enabled = true, ImageTag = "", GetImage = "" });
+                EditBindModel.AddEditBinds.Add(new AddEditBind()
+                {
+                    ClickCount = Count,
+                    visibility = Visibility.Collapsed,
+                    enabled = true,
+                    ImageTag = "",
+                    GetImage = ""
+                });
+
                 Count++;
 
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.UriSource = new Uri("ms-appx:///Assets/new logo2.png");
+                BITMAPImage = new BitmapImage();
+                BITMAPImage.UriSource = new Uri("ms-appx:///Assets/new logo2.png");
 
-                Pic.ProfilePicture = bitmapImage;
+                Pic.ProfilePicture = BITMAPImage;
                 PicRel.Tag = "ms-appx:///Assets/new logo2.png";
             }
         }
 
         public AddEditBindModel EditBindModel { get; set; }
-
         public StreamBindModel StreamBindModel { get; set; }
 
         private void NewItemClick(object sender, RoutedEventArgs e)
         {
-            EditBindModel.AddEditBinds.Add(new AddEditBind() { ClickCount = Count, enabled = true, visibility = Visibility.Collapsed, ImageTag = "" });
+            EditBindModel.AddEditBinds.Add(new AddEditBind()
+            {
+                ClickCount = Count,
+                enabled = true,
+                visibility = Visibility.Collapsed,
+                ImageTag = ""
+            });
+
             Count++;
         }
 
         private async void SaveClick(object sender, RoutedEventArgs e)
         {
+            StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
+
             Ring.Visibility = Visibility.Visible;
             Ring.IsActive = true;
 
@@ -183,132 +220,76 @@ namespace Repeats.Pages
 
             string getname = AskName.Text;
 
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
+            DataAccess.CreateTable(date);
+
+            string Date = date.Replace("R", "I");
+            int fileindex = 0;
+            for (int i = 1; i <= relcount; i++)
             {
-                db.Open();
+                RelativePanel panel = listrel[i];
+                string tag = "";
+                TextBox questbox = panel.FindChildByName("quest") as TextBox;
+                TextBox answerbox = panel.FindChildByName("answer") as TextBox;
+                Image photoImage = panel.FindChildByName("ImagePreview") as Image;
+                Button x = panel.FindChildByName("DeleteImage") as Button;
 
-                #region Create table
-                String tableCommand = "CREATE TABLE IF NOT EXISTS " + date + " (id INTEGER PRIMARY KEY AUTOINCREMENT, question NVARCHAR(2048) NULL, answer NVARCHAR(2048) NULL, image NVARCHAR(2048) NULL)";
-                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-                //try
-                //{
-                createTable.ExecuteReader();
-                //}
-                //catch(SqliteException)
-                //{
-
-                //}
-                #endregion
-
-                #region Get & save sets
-                string Date = date.Replace("R", "I");
-                int fileindex = 0;
-                for (int i = 1; i <= relcount; i++)
+                if (photoImage.Tag.ToString() == "T")
                 {
-                    RelativePanel panel = listrel[i];
-                    string tag = "";
-                    TextBox questbox = panel.FindChildByName("quest") as TextBox;
-                    TextBox answerbox = panel.FindChildByName("answer") as TextBox;
-                    Image photoImage = panel.FindChildByName("ImagePreview") as Image;
-                    Button x = panel.FindChildByName("DeleteImage") as Button;
+                    StorageFile file = StreamBindModel.StreamBinds[fileindex].File;
 
-                    if (photoImage.Tag.ToString() == "T")
-                    {
-                        StorageFile file = StreamBindModel.StreamBinds[fileindex].File;
-                        StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
-                        StorageFile CopyFile = await file.CopyAsync(folder);
-                        await CopyFile.RenameAsync(Date + file.FileType, NameCollisionOption.GenerateUniqueName);
-                        tag = CopyFile.Name;
-                    }
-                    else if(photoImage.Tag.ToString() != "")
-                    {
-                        tag = photoImage.Tag.ToString();
-                    }
-
-                    string TAG = x.Tag.ToString();
-
-                    if (TAG == "D")
-                    {
-                        StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
-
-                        StorageFile file = await folder.GetFileAsync(ImageName);
-
-                        await file.DeleteAsync();
-                    }
-
-                    string question = questbox.Text;
-                    string answer = answerbox.Text;
-
-                    SqliteCommand insertCommand = new SqliteCommand();
-                    insertCommand.Connection = db;
-
-                    insertCommand.CommandText = "INSERT INTO " + date + " VALUES (NULL, @question, @answer, @image);";
-                    insertCommand.Parameters.AddWithValue("@question", question);
-                    insertCommand.Parameters.AddWithValue("@answer", answer);
-                    insertCommand.Parameters.AddWithValue("@image", tag);
-                    //try
-                    //{
-                    insertCommand.ExecuteReader();
-                    //}
-                    //catch (SqliteException)
-                    //{
-                    //    return;
-                    //}
+                    StorageFile CopyFile = await file.CopyAsync(folder);
+                    await CopyFile.RenameAsync(Date + file.FileType, NameCollisionOption.GenerateUniqueName);
+                    tag = CopyFile.Name;
+                    fileindex++;
                 }
-                #endregion
-
-                #region save to RepeatsList
-                SqliteCommand insertCommand2 = new SqliteCommand();
-                insertCommand2.Connection = db;
-
-                insertCommand2.CommandText = "INSERT INTO TitleTable VALUES (NULL, @title, @TableName, @CreateDate, @IsEnabled, @Avatar);";
-                insertCommand2.Parameters.AddWithValue("@title", getname);
-                insertCommand2.Parameters.AddWithValue("@TableName", date);
-                insertCommand2.Parameters.AddWithValue("@CreateDate", realDate);
-                insertCommand2.Parameters.AddWithValue("@IsEnabled", "true");
-                insertCommand2.Parameters.AddWithValue("@Avatar", PicRel.Tag);
-                try
+                else if (photoImage.Tag.ToString() != "")
                 {
-                    insertCommand2.ExecuteReader();
-                }
-                catch (SqliteException)
-                {
-                    return;
-                }
-                #endregion
-
-                if(edit)
-                {
-                    #region Drop table
-                    String tableCommand2 = "DROP TABLE " + tablename;
-                    SqliteCommand createTable2 = new SqliteCommand(tableCommand2, db);
-                    try
-                    {
-                        createTable2.ExecuteReader();
-                    }
-                    catch (SqliteException)
-                    {
-
-                    }
-                    #endregion
-
-                    #region Delete from RepeatsList
-                    SqliteCommand insertCommand3 = new SqliteCommand();
-                    insertCommand3.Connection = db;
-
-                    insertCommand3.CommandText = "DELETE FROM TitleTable WHERE TableName=" + "\"" + tablename + "\"";
-                    try
-                    {
-                        insertCommand3.ExecuteReader();
-                    }
-                    catch (SqliteException)
-                    {
-                        return;
-                    }
-                    #endregion
+                    tag = photoImage.Tag.ToString();
                 }
 
-                db.Close();
+                string TAG = x.Tag.ToString();
+
+                if (TAG == "D" && edit)
+                {
+                    StorageFile file = await folder.GetFileAsync(ImageName);
+
+                    await file.DeleteAsync();
+                }
+
+                string question = questbox.Text;
+                string answer = answerbox.Text;
+
+                DataAccess.SaveToTableSet(question, answer, tag, date);
+            }
+
+            string TA = Pic.Tag.ToString();
+            string TAGPIC = "";
+
+            if (TA == "T")
+            {
+                string type = AvatarFile.FileType;
+                StorageFile File = await AvatarFile.CopyAsync(folder);
+
+                string DATE = date.Replace("R", "A");
+
+                await File.RenameAsync(DATE + type, NameCollisionOption.GenerateUniqueName);
+
+                TAGPIC = File.Path;
+
+                if (AvatarChanged)
+                {
+                    StorageFile file = await StorageFile.GetFileFromPathAsync(RepeatsList.AV);
+                    await file.DeleteAsync();
+                }
+            }
+
+            DataAccess.SaveToTitleTable(getname, date, realDate, TAGPIC);
+
+
+            if (edit)
+            {
+                DataAccess.DropTable(tablename);
+                DataAccess.DelFromTitleTable(tablename);
             }
 
             bool taskRegistered = false;
@@ -323,7 +304,7 @@ namespace Repeats.Pages
                 }
             }
 
-            if(!taskRegistered)
+            if (!taskRegistered)
             {
                 AskTimeDialog TIME = new AskTimeDialog();
                 await TIME.ShowAsync();
@@ -345,34 +326,24 @@ namespace Repeats.Pages
             StorageFile file = await openPicker.PickSingleFileAsync();
             if (file != null)
             {
-                string type = file.FileType;
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
-                StorageFile File = await file.CopyAsync(folder);
+                if(Pic.ProfilePicture != BITMAPImage)
+                {
+                    AvatarChanged = true;
+                }
+                Pic.Tag = "T";
 
-                string Date = date;
-                string DATE = Date.Replace("R", "A");
+                AvatarFile = file;
 
-                await File.RenameAsync(DATE + type, NameCollisionOption.GenerateUniqueName);
-
-                string realName = File.Path;
-
-                but.Tag = realName;
-
-                RelativePanel find = but.FindAscendantByName("PicRel") as RelativePanel;
-                PersonPicture img = find.FindChildByName("Pic") as PersonPicture;
-
-                img.Tag = realName;
-
-                PicRel.Tag = realName;
+                IRandomAccessStream Stream = await file.OpenAsync(FileAccessMode.Read);
 
                 BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.UriSource = new Uri(img.BaseUri, File.Path);
+                await bitmapImage.SetSourceAsync(Stream);
 
-                img.ProfilePicture = bitmapImage;
+                Pic.ProfilePicture = bitmapImage;
             }
         }
 
-        private async void DeleteImage_Click(object sender, RoutedEventArgs e)
+        private void DeleteImage_Click(object sender, RoutedEventArgs e)
         {
             Button but = sender as Button;
             string tag = but.Tag.ToString();
@@ -408,6 +379,7 @@ namespace Repeats.Pages
                 Button x = find.FindChildByName("DeleteImage") as Button;
 
                 IRandomAccessStream STREAM = await file.OpenAsync(FileAccessMode.Read);
+
                 StreamBindModel.StreamBinds.Add(new StreamBind { File = file });
 
                 BitmapImage bitmapImage = new BitmapImage();

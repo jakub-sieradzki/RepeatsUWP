@@ -10,6 +10,9 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using DataAccessLibrary;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Globalization;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -34,15 +37,15 @@ namespace Repeats
         public ObservableCollection<SearchBind> Search { get { return this.search; } }
         public SearchBindModel()
         {
-            List<string> Oname = GetFromDB.GrabData("TitleTable", "title");
-            List<string> name = GetFromDB.GrabData("TitleTable", "TableName");
+            List<string> Oname = DataAccess.GrabData("TitleTable", "title");
+            List<string> name = DataAccess.GrabData("TitleTable", "TableName");
 
             int count = name.Count;
 
             for (int i = 0; i < count; i++)
             {
-                List<string> Questions = GetFromDB.GrabData(name.ElementAt(i), "question");
-                List<string> Answers = GetFromDB.GrabData(name.ElementAt(i), "answer");
+                List<string> Questions = DataAccess.GrabData(name.ElementAt(i), "question");
+                List<string> Answers = DataAccess.GrabData(name.ElementAt(i), "answer");
 
                 int All = Questions.Count;
 
@@ -71,8 +74,6 @@ namespace Repeats
             FRAME = ContentFrame;
 
             CreateFolder();
-
-            
 
             ContentFrame.Navigate(typeof(RepeatsList), null, new SuppressNavigationTransitionInfo());
         }

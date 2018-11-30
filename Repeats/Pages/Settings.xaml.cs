@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.Toolkit.Uwp.Helpers;
+﻿using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +11,7 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
+using DataAccessLibrary;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -34,9 +34,9 @@ namespace Repeats.Pages
         public ObservableCollection<bind3> SetRepeat { get { return this.setRepeat; } }
         public BindSettingsViewModel()
         {
-            List<string> Grab_Titles = GetFromDB.GrabData("TitleTable", "title");
-            List<string> Grab_Table = GetFromDB.GrabData("TitleTable", "TableName");
-            List<string> Grab_Enabled = GetFromDB.GrabData(" TitleTable", "IsEnabled");
+            List<string> Grab_Titles = DataAccess.GrabData("TitleTable", "title");
+            List<string> Grab_Table = DataAccess.GrabData("TitleTable", "TableName");
+            List<string> Grab_Enabled = DataAccess.GrabData(" TitleTable", "IsEnabled");
 
             int count = Grab_Titles.Count;
 
@@ -209,21 +209,8 @@ namespace Repeats.Pages
             #endregion
 
             #region Reset IsEnabled in DB
-            using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-            {
-                db.Open();
-                String tableCommand = "UPDATE TitleTable SET IsEnabled='true'";
-                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-                //try
-                //{
-                createTable.ExecuteReader();
-                //}
-                //catch (SqliteException)
-                //{
 
-                //}
-                db.Close();
-            }
+            DataAccess.UpdateTable("TitleTable", "IsEnabled='true'", "");
 
             this.VIEWMODEL = new BindSettingsViewModel();
             #endregion
@@ -255,41 +242,13 @@ namespace Repeats.Pages
 
                     if (toggle.IsOn == true)
                     {
-                        using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                        {
-                            db.Open();
-                            String tableCommand = "UPDATE TitleTable SET IsEnabled='true' WHERE TableName='" + name + "'";
-                            SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-                            try
-                            {
-                                createTable.ExecuteReader();
-                            }
-                            catch (SqliteException)
-                            {
-
-                            }
-                            db.Close();
-                        }
+                        DataAccess.UpdateTable("TitleTable", "IsEnabled='true'", "TableName = '" + name + "'");
                     }
                     else
                     {
-                        using (SqliteConnection db = new SqliteConnection("Filename=Repeats.db"))
-                        {
-                            db.Open();
-                            String tableCommand = "UPDATE TitleTable SET IsEnabled='false' WHERE TableName='" + name + "'";
-                            SqliteCommand createTable = new SqliteCommand(tableCommand, db);
-                            try
-                            {
-                                createTable.ExecuteReader();
-                            }
-                            catch (SqliteException)
-                            {
+                        DataAccess.UpdateTable("TitleTable", "IsEnabled='false'", "TableName = '" + name + "'");
 
-                            }
-                            db.Close();
-                        }
-
-                        List<string> Enabled = GetFromDB.GrabData("TitleTable", "IsEnabled");
+                        List<string> Enabled = DataAccess.GrabData("TitleTable", "IsEnabled");
                         if (!Enabled.Contains("true"))
                         {
                             Switch.IsOn = false;
@@ -306,7 +265,7 @@ namespace Repeats.Pages
             {
                 if (toggleSwitch.IsOn == true)
                 {
-                    List<string> Enabled = GetFromDB.GrabData("TitleTable", "IsEnabled");
+                    List<string> Enabled = DataAccess.GrabData("TitleTable", "IsEnabled");
                     if (!Enabled.Contains("true"))
                     {
                         Switch.IsOn = false;
