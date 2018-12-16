@@ -103,18 +103,7 @@ namespace Repeats.Pages
             }
             else
             {
-                if (language == "pl-PL")
-                {
-                    Time.Text = "Powiadomienia przychodzą co 0 minut";
-                }
-                else
-                {
-                    Time.Text = "Notifications are sent every 0 minutes";
-                }
-
-                Switch.IsOn = false;
-                LISTofSets.IsEnabled = false;
-                ChangeButton.IsEnabled = false;
+                FreqStack.Visibility = Visibility.Collapsed;
             }
 
             Switch.Toggled += Switch_Toggled;
@@ -226,7 +215,11 @@ namespace Repeats.Pages
             RESETbutton.Content = reset;
             CheckText.Visibility = Visibility.Visible;
             LISTofSets.ItemsSource = VIEWMODEL.SetRepeat;
-            Switch.IsOn = true;
+            if(!AskTimeDialog.IsCancel)
+            {
+                Switch.IsOn = true;
+                FreqStack.Visibility = Visibility.Visible;
+            }
             Switch.Toggled += Switch_Toggled;
         }
 
@@ -281,6 +274,7 @@ namespace Repeats.Pages
                         }
                         else
                         {
+                            FreqStack.Visibility = Visibility.Visible;
                             ChangeButton.IsEnabled = true;
                             LISTofSets.IsEnabled = true;
                         }
@@ -289,16 +283,7 @@ namespace Repeats.Pages
                 }
                 else
                 {
-                    if(language == "pl-PL")
-                    {
-                        Time.Text = "Powiadomienia przychodzą co 0 minut";
-                    }
-                    else
-                    {
-                        Time.Text = "Notifications are sent every 0 minutes";
-                    }
-
-                    ChangeButton.IsEnabled = false;
+                    FreqStack.Visibility = Visibility.Collapsed;
                     if(LISTofSets.Items.Count == 0)
                     {
                         LISTofSets.IsEnabled = false;

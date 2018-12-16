@@ -81,11 +81,12 @@ namespace Repeats.Pages
         public string tablename;
         public string date;
         public string realDate;
-        public string ImageName;
+        public List<string> ImageName;
         public StorageFile AvatarFile;
         public bool AvatarChanged;
         public BitmapImage BITMAPImage;
         public string ListAV;
+        public List<string> REMOVEimagewithQ;
 
         public AddEditRepeats()
         {
@@ -93,6 +94,8 @@ namespace Repeats.Pages
 
             this.InitializeComponent();
 
+            REMOVEimagewithQ = new List<string>();
+            ImageName = new List<string>();
             this.EditBindModel = new AddEditBindModel();
             this.StreamBindModel = new StreamBindModel();
 
@@ -123,6 +126,7 @@ namespace Repeats.Pages
                 }
 
                 tablename = RepeatsList.name;
+                date = RepeatsList.name;
                 string name = RepeatsList.OfficialName;
 
                 BitmapImage bitmapImage = new BitmapImage();
@@ -214,6 +218,14 @@ namespace Repeats.Pages
         {
             StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
 
+            if (edit)
+            {
+                DataAccess.DropTable(tablename);
+                DataAccess.DelFromTitleTable(tablename);
+            }
+
+            int ImagesToRemoveDEL = 0;
+
             Ring.Visibility = Visibility.Visible;
             Ring.IsActive = true;
 
@@ -235,7 +247,8 @@ namespace Repeats.Pages
                 TextBox answerbox = panel.FindChildByName("answer") as TextBox;
                 Image photoImage = panel.FindChildByName("ImagePreview") as Image;
                 Button x = panel.FindChildByName("DeleteImage") as Button;
-
+                Button DEL = panel.FindChildByName("DELButton") as Button;
+                string TAG = x.Tag.ToString();
                 if (photoImage.Tag.ToString() == "T")
                 {
                     StorageFile file = StreamBindModel.StreamBinds[fileindex].File;
@@ -250,13 +263,11 @@ namespace Repeats.Pages
                     tag = photoImage.Tag.ToString();
                 }
 
-                string TAG = x.Tag.ToString();
-
                 if (TAG == "D" && edit)
                 {
-                    StorageFile file = await folder.GetFileAsync(ImageName);
-
+                    StorageFile file = await folder.GetFileAsync(ImageName.ElementAt(ImagesToRemoveDEL));
                     await file.DeleteAsync();
+                    ImagesToRemoveDEL++;
                 }
 
                 string question = questbox.Text;
@@ -266,7 +277,8 @@ namespace Repeats.Pages
             }
 
             string TA = Pic.Tag.ToString();
-            string TAGPIC = Pic.ProfilePicture.ToString();
+            BitmapImage bit = Pic.ProfilePicture as BitmapImage;
+            string TAGPIC = "";
 
             if (TA == "T")
             {
@@ -285,12 +297,17 @@ namespace Repeats.Pages
                     await file.DeleteAsync();
                 }
             }
-
-            if (edit)
+            else
             {
-                DataAccess.DropTable(tablename);
-                DataAccess.DelFromTitleTable(tablename);
+                TAGPIC = RepeatsList.AV;
             }
+
+            if(TAGPIC == null)
+            {
+                TAGPIC = BITMAPImage.UriSource.ToString();
+            }
+
+
 
             DataAccess.SaveToTitleTable(getname, date, realDate, TAGPIC);
 
@@ -312,6 +329,14 @@ namespace Repeats.Pages
                 await TIME.ShowAsync();
             }
 
+            int C = REMOVEimagewithQ.Count;
+
+            for(int i = 0; i < C; i++)
+            {
+                StorageFile file = await StorageFile.GetFileFromPathAsync(REMOVEimagewithQ.ElementAt(i));
+                await file.DeleteAsync();
+            }
+
             Frame.Navigate(typeof(RepeatsList));
         }
 
@@ -328,7 +353,8 @@ namespace Repeats.Pages
             StorageFile file = await openPicker.PickSingleFileAsync();
             if (file != null)
             {
-                if(Pic.ProfilePicture != BITMAPImage)
+                BitmapImage bitmap = Pic.ProfilePicture as BitmapImage; 
+                if (bitmap.UriSource != BITMAPImage.UriSource)
                 {
                     AvatarChanged = true;
                 }
@@ -355,7 +381,7 @@ namespace Repeats.Pages
             img.Visibility = Visibility.Collapsed;
             Button btn = find.FindChildByName("AddPhoto") as Button;
 
-            ImageName = img.Tag.ToString();
+            ImageName.Add(img.Tag.ToString());
             but.Tag = "D";
             btn.Tag = "";
             img.Tag = "";
@@ -398,7 +424,7 @@ namespace Repeats.Pages
             }
         }
 
-        private async void DeleteItemClick(object sender, RoutedEventArgs e)
+        private void DeleteItemClick(object sender, RoutedEventArgs e)
         {
             if (EditBindModel.AddEditBinds.Count != 1)
             {
@@ -417,12 +443,13 @@ namespace Repeats.Pages
                 Button btn2 = find2.FindName("DeleteImage") as Button;
                 Image img = find2.FindName("ImagePreview") as Image;
 
-                if (img.Visibility == Visibility.Visible)
+                if (img.Source != null)
                 {
-                    StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
-                    var file = await folder.GetFileAsync(btn2.Tag.ToString());
-                    await file.DeleteAsync();
+                    BitmapImage bitmapImage = img.Source as BitmapImage;
+                    string s = bitmapImage.UriSource.ToString();
+                    REMOVEimagewithQ.Add(s);
                 }
+
                 q.Text = "";
                 a.Text = "";
                 btn1.Tag = "";

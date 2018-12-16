@@ -48,7 +48,7 @@
                             <TextBox x:Uid="AnswerBox" Name="answer" Text="{Binding GetAnswer}" RelativePanel.LeftOf="AddPhoto" RelativePanel.RightOf="Rectangle" Margin="0,0,10,0" RelativePanel.Below="ImagePreview"/>
                             <Button Name="AddPhoto" Tag="" Click="AddPhoto_Click" RelativePanel.AlignRightWithPanel="True" IsEnabled="{Binding enabled}" FontFamily="Segoe MDL2 Assets" Content="&#xE722;" FontSize="16" RelativePanel.AlignVerticalCenterWithPanel="True"/>
                         </RelativePanel>
-                        <Button Name="SaveButton" Tag="{Binding ClickCount}" Content="&#xE107;" FontSize="16" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Right" Click="DeleteItemClick"/>
+                        <Button Name="DELButton" Tag="{Binding ClickCount}" Content="&#xE107;" FontSize="16" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Right" Click="DeleteItemClick"/>
                     </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>

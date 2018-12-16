@@ -12,7 +12,7 @@
             <PivotItem x:Uid="Pivot1" Header="">
                 <StackPanel Orientation="Vertical">
                     <ToggleSwitch x:Uid="switch" x:Name="Switch" Header="" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" />
-                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                    <StackPanel Name="FreqStack" Orientation="Horizontal" Margin="10,0,0,0">
                         <TextBlock x:Uid="freqtext" Name="Time" VerticalAlignment="Center"/>
                         <Button x:Uid="ChangeB" Name="ChangeButton" Margin="10,0,0,0" Click="ChangeTime_Click"/>
                     </StackPanel>
@@ -21,7 +21,7 @@
                         <TextBlock Name="CheckText" FontFamily="Segoe MDL2 Assets" FontSize="20" Text="&#xE081;" VerticalAlignment="Center" Visibility="Collapsed"/>
                     </StackPanel>
                     <!--<Button Content="Button" HorizontalAlignment="Center" Height="32" Margin="0,0,0,0" VerticalAlignment="Center" Width="65" Click="Button_Click"/>-->
-                    <TextBlock x:Uid="Concretsets" Margin="10,10,0,0"/>
+                    <TextBlock Name="ConcrectSets" x:Uid="Concretsets" Margin="10,10,0,0"/>
                     <ListView Name="LISTofSets" ItemsSource="{x:Bind VIEWMODEL.SetRepeat}" SelectionMode="None" IsItemClickEnabled="False" Margin="0,10,0,0">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
